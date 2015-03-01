@@ -34,6 +34,16 @@ define(["jquery"], function(jquery){
                       self.body.find(".widget-name").text(self.name);
                   });
         elem.append(this.body);
+
+        this.body.keyup(this.update.bind(this));
+    }
+
+    Widget.prototype.update = function() {
+        var elems = this.body.find(".total");
+        var total = _.reduce(elems, function(total, e){
+            return total + parseFloat($(e).text());
+        }, 0);
+        this.body.find(".widget-total").text(total);
     }
 
     /**
@@ -56,6 +66,7 @@ define(["jquery"], function(jquery){
         if (index != -1) {
             this.items.splice(index, 1);
         }
+        this.update();
         return this;
     }
 

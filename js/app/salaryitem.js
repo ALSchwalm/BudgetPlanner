@@ -35,12 +35,24 @@ define(["jquery"], function(jquery){
             this.parentWidget.removeItem(this);
         }.bind(this));
 
-        this.body.find('.salary-salary, .salary-effort').keyup(function(){
-            var salary = this.body.find('.salary-salary').val();
-            var effort = this.body.find('.salary-effort').val();
-            if (salary != "" && effort != "")
-                this.body.find('.salary-total').html(salary * effort * 0.01);
-        }.bind(this));
+        this.body.find('.salary-salary, .salary-effort')
+            .keyup(this.update.bind(this));
+    }
+
+    SalaryItem.prototype.update = function() {
+        var salary = this.body.find('.salary-salary').val();
+        var effort = this.body.find('.salary-effort').val();
+        if (salary != "" && effort != "") {
+
+            //TODO account for each year
+            this.body.find('.year').html(salary * effort * 0.01);
+
+            var total = _.reduce(this.body.find('.year'),
+                                 function(total, e){
+                                     return total + parseFloat($(e).text());
+                                 }, 0);
+            this.body.find('.total').html(total);
+        }
     }
 
     /**
