@@ -30,7 +30,7 @@ define(["jquery"], function(jquery){
             $(this).parent().parent().siblings('button')
                 .find(".salary-type").html($(this).attr("name"));
         });
-        this.body.find('.salary-remove').click(function(){
+        this.body.find('.item-remove').click(function(){
             this.body.remove();
             this.parentWidget.removeItem(this);
         }.bind(this));

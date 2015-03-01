@@ -11,8 +11,8 @@ requirejs.config({
     },
 });
 
-require(['excel-builder', "app/salarywidget"],
-function (EB, SalaryWidget) {
+require(['excel-builder', "app/salarywidget", "app/equipmentwidget"],
+function (EB, SalaryWidget, EquipmentWidget) {
     var download = function() {
         var artistWorkbook = EB.createWorkbook();
         var albumList = artistWorkbook.createWorksheet();
@@ -28,9 +28,11 @@ function (EB, SalaryWidget) {
         })[0].click();
     }
 
-    var widget;
+    var salary;
+    var equipment;
     $(document).ready(function() {
-        widget = new SalaryWidget($(".container"))
+        salary = new SalaryWidget($(".container"))
+        equipment = new EquipmentWidget($(".container"))
         $("#download").click(download);
     });
 });
