@@ -28,11 +28,22 @@ function (EB, SalaryWidget, EquipmentWidget) {
         })[0].click();
     }
 
-    var salary;
-    var equipment;
+    var widgets = [];
     $(document).ready(function() {
-        salary = new SalaryWidget($(".container"))
-        equipment = new EquipmentWidget($(".container"))
+        widgets = [
+            new SalaryWidget($(".container")),
+            new EquipmentWidget($(".container"))
+        ]
         $("#download").click(download);
+        $("#add-year").click(function(){
+            widgets.map(function(w){
+                w.addYear();
+            });
+        });
+        $("#remove-year").click(function(){
+            widgets.map(function(w){
+                w.removeYear();
+            });
+        });
     });
 });
