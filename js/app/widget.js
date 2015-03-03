@@ -77,9 +77,13 @@ define(["jquery"], function(jquery){
      * to a prior state
      */
     Widget.prototype.save = function() {
-        return this.items.map(function(item){
-            return item.save();
-        });
+        return {
+            items: this.items.map(function(item){
+                return item.save();
+            }),
+            start: this.start,
+            end: this.end
+        };
     }
 
     /**
@@ -88,8 +92,11 @@ define(["jquery"], function(jquery){
      * @param {object} config - The configuration object
      */
     Widget.prototype.restore = function(config) {
+        this.start = config.start;
+        this.end = config.end;
+
         // Restore from the config, adding items as needed
-        config.map(function(itemConfig, i){
+        config.items.map(function(itemConfig, i){
             if (i < this.items.length) {
                 this.items[i].restore(itemConfig);
             } else {
@@ -104,19 +111,33 @@ define(["jquery"], function(jquery){
 
         // Delay because adding items is async
         setTimeout(function(){
+            this.updateDuration(this.start, this.end);
             this.update();
         }.bind(this), 100)
+    }
+
+    Widget.prototype.updateDuration = function(start, end) {
+        this.start = start;
+        this.end = end;
+
+        var years = Math.ceil(end.diff(start, 'years', true));
+        while(this.body.find(".widget-year").length != years) {
+            if (this.body.find(".widget-year").length > years) {
+                this.removeYear();
+            } else {
+                this.addYear();
+            }
+        }
+
+        this.items.map(function(item){
+            item.updateDuration(start, end);
+        });
     }
 
     /**
      * Add another year to this widget's display
      */
     Widget.prototype.addYear = function() {
-        this.items.map(function(item){
-            item.addYear();
-            item.update();
-        })
-
         var year = this.body.find('.widget-year').length;
         var newYear = $.parseHTML(
             '<td class="widget-year-cell">Year ' + (year+1) + ': <span class="widget-year">0.00</span></td>'
@@ -128,11 +149,6 @@ define(["jquery"], function(jquery){
      * Remove a year from the widget's display
      */
     Widget.prototype.removeYear = function() {
-        this.items.map(function(item){
-            item.removeYear();
-            item.update();
-        })
-
         this.body.find(".widget-year-cell:last").remove();
         this.update();
     }
@@ -143,9 +159,12 @@ define(["jquery"], function(jquery){
      * @param {object} config - Optional configuration object
      */
     Widget.prototype.addItem = function(config) {
-        var year = this.body.find('.widget-year').length;
         this.items.push(
-            new this.type(this.body.find(".panel-body"), this, year, config)
+            new this.type(this.body.find(".panel-body"),
+                          this,
+                          this.start,
+                          this.end,
+                          config)
         );
         return this;
     }

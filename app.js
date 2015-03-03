@@ -11,8 +11,8 @@ requirejs.config({
     },
 });
 
-require(['excel-builder', "app/salarywidget", "app/equipmentwidget"],
-function (EB, SalaryWidget, EquipmentWidget) {
+require(["excel-builder", "moment", "app/salarywidget", "app/equipmentwidget"],
+function (EB, moment, SalaryWidget, EquipmentWidget) {
     var download = function() {
         var artistWorkbook = EB.createWorkbook();
         var albumList = artistWorkbook.createWorksheet();
@@ -35,15 +35,15 @@ function (EB, SalaryWidget, EquipmentWidget) {
             new EquipmentWidget($(".container"))
         ]
         $("#download").click(download);
-        $("#add-year").click(function(){
-            widgets.map(function(w){
-                w.addYear();
-            });
-        });
-        $("#remove-year").click(function(){
-            widgets.map(function(w){
-                w.removeYear();
-            });
+        $("#start-date, #end-date").change(function(){
+            widgets.map(function(widget){
+                var start = $("#start-date").val();
+                var end = $("#end-date").val()
+                if (!start || !end) {
+                    return;
+                }
+                widget.updateDuration(moment(start), moment(end));
+            })
         });
     });
 });

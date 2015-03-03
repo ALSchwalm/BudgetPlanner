@@ -9,20 +9,22 @@ define(["jquery"], function(jquery){
      * Type which defines a line in the salary widget
      * @alias module:app/salaryitem
      *
-     * @param {SalaryWidget} widget - The widget owning this element
      * @param {DOM Element} elem - The element to fill with this item
-     * @param {Number} year - The number of years to account for
+     * @param {SalaryWidget} widget - The widget owning this element
+     * @param {Moment} start - Start time of this item
+     * @param {Moment} end - End time of this item
      * @param {object} config - Restore this item from the given config
      */
-    var SalaryItem = function(elem, widget, year, config) {
-        this.parentWidget = widget;
+    var SalaryItem = function(elem, widget, start, end, config) {
+        this.parent = widget;
+        this.start = start;
+        this.end = end;
         this.body = $("<div>")
             .load("bodies/salaryitem.html",
                   null,
                   function(){
                       this.init();
-                      for (var i=0; i < year; ++i)
-                          this.addYear();
+                      this.updateDuration(start, end);
                       if (config)
                           this.restore(config);
                   }.bind(this));
@@ -53,6 +55,9 @@ define(["jquery"], function(jquery){
      * @param {object} config - The configuration object
      */
     SalaryItem.prototype.restore = function(config) {
+        this.start = this.parent.start;
+        this.end = this.parent.end;
+        this.updateDuration(this.start, this.end);
         this.body.find(".salary-name").val(config.name);
         this.body.find(".salary-salary").val(config.salary);
         this.body.find(".salary-effort").map(function(i){
@@ -94,6 +99,27 @@ define(["jquery"], function(jquery){
             this.body.find('.total').html(total);
         }
     }
+
+    /**
+     * Make this item able to represent the duration start-end
+     *
+     * @param {Moment} start - New start time of the item
+     * @param {Moment} end - New end time of the item
+     */
+    SalaryItem.prototype.updateDuration = function(start, end) {
+        this.start = start;
+        this.end = end;
+
+        var years = Math.ceil(end.diff(start, 'years', true));
+        while(this.body.find(".year").length != years) {
+            if (this.body.find(".year").length > years) {
+                this.removeYear();
+            } else {
+                this.addYear();
+            }
+        }
+    }
+
 
     /**
      * Get the current costs for each year from this item.

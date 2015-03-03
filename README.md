@@ -35,8 +35,7 @@ following methods:
 
 - `update()`: Bring this item up-to-date. Returns nothing.
 - `val()`: Must return an array of values representing the cost of this item at each year in the budget
-- `addYear()`: Modify the item to support input for an additional year. Returns nothing
-- `removeYear()`: Remove support for the last year. Returns nothing.
+- `updateDuration(start, end)`: Update this item to support the duration from start-end. `start` and `end` are [moment.js](http://momentjs.com/) objects.
 - `serialize()`: Returns an array of values suitable for being passed to excel-builder. See [this link](http://excelbuilderjs.com/) for more information.
 - `restore(config)`: Restore this item to the state specified by the configuration
 - `save()`: Return a configuration object suitable for being passed to `restore`.
