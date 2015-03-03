@@ -28,7 +28,7 @@ function (EB, SalaryWidget, EquipmentWidget) {
         })[0].click();
     }
 
-    var widgets = [];
+    widgets = [];
     $(document).ready(function() {
         widgets = [
             new SalaryWidget($(".container")),

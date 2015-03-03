@@ -13,7 +13,7 @@ define(["jquery"], function(jquery){
      * @param {DOM Element} elem - The element to fill with this item
      * @param {Number} year - The number of years to account for
      */
-    var EquipmentItem = function(elem, widget, year) {
+    var EquipmentItem = function(elem, widget, year, config) {
         this.parentWidget = widget;
         this.body = $("<div>")
             .load("bodies/equipmentitem.html",
@@ -22,6 +22,8 @@ define(["jquery"], function(jquery){
                       this.init();
                       for (var i=0; i < year; ++i)
                           this.addYear();
+                      if (config)
+                          this.restore(config);
                   }.bind(this));
         elem.append(this.body);
         return this;
@@ -39,6 +41,29 @@ define(["jquery"], function(jquery){
 
         this.body.find('.equipment-cost')
             .keyup(this.update.bind(this));
+    }
+
+    /**
+     * Get an object which can be used to restore this item to a prior state
+     */
+    EquipmentItem.prototype.save = function() {
+        return {
+            name : this.body.find(".equipment-name").val(),
+            cost : this.body.find(".equipment-cost").val(),
+            year : this.body.find(".equipment-year").val()
+        };
+    }
+
+    /**
+     * Restore this item to the state specified by 'config'
+     *
+     * @param {object} config - The configuration object
+     */
+    EquipmentItem.prototype.restore = function(config) {
+        this.body.find(".equipment-name").val(config.name);
+        this.body.find(".equipment-cost").val(config.cost);
+        this.body.find(".equipment-year").val(config.year);
+        this.update();
     }
 
     EquipmentItem.prototype.update = function() {

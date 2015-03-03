@@ -26,8 +26,6 @@ Type using `Widget` as a prototype are also required to provide the following
 methods:
 
 - `serialize()`: Returns a nested array of values suitable for being passed to excel-builder. See [this link](http://excelbuilderjs.com/) for more information.
-- `restore(config)`: Restore this widget to the state specified by the configuration
-- `save()`: Return a configuration object suitable for being passed to `restore`.
 
 Item
 ----

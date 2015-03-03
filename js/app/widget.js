@@ -52,11 +52,15 @@ define(["jquery"], function(jquery){
             return item.val();
         });
 
+        var yearBase = this.body.find('.widget-year').map(function(){
+            return 0;
+        }).get();
+
         var years = _.reduce(values, function(t, vals){
             return t.map(function(val, i){
                 return val + vals[i];
             });
-        });
+        }, yearBase);
 
         var total = _.reduce(years, function(t, year){
             return t + year;
@@ -66,6 +70,42 @@ define(["jquery"], function(jquery){
             $(this).text(years[i]);
         });
         this.body.find(".widget-total").text(total);
+    }
+
+    /**
+     * Create an object which may be passed to "restore" to restore this widget
+     * to a prior state
+     */
+    Widget.prototype.save = function() {
+        return this.items.map(function(item){
+            return item.save();
+        });
+    }
+
+    /**
+     * Restore this widget to the state specified by "config"
+     *
+     * @param {object} config - The configuration object
+     */
+    Widget.prototype.restore = function(config) {
+        // Restore from the config, adding items as needed
+        config.map(function(itemConfig, i){
+            if (i < this.items.length) {
+                this.items[i].restore(itemConfig);
+            } else {
+                this.addItem(itemConfig);
+            }
+        }, this);
+
+        // Remove excess items
+        while (this.items.length > config.length) {
+            this.removeItem(this.items[this.items.length]);
+        }
+
+        // Delay because adding items is async
+        setTimeout(function(){
+            this.update();
+        }.bind(this), 100)
     }
 
     /**
@@ -99,11 +139,13 @@ define(["jquery"], function(jquery){
 
     /**
      * Add a row to this widget
+     *
+     * @param {object} config - Optional configuration object
      */
-    Widget.prototype.addItem = function() {
+    Widget.prototype.addItem = function(config) {
         var year = this.body.find('.widget-year').length;
         this.items.push(
-            new this.type(this.body.find(".panel-body"), this, year)
+            new this.type(this.body.find(".panel-body"), this, year, config)
         );
         return this;
     }

@@ -12,8 +12,9 @@ define(["jquery"], function(jquery){
      * @param {SalaryWidget} widget - The widget owning this element
      * @param {DOM Element} elem - The element to fill with this item
      * @param {Number} year - The number of years to account for
+     * @param {object} config - Restore this item from the given config
      */
-    var SalaryItem = function(elem, widget, year) {
+    var SalaryItem = function(elem, widget, year, config) {
         this.parentWidget = widget;
         this.body = $("<div>")
             .load("bodies/salaryitem.html",
@@ -22,6 +23,8 @@ define(["jquery"], function(jquery){
                       this.init();
                       for (var i=0; i < year; ++i)
                           this.addYear();
+                      if (config)
+                          this.restore(config);
                   }.bind(this));
         elem.append(this.body);
         return this;
@@ -42,6 +45,34 @@ define(["jquery"], function(jquery){
         }.bind(this));
 
         this.body.keyup(this.update.bind(this));
+    }
+
+    /**
+     * Restore this item to the state specified by 'config'
+     *
+     * @param {object} config - The configuration object
+     */
+    SalaryItem.prototype.restore = function(config) {
+        this.body.find(".salary-name").val(config.name);
+        this.body.find(".salary-salary").val(config.salary);
+        this.body.find(".salary-effort").map(function(i){
+            $(this).val(config.efforts[i]);
+        });
+        this.update();
+    }
+
+    /**
+     * Get an object which can be used to restore this item to a prior state
+     */
+    SalaryItem.prototype.save = function() {
+        var config = {
+            name : this.body.find(".salary-name").val(),
+            salary : this.body.find(".salary-salary").val(),
+            efforts: this.body.find(".salary-effort").map(function(){
+                return $(this).val()
+            }).get()
+        };
+        return config;
     }
 
     /**
