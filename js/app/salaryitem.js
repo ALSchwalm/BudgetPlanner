@@ -2,7 +2,7 @@
  * A module which defines the 'rows' which are placed in the SalaryWidget
  * @module app/salaryitem
  */
-define(["jquery"], function(jquery){
+define(["jquery", "jquery.autocomplete.min"], function(jquery, autocomplete){
     "use strict"
 
     /**
@@ -27,6 +27,20 @@ define(["jquery"], function(jquery){
                       this.updateDuration(start, end);
                       if (config)
                           this.restore(config);
+
+                      // Setup autocomplete
+                      this.body.find(".salary-name").autocomplete({
+                          serviceUrl: "/lookup.php",
+                          lookupLimit: 10,
+                          onSelect : function(completion) {
+                              this.body.find(".salary-salary").val(completion.data.salary);
+                              if (completion.data.duration.trim() === "9-mth") {
+                                  this.body.find(".salary-type").html("9-month ");
+                              } else {
+                                  this.body.find(".salary-type").html("Annual ");
+                              }
+                          }.bind(this)
+                      });
                   }.bind(this));
         elem.append(this.body);
         return this;
