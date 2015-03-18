@@ -22,10 +22,16 @@ function(jquery, Widget, EquipmentItem){
      * Convert this widget to an array suitable for being passed to excel-builder
      */
     EquipmentWidget.prototype.serialize = function() {
-        var out = [['Name', 'Anual Salary', 'Duration', 'Percent Effort', 'Total']];
-        return out.concat(this.items.map(function(item){
-            return item.serialize();
-        }));
+        var serialization = [
+            ['Equipment'],
+            ['Item Name', 'Cost', 'Purchase Year']
+        ];
+
+        this.items.forEach(function(item){
+            serialization.push(item.serialize());
+        });
+
+        return serialization;
     }
 
     return EquipmentWidget;

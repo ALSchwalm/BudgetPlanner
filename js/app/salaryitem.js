@@ -184,8 +184,8 @@ define(["jquery", "jquery.autocomplete.min"], function(jquery, autocomplete){
         var duration = this.body.find(".salary-type").text();
         var effort = this.body.find(".salary-effort").val();
         return [
-            name, salary, duration, effort,
-            {value: 'INDIRECT("B" & ROW())*INDIRECT("D" & ROW())*0.01',
+            name, duration, salary, effort,
+            {value: 'INDIRECT("C" & ROW())*INDIRECT("D" & ROW())*0.01',
              metadata: {type: 'formula'}}
         ];
     }

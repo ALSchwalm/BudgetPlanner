@@ -22,10 +22,16 @@ function(jquery, Widget, SalaryItem){
      * Convert this SalaryWidget to an array suitable for being passed to excel-builder
      */
     SalaryWidget.prototype.serialize = function() {
-        var out = [['Name', 'Anual Salary', 'Duration', 'Percent Effort', 'Total']];
-        return out.concat(this.items.map(function(item){
-            return item.serialize();
-        }));
+        var serialization = [
+            ['Salary And Wages'],
+            ['Name', '9/12-month', 'Salary', 'Percent Effort'],
+        ];
+
+        this.items.forEach(function(item){
+            serialization.push(item.serialize());
+        });
+
+        return serialization;
     }
 
     return SalaryWidget;

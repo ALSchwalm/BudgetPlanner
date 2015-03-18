@@ -132,7 +132,14 @@ define(["jquery"], function(jquery){
      * Convert this item to an array suitable for being passed to excel-builder
      */
     EquipmentItem.prototype.serialize = function() {
-        return [];
+        var name = this.body.find(".equipment-name").val();
+        var cost = this.body.find(".equipment-cost").val();
+        var year = this.body.find(".equipment-year").text();
+        return [
+            name, cost, year,
+            {value: 'INDIRECT("B" & ROW())',
+             metadata: {type: 'formula'}}
+        ];
     }
 
     return EquipmentItem;

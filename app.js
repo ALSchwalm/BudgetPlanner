@@ -21,7 +21,16 @@ function (EB, SettingsWidget, SalaryWidget, EquipmentWidget) {
         var albumList = artistWorkbook.createWorksheet();
         var stylesheet = artistWorkbook.getStyleSheet();
 
-        albumList.setData(widget.serialize());
+        var content = [];
+        for (var i=0; i < widgets.length; ++i){
+            content.push(widgets[i].serialize());
+            content.push([""]);
+        }
+
+        var merged = [];
+        merged = merged.concat.apply(merged, content);
+
+        albumList.setData(merged);
         artistWorkbook.addWorksheet(albumList);
 
         $("<a>").attr({
