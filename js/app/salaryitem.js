@@ -103,8 +103,9 @@ define(["jquery", "jquery.autocomplete.min"], function(jquery, autocomplete){
         var years = this.body.find('.year');
         if (salary != "") {
             efforts.map(function(i){
-                //TODO annual salary increase
-                $(years[i]).html(salary*$(this).val()*0.01);
+                var effort = $(this).val()*0.01;
+                var raise = Math.pow(1+$("#settings-raise-percent").val()*0.01, i);
+                $(years[i]).html(salary*effort*raise);
             });
             var total = _.reduce(this.body.find('.year'),
                                  function(total, e){

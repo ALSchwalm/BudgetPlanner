@@ -22,6 +22,12 @@ function(jquery, Widget, moment){
     }
 
     SettingsWidget.prototype.onAdded = function() {
+        $("#settings-raise-percent").change(function(){
+            this.widgets.forEach(function(widget){
+                widget.update();
+            });
+        }.bind(this));
+
         $("#settings-start-date, #settings-end-date").change(function(){
             this.widgets.map(function(widget){
                 var start = $("#settings-start-date").val();
