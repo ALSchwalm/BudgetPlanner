@@ -15,13 +15,14 @@ require(["excel-builder", "app/settingswidget",
          "app/salarywidget", "app/equipmentwidget"],
 function (EB, SettingsWidget, SalaryWidget, EquipmentWidget) {
     var widgets = [];
+    var settings = null;
 
     var download = function() {
         var artistWorkbook = EB.createWorkbook();
         var albumList = artistWorkbook.createWorksheet();
         var stylesheet = artistWorkbook.getStyleSheet();
 
-        var content = [];
+        var content = [settings.serialize(), [""]];
         for (var i=0; i < widgets.length; ++i){
             content.push(widgets[i].serialize());
             content.push([""]);
@@ -45,7 +46,7 @@ function (EB, SettingsWidget, SalaryWidget, EquipmentWidget) {
             new SalaryWidget($(".container")),
             new EquipmentWidget($(".container"))
         ];
-        var settings = new SettingsWidget($(".container"), widgets);
+        settings = new SettingsWidget($(".container"), widgets);
         $("#download").click(download);
     });
 });

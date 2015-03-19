@@ -6,6 +6,8 @@
     margin-bottom: 0px;
 }
 
+.top-buffer { margin-top:20px; }
+
 input[type=date]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     display: none;

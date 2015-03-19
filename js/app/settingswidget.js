@@ -40,5 +40,22 @@ function(jquery, Widget, moment){
         }.bind(this));
     }
 
+    SettingsWidget.prototype.serialize = function() {
+        var start = $("#settings-start-date").val();
+        var end = $("#settings-end-date").val()
+        if (!start || !end) {
+            return;
+        }
+        start = moment(start);
+        end = moment(end);
+        return [
+            ["Title:" + $("#settings-title").val()],
+            ["Author: " + $("#settings-author").val()],
+            ["Budget for the period from " + start.format("do, MMMM Do YYYY")
+             + " to " + end.format("do, MMMM Do YYYY")],
+            [$("#settings-raise-percent").val() + "% raise factor in effect"]
+        ];
+    }
+
     return SettingsWidget;
 });
