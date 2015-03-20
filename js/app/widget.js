@@ -48,6 +48,19 @@ define(["jquery", "app/utils"], function(jquery, utils){
             item.update();
         });
 
+        var years = this.getPerYearTotal();
+        this.body.find(".widget-year").map(function(i){
+            $(this).text(utils.asCurrency(years[i]));
+        });
+
+        var total = this.getTotal();
+        this.body.find(".widget-total").text(utils.asCurrency(total));
+    }
+
+    /**
+     * Calculate the cost of this widget at each year of the budget
+     */
+    Widget.prototype.getPerYearTotal = function(){
         var values = this.items.map(function(item){
             return item.val();
         });
@@ -61,15 +74,18 @@ define(["jquery", "app/utils"], function(jquery, utils){
                 return val + vals[i];
             });
         }, yearBase);
+        return years;
+    }
 
+    /**
+     * Find and return the total cost of this widget
+     */
+    Widget.prototype.getTotal = function() {
+        var years = this.getPerYearTotal();
         var total = _.reduce(years, function(t, year){
             return t + year;
         });
-
-        this.body.find(".widget-year").map(function(i){
-            $(this).text(utils.asCurrency(years[i]));
-        });
-        this.body.find(".widget-total").text(utils.asCurrency(total));
+        return total;
     }
 
     /**

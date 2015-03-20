@@ -23,20 +23,20 @@ function(jquery, Widget, moment){
 
     SettingsWidget.prototype.onAdded = function() {
         $("#settings-raise-percent").change(function(){
-            this.widgets.forEach(function(widget){
+            _.map(this.widgets, function(widget){
                 widget.update();
             });
         }.bind(this));
 
         $("#settings-start-date, #settings-end-date").change(function(){
-            this.widgets.map(function(widget){
+            _.map(this.widgets, function(widget){
                 var start = $("#settings-start-date").val();
                 var end = $("#settings-end-date").val()
                 if (!start || !end) {
                     return;
                 }
                 widget.updateDuration(moment(start), moment(end));
-            })
+            });
         }.bind(this));
     }
 

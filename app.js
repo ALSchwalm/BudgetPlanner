@@ -11,11 +11,12 @@ requirejs.config({
     },
 });
 
-require(["excel-builder", "app/settingswidget",
+require(["excel-builder", "app/settingswidget", "app/totalswidget",
          "app/salarywidget", "app/equipmentwidget"],
-function (EB, SettingsWidget, SalaryWidget, EquipmentWidget) {
+function (EB, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidget) {
     var widgets = [];
     var settings = null;
+    var totals = null;
 
     var download = function() {
         var artistWorkbook = EB.createWorkbook();
@@ -23,10 +24,12 @@ function (EB, SettingsWidget, SalaryWidget, EquipmentWidget) {
         var stylesheet = artistWorkbook.getStyleSheet();
 
         var content = [settings.serialize(), [""]];
-        for (var i=0; i < widgets.length; ++i){
-            content.push(widgets[i].serialize());
+        for (var name in widgets) {
+            var widget = widgets[name];
+            content.push(widget.serialize());
             content.push([""]);
         }
+        content.push(totals.serialize());
 
         var merged = [];
         merged = merged.concat.apply(merged, content);
@@ -42,11 +45,22 @@ function (EB, SettingsWidget, SalaryWidget, EquipmentWidget) {
     }
 
     $(document).ready(function() {
-        widgets = [
-            new SalaryWidget($(".container")),
-            new EquipmentWidget($(".container"))
-        ];
+        widgets = {
+            "salary" : new SalaryWidget($(".container")),
+            "equipment" : new EquipmentWidget($(".container"))
+        };
         settings = new SettingsWidget($(".container"), widgets);
+        totals = new TotalsWidget($(".container"), widgets);
+
+        $(document).on("change keyup click", function(){
+            var start = $("#settings-start-date").val();
+            var end = $("#settings-end-date").val()
+            if (!start || !end) {
+                return;
+            }
+            totals.update();
+        })
+
         $("#download").click(download);
     });
 });

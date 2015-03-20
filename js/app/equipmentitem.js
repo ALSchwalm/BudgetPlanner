@@ -39,7 +39,7 @@ define(["jquery"], function(jquery){
     EquipmentItem.prototype.init = function() {
         this.body.find('.item-remove').click(function(){
             this.body.remove();
-            this.parentWidget.removeItem(this);
+            this.parent.removeItem(this);
         }.bind(this));
 
         this.body.find('.equipment-cost')
