@@ -2,7 +2,8 @@
  * A module which defines the 'rows' which are placed in the SalaryWidget
  * @module app/salaryitem
  */
-define(["jquery", "jquery.autocomplete.min"], function(jquery, autocomplete){
+define(["jquery", "jquery.autocomplete.min", "app/utils"],
+function(jquery, autocomplete, utils){
     "use strict"
 
     /**
@@ -105,13 +106,13 @@ define(["jquery", "jquery.autocomplete.min"], function(jquery, autocomplete){
             efforts.map(function(i){
                 var effort = $(this).val()*0.01;
                 var raise = Math.pow(1+$("#settings-raise-percent").val()*0.01, i);
-                $(years[i]).html(salary*effort*raise);
+                $(years[i]).text(utils.asCurrency(salary*effort*raise));
             });
             var total = _.reduce(this.body.find('.year'),
                                  function(total, e){
                                      return total + parseFloat($(e).text());
                                  }, 0);
-            this.body.find('.total').html(total);
+            this.body.find('.total').text(utils.asCurrency(total));
         }
     }
 
@@ -163,7 +164,7 @@ define(["jquery", "jquery.autocomplete.min"], function(jquery, autocomplete){
                         '<span class="input-group-addon hidden-sm hidden-xs">%</span>' +
                     '</div>' +
                 '</td>' +
-                '<td class="col-sm-4 year">0.00</td>' +
+                '<td class="col-sm-4">$<span class="year currency">0.00</></td>' +
             '</tr>'
         );
         $(newYear).insertBefore(this.body.find(".salary-totals .row:last"));

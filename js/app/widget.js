@@ -2,7 +2,7 @@
  * A module which defines a generic widget
  * @module app/widget
  */
-define(["jquery"], function(jquery){
+define(["jquery", "app/utils"], function(jquery, utils){
     "use strict"
 
     /**
@@ -67,9 +67,9 @@ define(["jquery"], function(jquery){
         });
 
         this.body.find(".widget-year").map(function(i){
-            $(this).text(years[i]);
+            $(this).text(utils.asCurrency(years[i]));
         });
-        this.body.find(".widget-total").text(total);
+        this.body.find(".widget-total").text(utils.asCurrency(total));
     }
 
     /**
@@ -140,7 +140,7 @@ define(["jquery"], function(jquery){
     Widget.prototype.addYear = function() {
         var year = this.body.find('.widget-year').length;
         var newYear = $.parseHTML(
-            '<td class="widget-year-cell">Year ' + (year+1) + ': <span class="widget-year">0.00</span></td>'
+            '<td class="widget-year-cell"><i>Year ' + (year+1) + '</i>: $<span class="widget-year currency">0.00</span></td>'
         );
         $(newYear).insertBefore(this.body.find(".widget-total-cell"));
     }
