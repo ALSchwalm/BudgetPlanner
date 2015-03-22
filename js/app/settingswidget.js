@@ -28,6 +28,10 @@ function(jquery, Widget, moment){
             });
         }.bind(this));
 
+        $("#settings-project-type").change(function(){
+             $("#settings-indirect-cost-rate").val($(this).val());
+        });
+
         $("#settings-start-date, #settings-end-date").change(function(){
             _.map(this.widgets, function(widget){
                 var start = $("#settings-start-date").val();
