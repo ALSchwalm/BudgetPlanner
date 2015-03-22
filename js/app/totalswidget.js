@@ -45,7 +45,7 @@ function(jquery, Widget, utils){
     }
 
     TotalsWidget.prototype.getIndirectCost = function() {
-        var rate = $("#total-indirect-cost-rate").val()*0.01;
+        var rate = $("#settings-indirect-cost-rate").val()*0.01;
         return this.getModifiedDirectCost()*rate;
     }
 
@@ -55,11 +55,10 @@ function(jquery, Widget, utils){
 
     TotalsWidget.prototype.serialize = function() {
         return [
-            ["Title:" + $("#settings-title").val()],
-            ["Author: " + $("#settings-author").val()],
-            ["Budget for the period from " + start.format("do, MMMM Do YYYY")
-             + " to " + end.format("do, MMMM Do YYYY")],
-            [$("#settings-raise-percent").val() + "% raise factor in effect"]
+            ["", "TOTAL DIRECT COST", "", this.getTotalDirectCost()],
+            ["", "MODIFIED TOTAL DIRECT COST", "", this.getModifiedDirectCost()],
+            ["", "INDIRECT COST", $("#total-indirect-cost-rate").val() + "%", this.getIndirectCost()],
+            ["", "TOTAL", "", this.getTotal()]
         ];
     }
 

@@ -50,9 +50,8 @@ function(jquery, Widget, moment){
         end = moment(end);
         return [
             ["Title:" + $("#settings-title").val()],
-            ["Author: " + $("#settings-author").val()],
-            ["Budget for the period from " + start.format("do, MMMM Do YYYY")
-             + " to " + end.format("do, MMMM Do YYYY")],
+            ["Budget for the period from " + start.format("MMMM Do YYYY")
+             + " to " + end.format("MMMM Do YYYY")],
             [$("#settings-raise-percent").val() + "% raise factor in effect"]
         ];
     }

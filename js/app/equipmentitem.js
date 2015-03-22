@@ -136,7 +136,7 @@ define(["jquery"], function(jquery){
         var cost = this.body.find(".equipment-cost").val();
         var year = this.body.find(".equipment-year").text();
         return [
-            name, cost, year,
+            "", name, cost, year,
             {value: 'INDIRECT("B" & ROW())',
              metadata: {type: 'formula'}}
         ];

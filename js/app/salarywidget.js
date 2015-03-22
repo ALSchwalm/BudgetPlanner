@@ -23,8 +23,9 @@ function(jquery, Widget, SalaryItem){
      */
     SalaryWidget.prototype.serialize = function() {
         var serialization = [
-            ['Salary And Wages'],
-            ['Name', '9/12-month', 'Salary', 'Percent Effort'],
+            [""], [""],
+            ["I", 'Salary And Wages'],
+            ["", 'Name', '9/12-month', 'Salary', 'Percent Effort'],
         ];
 
         this.items.forEach(function(item){

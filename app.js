@@ -37,6 +37,12 @@ function (EB, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidget) {
         albumList.setData(merged);
         artistWorkbook.addWorksheet(albumList);
 
+        albumList.setColumns([
+            {width: 3},
+            {width: 13},
+            {width: 13}
+        ]);
+
         $("<a>").attr({
             download: "file.xlsx",
             href: 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,' +

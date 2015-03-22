@@ -38,7 +38,7 @@ function(jquery, autocomplete, utils){
                               if (completion.data.duration.trim() === "9-mth") {
                                   this.body.find(".salary-type").html("9-month ");
                               } else {
-                                  this.body.find(".salary-type").html("Annual ");
+                                  this.body.find(".salary-type").html("12-month ");
                               }
                           }.bind(this)
                       });
@@ -186,8 +186,8 @@ function(jquery, autocomplete, utils){
         var duration = this.body.find(".salary-type").text();
         var effort = this.body.find(".salary-effort").val();
         return [
-            name, duration, salary, effort,
-            {value: 'INDIRECT("C" & ROW())*INDIRECT("D" & ROW())*0.01',
+            "", name, duration, salary, effort,
+            {value: 'INDIRECT("D" & ROW())*INDIRECT("E" & ROW())*0.01',
              metadata: {type: 'formula'}}
         ];
     }

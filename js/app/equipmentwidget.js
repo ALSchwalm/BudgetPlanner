@@ -23,8 +23,8 @@ function(jquery, Widget, EquipmentItem){
      */
     EquipmentWidget.prototype.serialize = function() {
         var serialization = [
-            ['Equipment'],
-            ['Item Name', 'Cost', 'Purchase Year']
+            ["II", "Equipment"],
+            ["", 'Item Name', 'Cost', 'Purchase Year']
         ];
 
         this.items.forEach(function(item){
