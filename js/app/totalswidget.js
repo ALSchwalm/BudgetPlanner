@@ -33,7 +33,8 @@ function(jquery, Widget, utils){
     TotalsWidget.prototype.getTotalDirectCost = function() {
         var total = 0;
         for (var key in this.widgets) {
-            total += this.widgets[key].getTotal();
+            if (this.widgets[key].getTotal)
+                total += this.widgets[key].getTotal();
         }
         return total;
     }

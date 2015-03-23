@@ -14,7 +14,7 @@ requirejs.config({
 require(["excel-builder", "app/settingswidget", "app/totalswidget",
          "app/salarywidget", "app/equipmentwidget"],
 function (EB, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidget) {
-    var widgets = [];
+    var widgets = {};
     var settings = null;
     var totals = null;
 
@@ -50,13 +50,39 @@ function (EB, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidget) {
         })[0].click();
     }
 
+    save = function() {
+        var config = {};
+        for (var key in widgets) {
+            if (key !== "totals") {
+                config[key] = widgets[key].save();
+            }
+        }
+        return config;
+    }
+
+    restore = function(config) {
+        widgets["settings"].restore(config["settings"]);
+        for (var key in config) {
+            if (key !== "totals" && key !== "settings") {
+                widgets[key].restore(config[key]);
+            }
+        }
+
+        setTimeout(function(){
+            totals.update();
+        }, 1000);
+
+    }
+
     $(document).ready(function() {
         widgets = {
             "salary" : new SalaryWidget($(".container")),
-            "equipment" : new EquipmentWidget($(".container"))
+            "equipment" : new EquipmentWidget($(".container")),
         };
         settings = new SettingsWidget($(".container"), widgets);
         totals = new TotalsWidget($(".container"), widgets);
+
+        widgets["settings"] = settings;
 
         $(document).on("change keyup click", function(){
             var start = $("#settings-start-date").val();

@@ -2,7 +2,7 @@
  * A module which defines a generic widget
  * @module app/widget
  */
-define(["jquery", "app/utils"], function(jquery, utils){
+define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
     "use strict"
 
     /**
@@ -115,8 +115,8 @@ define(["jquery", "app/utils"], function(jquery, utils){
      * @param {object} config - The configuration object
      */
     Widget.prototype.restore = function(config) {
-        this.start = config.start;
-        this.end = config.end;
+        this.start = moment(config.start);
+        this.end = moment(config.end);
 
         // Restore from the config, adding items as needed
         config.items.map(function(itemConfig, i){

@@ -8,7 +8,7 @@ function(jquery, autocomplete, utils){
 
     /**
      * Type which defines a line in the salary widget
-     * @alias module:app/salaryitem
+     * @alias module:app/salaryitem-employee
      *
      * @param {DOM Element} elem - The element to fill with this item
      * @param {SalaryWidget} widget - The widget owning this element
@@ -16,12 +16,16 @@ function(jquery, autocomplete, utils){
      * @param {Moment} end - End time of this item
      * @param {object} config - Restore this item from the given config
      */
-    var SalaryItem = function(elem, widget, start, end, config) {
+    var SalaryItemEmployee = function(elem, widget, start, end, config) {
+        // Allow other items to 'inherit' from this one
+        if (!elem)
+            return;
+
         this.parent = widget;
         this.start = start;
         this.end = end;
         this.body = $("<div>")
-            .load("bodies/salaryitem.html",
+            .load("bodies/salaryitem-employee.html",
                   null,
                   function(){
                       this.init();
@@ -51,7 +55,7 @@ function(jquery, autocomplete, utils){
      * Initialize this salary item. This function will be invoked after the body
      * div has been populated but before it is inserted into the DOM.
      */
-    SalaryItem.prototype.init = function() {
+    SalaryItemEmployee.prototype.init = function() {
         this.body.find('.dropdown-menu a').click(function(e){
             $(this).parent().parent().siblings('button')
                 .find(".salary-type").html($(this).attr("name"));
@@ -69,7 +73,7 @@ function(jquery, autocomplete, utils){
      *
      * @param {object} config - The configuration object
      */
-    SalaryItem.prototype.restore = function(config) {
+    SalaryItemEmployee.prototype.restore = function(config) {
         this.start = this.parent.start;
         this.end = this.parent.end;
         this.updateDuration(this.start, this.end);
@@ -81,12 +85,12 @@ function(jquery, autocomplete, utils){
         this.update();
     }
 
-    SalaryItem.prototype.itemName = "Employee";
+    SalaryItemEmployee.prototype.itemName = "Employee";
 
     /**
      * Get an object which can be used to restore this item to a prior state
      */
-    SalaryItem.prototype.save = function() {
+    SalaryItemEmployee.prototype.save = function() {
         var config = {
             name : this.body.find(".salary-name").val(),
             salary : this.body.find(".salary-salary").val(),
@@ -100,7 +104,7 @@ function(jquery, autocomplete, utils){
     /**
      * Bring this item up-to-date.
      */
-    SalaryItem.prototype.update = function() {
+    SalaryItemEmployee.prototype.update = function() {
         var salary = this.body.find('.salary-salary').val();
         var efforts = this.body.find('.salary-effort');
         var years = this.body.find('.year');
@@ -124,7 +128,7 @@ function(jquery, autocomplete, utils){
      * @param {Moment} start - New start time of the item
      * @param {Moment} end - New end time of the item
      */
-    SalaryItem.prototype.updateDuration = function(start, end) {
+    SalaryItemEmployee.prototype.updateDuration = function(start, end) {
         this.start = start;
         this.end = end;
 
@@ -144,7 +148,7 @@ function(jquery, autocomplete, utils){
      *
      * @returns {Number[]} - An array of numbers, one for each year
      */
-    SalaryItem.prototype.val = function() {
+    SalaryItemEmployee.prototype.val = function() {
         var out = [];
         this.body.find(".year").map(function(){
             out.push(parseFloat($(this).html()));
@@ -155,7 +159,7 @@ function(jquery, autocomplete, utils){
     /**
      * Add a year to this item's display
      */
-    SalaryItem.prototype.addYear = function() {
+    SalaryItemEmployee.prototype.addYear = function() {
         var year = this.body.find(".year").length;
         var newYear = $.parseHTML(
             '<tr class="row">' +
@@ -175,14 +179,14 @@ function(jquery, autocomplete, utils){
     /**
      * Remove a year from this item's display
      */
-    SalaryItem.prototype.removeYear = function() {
+    SalaryItemEmployee.prototype.removeYear = function() {
         this.body.find(".salary-totals .row").eq(-2).remove();
     }
 
     /**
-     * Convert this SalaryItem to an array suitable for being passed to excel-builder
+     * Convert this SalaryItemEmployee to an array suitable for being passed to excel-builder
      */
-    SalaryItem.prototype.serialize = function() {
+    SalaryItemEmployee.prototype.serialize = function() {
         var name = this.body.find(".salary-name").val();
         var salary = this.body.find(".salary-salary").val();
         var duration = this.body.find(".salary-type").text();
@@ -194,5 +198,5 @@ function(jquery, autocomplete, utils){
         ];
     }
 
-    return SalaryItem;
+    return SalaryItemEmployee;
 });

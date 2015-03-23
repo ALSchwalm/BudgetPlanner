@@ -2,8 +2,8 @@
  * A module which defines the SalaryWidget
  * @module app/salarywidget
  */
-define(["jquery", "app/widget", "app/salaryitem"],
-function(jquery, Widget, SalaryItem){
+define(["jquery", "app/widget", "app/salaryitem-employee", "app/salaryitem-graduate"],
+function(jquery, Widget, SalaryItemEmployee, SalaryItemGraduate){
     "use strict"
 
     /**
@@ -16,7 +16,8 @@ function(jquery, Widget, SalaryItem){
         this.init(elem);
     }
 
-    SalaryWidget.prototype = new Widget("Salary and Wages", [SalaryItem]);
+    SalaryWidget.prototype = new Widget("Salary and Wages", [SalaryItemEmployee,
+                                                             SalaryItemGraduate]);
 
     /**
      * Convert this SalaryWidget to an array suitable for being passed to excel-builder
