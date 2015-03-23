@@ -11,8 +11,8 @@ define(["jquery", "app/utils"], function(jquery, utils){
      *
      * @param {DOM Element} elem - The element to fill with this widget
      */
-    var Widget = function(name, type) {
-        this.type = type;
+    var Widget = function(name, types) {
+        this.types = types;
         this.name = name;
         this.items = [];
     }
@@ -28,8 +28,13 @@ define(["jquery", "app/utils"], function(jquery, utils){
         this.body = $("<div>")
             .load("bodies/widget.html",
                   null, function(){
-                      self.body.find(".widget-add").click(function(){
-                          self.addItem();
+                      self.types.forEach(function(type){
+                          var typesList = self.body.find(".widget-types");
+                          var newLink = $("<a>").html(type.prototype.itemName).attr("href", "#");
+                          typesList.append($("<li>").append(newLink));
+                      });
+                      self.body.find(".widget-types a").click(function(){
+                          self.addItem({itemName:$(this).html()});
                       });
                       self.body.find(".widget-name").text(self.name);
                   });
@@ -95,7 +100,9 @@ define(["jquery", "app/utils"], function(jquery, utils){
     Widget.prototype.save = function() {
         return {
             items: this.items.map(function(item){
-                return item.save();
+                var itemConfig = item.save();
+                itemConfig.itemName = item.itemName;
+                return itemConfig;
             }),
             start: this.start,
             end: this.end
@@ -175,12 +182,21 @@ define(["jquery", "app/utils"], function(jquery, utils){
      * @param {object} config - Optional configuration object
      */
     Widget.prototype.addItem = function(config) {
+        var itemType = _.find(this.types, function(item){
+            return item.prototype.itemName == config.itemName;
+        })
+        var config = config;
+
+        // Do not restore from config if it only contains the item name
+        if (Object.keys(config).length == 1)
+            config = undefined;
+
         this.items.push(
-            new this.type(this.body.find(".panel-body"),
-                          this,
-                          this.start,
-                          this.end,
-                          config)
+            new itemType(this.body.find(".panel-body"),
+                         this,
+                         this.start,
+                         this.end,
+                         config)
         );
         return this;
     }

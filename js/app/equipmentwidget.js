@@ -16,7 +16,7 @@ function(jquery, Widget, EquipmentItem){
         this.init(elem);
     }
 
-    EquipmentWidget.prototype = new Widget("Equipment", EquipmentItem);
+    EquipmentWidget.prototype = new Widget("Equipment", [EquipmentItem]);
 
     /**
      * Convert this widget to an array suitable for being passed to excel-builder

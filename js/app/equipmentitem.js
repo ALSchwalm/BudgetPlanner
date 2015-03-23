@@ -32,6 +32,8 @@ define(["jquery"], function(jquery){
         return this;
     }
 
+    EquipmentItem.prototype.itemName = "Equipment";
+
     /**
      * Initialize this item. This function will be invoked after the body
      * div has been populated but before it is inserted into the DOM.

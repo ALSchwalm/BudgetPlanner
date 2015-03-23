@@ -81,6 +81,8 @@ function(jquery, autocomplete, utils){
         this.update();
     }
 
+    SalaryItem.prototype.itemName = "Employee";
+
     /**
      * Get an object which can be used to restore this item to a prior state
      */

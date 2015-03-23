@@ -16,7 +16,7 @@ function(jquery, Widget, SalaryItem){
         this.init(elem);
     }
 
-    SalaryWidget.prototype = new Widget("Salary and Wages", SalaryItem);
+    SalaryWidget.prototype = new Widget("Salary and Wages", [SalaryItem]);
 
     /**
      * Convert this SalaryWidget to an array suitable for being passed to excel-builder
