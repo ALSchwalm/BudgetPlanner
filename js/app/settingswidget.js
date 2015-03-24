@@ -53,6 +53,8 @@ function(jquery, Widget, moment){
 
     SettingsWidget.prototype.save = function() {
         return {
+            "title" : $("#settings-title").val(),
+            "author" : $("#settings-author").val(),
             "start-date" : $("#settings-start-date").val(),
             "end-date" : $("#settings-end-date").val(),
             "raise-percent" : $("#settings-raise-percent").val(),
@@ -62,6 +64,8 @@ function(jquery, Widget, moment){
     }
 
     SettingsWidget.prototype.restore = function(config) {
+        $("#settings-title").val(config["title"]);
+        $("#settings-author").val(config["author"]);
         $("#settings-start-date").val(config["start-date"]);
         $("#settings-end-date").val(config["end-date"]);
         $("#settings-raise-percent").val(config["raise-percent"]);
