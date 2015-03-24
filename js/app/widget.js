@@ -33,8 +33,9 @@ define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
                           var newLink = $("<a>").html(type.prototype.itemName).attr("href", "#");
                           typesList.append($("<li>").append(newLink));
                       });
-                      self.body.find(".widget-types a").click(function(){
+                      self.body.find(".widget-types a").click(function(e){
                           self.addItem({itemName:$(this).html()});
+                          e.preventDefault();
                       });
                       self.body.find(".widget-name").text(self.name);
                   });

@@ -57,6 +57,14 @@ function (EB, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidget) {
                 config[key] = widgets[key].save();
             }
         }
+
+        $.post("save.php", {
+            id : location.search.split('id=')[1],
+            data : JSON.stringify(config)
+        }, function(data){
+            console.log("saved");
+        });
+
         return config;
     }
 
@@ -71,7 +79,6 @@ function (EB, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidget) {
         setTimeout(function(){
             totals.update();
         }, 1000);
-
     }
 
     $(document).ready(function() {
@@ -94,5 +101,20 @@ function (EB, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidget) {
         })
 
         $("#download").click(download);
+        $("#save").click(function(e){
+            e.preventDefault();
+            save();
+        });
+
+        // Try to restore with this ID, do nothing otherwise
+        setTimeout(function(){
+            $.get("restore.php", {
+                id : location.search.split('id=')[1],
+            }, function(data){
+                if (JSON.parse(data)) {
+                    restore(JSON.parse(JSON.parse(data)));
+                }
+            });
+        }, 400);
     });
 });
