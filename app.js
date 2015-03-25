@@ -12,8 +12,9 @@ requirejs.config({
 });
 
 require(["excel-builder", "app/settingswidget", "app/totalswidget",
-         "app/salarywidget", "app/equipmentwidget"],
-function (EB, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidget) {
+         "app/salarywidget", "app/equipmentwidget", "app/contractwidget"],
+function (EB, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidget,
+                  ContractWidget) {
     var widgets = {};
     var settings = null;
     var totals = null;
@@ -85,6 +86,7 @@ function (EB, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidget) {
         widgets = {
             "salary" : new SalaryWidget($(".container")),
             "equipment" : new EquipmentWidget($(".container")),
+            "contract" : new ContractWidget($(".container")),
         };
         settings = new SettingsWidget($(".container"), widgets);
         totals = new TotalsWidget($(".container"), widgets);
