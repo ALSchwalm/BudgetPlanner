@@ -29,9 +29,11 @@ define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
             .load("bodies/widget.html",
                   null, function(){
                       self.types.forEach(function(type){
-                          var typesList = self.body.find(".widget-types");
-                          var newLink = $("<a>").html(type.prototype.itemName).attr("href", "#");
-                          typesList.append($("<li>").append(newLink));
+                          if (type.prototype.itemName) {
+                              var typesList = self.body.find(".widget-types");
+                              var newLink = $("<a>").html(type.prototype.itemName).attr("href", "#");
+                              typesList.append($("<li>").append(newLink));
+                          }
                       });
                       self.body.find(".widget-types a").click(function(e){
                           self.addItem({itemName:$(this).html()});

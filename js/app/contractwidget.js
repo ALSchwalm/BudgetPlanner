@@ -2,8 +2,8 @@
  * A module which defines the ContractWidget
  * @module app/contractwidget
  */
-define(["jquery", "app/widget", "app/contractitem"],
-function(jquery, Widget, ContractItem){
+define(["jquery", "app/widget", "app/contractitem", "app/graduateinsuranceitem"],
+function(jquery, Widget, ContractItem, GraduateInsuranceItem){
     "use strict"
 
     /**
@@ -14,6 +14,13 @@ function(jquery, Widget, ContractItem){
      */
     var ContractWidget = function(elem) {
         this.init(elem);
+
+        setTimeout(function(){
+            this.items.push(
+                new GraduateInsuranceItem(this.body.find(".panel-body"), this,
+                                          this.start, this.end)
+            );
+        }.bind(this), 400)
     }
 
     ContractWidget.prototype = new Widget("Contractual", [ContractItem]);
