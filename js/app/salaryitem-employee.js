@@ -2,8 +2,8 @@
  * A module which defines the 'rows' which are placed in the SalaryWidget
  * @module app/salaryitem
  */
-define(["jquery", "jquery.autocomplete.min", "app/utils"],
-function(jquery, autocomplete, utils){
+define(["jquery", "jquery.autocomplete.min", "app/utils", "moment"],
+function(jquery, autocomplete, utils, moment){
     "use strict"
 
     /**
@@ -66,6 +66,22 @@ function(jquery, autocomplete, utils){
         }.bind(this));
 
         this.body.keyup(this.update.bind(this));
+
+        // Set the initial start/end date to the budget dates
+        this.body.find(".salary-start-date").val(
+            $("#settings-start-date").val()
+        );
+
+        this.body.find(".salary-end-date").val(
+            $("#settings-end-date").val()
+        );
+
+        this.body.find(".salary-start-date, .salary-end-date").change(function(){
+            this.updateDuration(
+                moment(this.body.find(".salary-start-date").val()),
+                moment(this.body.find(".salary-end-date").val())
+            );
+        }.bind(this));
     }
 
     /**

@@ -100,6 +100,10 @@ function (EB, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidget) {
             totals.update();
         })
 
+        window.onbeforeunload = function(){
+            return 'Any unsaved changes will be lost.';
+        };
+
         $("#download").click(download);
         $("#save").click(function(e){
             e.preventDefault();

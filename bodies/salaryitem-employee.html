@@ -1,28 +1,44 @@
 <div class="row">
-  <div class="col-xs-1">
-    <button class="item-remove btn btn-default">
-      <span class="hidden-lg glyphicon glyphicon-remove"></span>
-      <span class="hidden-md hidden-sm hidden-xs">Remove<span>
-    </button>
-  </div>
-  <div class="col-xs-11 col-sm-4">
-    <div class="input-group">
-      <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-      <input type="text" class="form-control salary-name" placeholder="Name">
-    </div>
-  </div>
-  <div class="col-xs-12 col-sm-3">
-    <div class="input-group salary">
-      <div class="input-group-btn">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-          <span class="salary-type">12-month </span><span class="caret"></span>
+  <div class="col-xs-8">
+    <div class="row">
+      <div class="col-xs-2">
+        <button class="item-remove btn btn-default">
+          <span class="hidden-lg glyphicon glyphicon-remove"></span>
+          <span class="hidden-md hidden-sm hidden-xs">Remove<span>
         </button>
-        <ul class="dropdown-menu" role="menu">
-          <li><a href="#" name="12-month ">12-month</a></li>
-          <li><a href="#" name="9-month ">9-month</a></li>
-        </ul>
       </div>
-      <input type="text" class="form-control salary-salary" placeholder="Salary">
+      <div class="col-sm-5">
+        <div class="input-group">
+          <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+          <input type="text" class="form-control salary-name" placeholder="Name">
+        </div>
+      </div>
+      <div class="col-sm-5">
+        <div class="input-group salary">
+          <div class="input-group-btn">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+              <span class="salary-type">12-month </span><span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#" name="12-month ">12-month</a></li>
+              <li><a href="#" name="9-month ">9-month</a></li>
+            </ul>
+          </div>
+          <input type="text" class="form-control salary-salary" placeholder="Salary">
+        </div>
+      </div>
+      <span class="col-sm-offset-2 col-sm-3 top-buffer">
+        <div class="input-group">
+          <span class="input-group-addon"><span class="glyphicon">Start Date</span></span>
+          <input type="date" class="form-control salary-start-date" required="required">
+        </div>
+      </span>
+      <span class="col-sm-offset-2 col-sm-3 top-buffer">
+        <div class="input-group">
+          <span class="input-group-addon"><span class="glyphicon">End Date</span></span>
+          <input type="date" class="form-control salary-end-date" required="required">
+        </div>
+      </span>
     </div>
   </div>
   <div class="col-sm-4">
