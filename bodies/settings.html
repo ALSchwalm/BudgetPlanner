@@ -2,25 +2,57 @@
   <div class="col-sm-12">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <span class="widget-name">Settings</span>
+        <span class="widget-name">Budget Settings</span>
       </div>
       <div class="panel-body">
         <div class="row">
+          <div class="col-sm-7">
+            <div class="input-group">
+              <span class="input-group-addon"><span class="glyphicon">Title</span></span>
+              <input type="text" id="settings-title" required="required" class="form-control">
+            </div>
+          </div>
+          <div class="col-sm-5">
+            <div class="input-group">
+              <span class="input-group-addon"><span class="glyphicon">Author</span></span>
+              <input type="text" id="settings-author" required="required" class="form-control">
+            </div>
+          </div>
+        </div>
+        <div class="row top-buffer">
           <span class="col-sm-3">
             <div class="input-group">
               <span class="input-group-addon"><span class="glyphicon">Start Date</span></span>
-              <input type="date" id="settings-start-date" required="required">
+              <input type="date" id="settings-start-date" class="form-control" required="required">
             </div>
           </span>
           <span class="col-sm-3">
             <div class="input-group">
               <span class="input-group-addon"><span class="glyphicon">End Date</span></span>
-              <input type="date" id="settings-end-date" required="required">
+              <input type="date" id="settings-end-date" class="form-control" required="required">
             </div>
           </span>
           <div class="col-sm-2">
             <div class="input-group">
-              <input type="text" class="form-control settings-raise-percent" placeholder="Raise Percent">
+              <input type="text" id="settings-raise-percent" class="form-control" placeholder="Inflation">
+              <span class="input-group-addon"><span class="glyphicon">%</span></span>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <select id="settings-project-type" class="form-control">
+              <option value="" disabled selected>Select Project Type</option>
+              <option value="45.5">Organized Research - On Campus</option>
+              <option value="26.0">Organized Research - Off Campus</option>
+              <option value="50.0">Instruction - On Campus</option>
+              <option value="26.0">Instruction - Off Campus</option>
+              <option value="27.2">Other Sponsored Activities - On Campus</option>
+              <option value="22.8">Other Sponsored Activities - Off Campus</option>
+              <option value="">Other/None</option>
+            </select>
+          </div>
+          <div class="col-sm-2">
+            <div class="input-group">
+              <input type="text" id="settings-indirect-cost-rate" class="form-control" placeholder="F&A Rate">
               <span class="input-group-addon"><span class="glyphicon">%</span></span>
             </div>
           </div>

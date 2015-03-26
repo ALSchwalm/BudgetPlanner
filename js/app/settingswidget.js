@@ -22,16 +22,72 @@ function(jquery, Widget, moment){
     }
 
     SettingsWidget.prototype.onAdded = function() {
-        $("#settings-start-date, #settings-end-date").change(function(){
-            this.widgets.map(function(widget){
-                var start = $("#settings-start-date").val();
-                var end = $("#settings-end-date").val()
-                if (!start || !end) {
-                    return;
-                }
-                widget.updateDuration(moment(start), moment(end));
-            })
+        $("#settings-raise-percent").change(function(){
+            _.map(this.widgets, function(widget){
+                if (widget.update)
+                    widget.update();
+            });
         }.bind(this));
+
+        $("#settings-project-type").change(function(){
+            $("#settings-indirect-cost-rate").val($(this).val());
+        });
+
+        $("#settings-start-date, #settings-end-date").change(function(){
+            this.update();
+        }.bind(this));
+    }
+
+    SettingsWidget.prototype.update = function() {
+        _.map(this.widgets, function(widget, name){
+            var start = $("#settings-start-date").val();
+            var end = $("#settings-end-date").val()
+            if (!start || !end) {
+                return;
+            }
+            if (widget.updateDuration) {
+                widget.updateDuration(moment(start), moment(end));
+            }
+        });
+    }
+
+    SettingsWidget.prototype.save = function() {
+        return {
+            "title" : $("#settings-title").val(),
+            "author" : $("#settings-author").val(),
+            "start-date" : $("#settings-start-date").val(),
+            "end-date" : $("#settings-end-date").val(),
+            "raise-percent" : $("#settings-raise-percent").val(),
+            "indirect-cost-rate" : $("#settings-indirect-cost-rate").val(),
+            "project-type" : $("#settings-project-type").val()
+        };
+    }
+
+    SettingsWidget.prototype.restore = function(config) {
+        $("#settings-title").val(config["title"]);
+        $("#settings-author").val(config["author"]);
+        $("#settings-start-date").val(config["start-date"]);
+        $("#settings-end-date").val(config["end-date"]);
+        $("#settings-raise-percent").val(config["raise-percent"]);
+        $("#settings-indirect-cost-rate").val(config["indirect-cost-rate"]);
+        $("#settings-project-type").val(config["project-type"]);
+        this.update();
+    }
+
+    SettingsWidget.prototype.serialize = function() {
+        var start = $("#settings-start-date").val();
+        var end = $("#settings-end-date").val()
+        if (!start || !end) {
+            return;
+        }
+        start = moment(start);
+        end = moment(end);
+        return [
+            ["Title:" + $("#settings-title").val()],
+            ["Budget for the period from " + start.format("MMMM Do YYYY")
+             + " to " + end.format("MMMM Do YYYY")],
+            [$("#settings-raise-percent").val() + "% raise factor in effect"]
+        ];
     }
 
     return SettingsWidget;

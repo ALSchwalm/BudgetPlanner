@@ -3,9 +3,15 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <span class="widget-name"></span>
-        <button type="button" class="pull-right widget-add btn btn-default btn-xs">
-          <span class="glyphicon glyphicon-plus"></span>
-        </button>
+        <div class="pull-right">
+          <div class="btn-group">
+            <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+              Add New <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu widget-types" role="menu">
+            </ul>
+          </div>
+        </div>
       </div>
       <div class="panel-body">
       </div>
@@ -14,8 +20,7 @@
         <span class="pull-right">
           <table class="table">
             <tr>
-              <td class="widget-year-cell">Year 1: <span class="widget-year">0.00</span></td>
-              <td class="widget-total-cell">Total: <span class="widget-total">0.00</span></td>
+              <td class="widget-total-cell"><b>Total: $<span class="widget-total currency">0.00</span></b></td>
             </tr>
           </table>
         </span>

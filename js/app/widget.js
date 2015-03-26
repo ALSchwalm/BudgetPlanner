@@ -2,7 +2,7 @@
  * A module which defines a generic widget
  * @module app/widget
  */
-define(["jquery"], function(jquery){
+define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
     "use strict"
 
     /**
@@ -11,8 +11,8 @@ define(["jquery"], function(jquery){
      *
      * @param {DOM Element} elem - The element to fill with this widget
      */
-    var Widget = function(name, type) {
-        this.type = type;
+    var Widget = function(name, types) {
+        this.types = types;
         this.name = name;
         this.items = [];
     }
@@ -28,8 +28,16 @@ define(["jquery"], function(jquery){
         this.body = $("<div>")
             .load("bodies/widget.html",
                   null, function(){
-                      self.body.find(".widget-add").click(function(){
-                          self.addItem();
+                      self.types.forEach(function(type){
+                          if (type.prototype.itemName) {
+                              var typesList = self.body.find(".widget-types");
+                              var newLink = $("<a>").html(type.prototype.itemName).attr("href", "#");
+                              typesList.append($("<li>").append(newLink));
+                          }
+                      });
+                      self.body.find(".widget-types a").click(function(e){
+                          self.addItem({itemName:$(this).html()});
+                          e.preventDefault();
                       });
                       self.body.find(".widget-name").text(self.name);
                   });
@@ -48,6 +56,19 @@ define(["jquery"], function(jquery){
             item.update();
         });
 
+        var years = this.getPerYearTotal();
+        this.body.find(".widget-year").map(function(i){
+            $(this).text(utils.asCurrency(years[i]));
+        });
+
+        var total = this.getTotal();
+        this.body.find(".widget-total").text(utils.asCurrency(total));
+    }
+
+    /**
+     * Calculate the cost of this widget at each year of the budget
+     */
+    Widget.prototype.getPerYearTotal = function(){
         var values = this.items.map(function(item){
             return item.val();
         });
@@ -58,18 +79,21 @@ define(["jquery"], function(jquery){
 
         var years = _.reduce(values, function(t, vals){
             return t.map(function(val, i){
-                return val + vals[i];
+                return val + (vals[i] || 0);
             });
         }, yearBase);
+        return years;
+    }
 
+    /**
+     * Find and return the total cost of this widget
+     */
+    Widget.prototype.getTotal = function() {
+        var years = this.getPerYearTotal();
         var total = _.reduce(years, function(t, year){
             return t + year;
         });
-
-        this.body.find(".widget-year").map(function(i){
-            $(this).text(years[i]);
-        });
-        this.body.find(".widget-total").text(total);
+        return total;
     }
 
     /**
@@ -79,7 +103,9 @@ define(["jquery"], function(jquery){
     Widget.prototype.save = function() {
         return {
             items: this.items.map(function(item){
-                return item.save();
+                var itemConfig = item.save();
+                itemConfig.itemName = item.itemName;
+                return itemConfig;
             }),
             start: this.start,
             end: this.end
@@ -92,8 +118,8 @@ define(["jquery"], function(jquery){
      * @param {object} config - The configuration object
      */
     Widget.prototype.restore = function(config) {
-        this.start = config.start;
-        this.end = config.end;
+        this.start = moment(config.start);
+        this.end = moment(config.end);
 
         // Restore from the config, adding items as needed
         config.items.map(function(itemConfig, i){
@@ -140,7 +166,7 @@ define(["jquery"], function(jquery){
     Widget.prototype.addYear = function() {
         var year = this.body.find('.widget-year').length;
         var newYear = $.parseHTML(
-            '<td class="widget-year-cell">Year ' + (year+1) + ': <span class="widget-year">0.00</span></td>'
+            '<td class="widget-year-cell"><i>Year ' + (year+1) + '</i>: $<span class="widget-year currency">0.00</span></td>'
         );
         $(newYear).insertBefore(this.body.find(".widget-total-cell"));
     }
@@ -159,12 +185,21 @@ define(["jquery"], function(jquery){
      * @param {object} config - Optional configuration object
      */
     Widget.prototype.addItem = function(config) {
+        var itemType = _.find(this.types, function(item){
+            return item.prototype.itemName == config.itemName;
+        })
+        var config = config;
+
+        // Do not restore from config if it only contains the item name
+        if (Object.keys(config).length == 1)
+            config = undefined;
+
         this.items.push(
-            new this.type(this.body.find(".panel-body"),
-                          this,
-                          this.start,
-                          this.end,
-                          config)
+            new itemType(this.body.find(".panel-body"),
+                         this,
+                         this.start,
+                         this.end,
+                         config)
         );
         return this;
     }

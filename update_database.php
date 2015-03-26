@@ -19,7 +19,14 @@ $result = mysql_query(
         department VARCHAR(100),
         salary FLOAT
     )", $connect)
-    or die('Invalid query: ' . mysql_error());
+        or die('Invalid query: ' . mysql_error());
+
+$result = mysql_query(
+    "CREATE TABLE IF NOT EXISTS saved (
+        id VARCHAR(13) NOT NULL PRIMARY KEY,
+        data TEXT
+    )"
+) or die('Invalid query: ' . mysql_error());
 
 // Get the data from the csv file
 $csvData = file_get_contents("HPC_data.csv");
