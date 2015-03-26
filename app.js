@@ -12,8 +12,9 @@ requirejs.config({
 });
 
 require(["excel-builder", "app/settingswidget",
-         "app/salarywidget", "app/equipmentwidget"],
-function (EB, SettingsWidget, SalaryWidget, EquipmentWidget) {
+         "app/salarywidget", "app/equipmentwidget",
+		 "app/travelwidget"],
+function (EB, SettingsWidget, SalaryWidget, EquipmentWidget, TravelWidget) {
     var widgets = [];
 
     var download = function() {
@@ -43,9 +44,22 @@ function (EB, SettingsWidget, SalaryWidget, EquipmentWidget) {
     $(document).ready(function() {
         widgets = [
             new SalaryWidget($(".container")),
-            new EquipmentWidget($(".container"))
+            new EquipmentWidget($(".container")),
+			new TravelWidget($(".container"))
         ];
         var settings = new SettingsWidget($(".container"), widgets);
         $("#download").click(download);
+		
+        // AJAX
+		$('.travel-hotel-cost').on('blur', function() {
+			$.ajax({
+				url : 'ajaxServer.php',
+				type : 'POST',
+				data : {
+					command: 'getHotelPrice'
+				},
+				dataType : 'json'
+			});
+		});
     });
 });
