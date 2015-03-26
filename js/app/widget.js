@@ -79,7 +79,7 @@ define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
 
         var years = _.reduce(values, function(t, vals){
             return t.map(function(val, i){
-                return val + vals[i];
+                return val + (vals[i] || 0);
             });
         }, yearBase);
         return years;
