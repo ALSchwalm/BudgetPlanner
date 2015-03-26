@@ -90,8 +90,10 @@ function(jquery, autocomplete, utils, moment){
      * @param {object} config - The configuration object
      */
     SalaryItemEmployee.prototype.restore = function(config) {
-        this.start = this.parent.start;
-        this.end = this.parent.end;
+        this.body.find(".salary-start-date").val(config.start);
+        this.body.find(".salary-end-date").val(config.end);
+        this.start = moment(config.start)
+        this.end = moment(config.end);
         this.updateDuration(this.start, this.end);
         this.body.find(".salary-name").val(config.name);
         this.body.find(".salary-salary").val(config.salary);
@@ -108,6 +110,8 @@ function(jquery, autocomplete, utils, moment){
      */
     SalaryItemEmployee.prototype.save = function() {
         var config = {
+            start : this.body.find(".salary-start-date").val(),
+            end : this.body.find(".salary-end-date").val(),
             name : this.body.find(".salary-name").val(),
             salary : this.body.find(".salary-salary").val(),
             efforts: this.body.find(".salary-effort").map(function(){

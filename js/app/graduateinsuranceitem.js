@@ -74,7 +74,6 @@ define(["jquery", "app/utils"], function(jquery, utils){
         var year = this.start.year() + year;
 
         if (fixedCosts[year]) {
-            console.log("fixed");
             return fixedCosts[year];
         } else {
             var years = year - 2019;
