@@ -29,6 +29,9 @@ function(jquery, utils, SalaryItemEmployee){
 
                       // Trigger event so contractual will update
                       $(document.body).trigger("graduate-added");
+                      this.body.find('.item-remove').click(function(){
+                          $(document.body).trigger("graduate-added");
+                      });
 
                       if (config)
                           this.restore(config)

@@ -32,7 +32,7 @@ define(["jquery"], function(jquery){
         return this;
     }
 
-    SubContractItem.prototype.itemName = "SubContract";
+    SubContractItem.prototype.itemName = "Subcontract";
 
     /**
      * Initialize this item. This function will be invoked after the body
