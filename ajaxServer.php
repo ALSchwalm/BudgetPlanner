@@ -25,7 +25,7 @@ if ($ch !== false) {
 	curl_close($ch);
 }
 
-if (!isset($json) || @empty($json)) die('PC Load Letter');
+if (!isset($json) || @empty($json)) die('Error executing curl, try again.');
 
 $decoded = json_decode($json);
 $price = 0;
