@@ -1,13 +1,14 @@
 /**
- * A module which defines the TravelWidget
+ * A module which defines the SalaryWidget
  * @module app/travelwidget
  */
-define(["jquery", "app/widget", "app/travelitem"],
-function(jquery, Widget, TravelItem){
+define(["jquery", "app/widget", "app/travelitem-hotel",
+    "app/travelitem-car", "app/travelitem-plane"],
+function(jquery, Widget, TravelItemHotel, TravelItemCar, TravelItemPlane){
     "use strict"
 
     /**
-     * Type which defines the travel widget
+     * Type which defines the salary widget
      * @alias module:app/travelwidget
      *
      * @param {DOM Element} elem - The element to fill with this widget
@@ -16,15 +17,15 @@ function(jquery, Widget, TravelItem){
         this.init(elem);
     }
 
-    TravelWidget.prototype = new Widget("Travel Expenses", TravelItem);
+    /*TravelWidget.prototype = new Widget("Travel", [TravelItemHotel,
+                                TravelItemCar, TravelItemPlane]);*/
+    TravelWidget.prototype = new Widget("Travel", [TravelItemHotel]);
 
     /**
      * Convert this TravelWidget to an array suitable for being passed to excel-builder
      */
     TravelWidget.prototype.serialize = function() {
         var serialization = [
-            ['Salary And Wages'],
-            ['Name', '9/12-month', 'Salary', 'Percent Effort'],
         ];
 
         this.items.forEach(function(item){
