@@ -44,6 +44,25 @@ define(["jquery"], function(jquery){
 
         this.body.find('.travel-hotel-cost')
             .keyup(this.update.bind(this));
+            
+        // Get hotel price via API
+        this.body.find('.travel-hotel-people').on('blur', function() {
+            $.ajax({
+                url: '/ajaxServer.php',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    command: 'getHotelPrice',
+                    location: this.body.find('.travel-hotel-location').val(),
+                    checkin: this.body.find('.travel-hotel-checkin').val(),
+                    checkout: this.body.find('.travel-hotel-checkout').val(),
+                    rooms: this.body.find('.travel-hotel-rooms').val(),
+                    people: this.body.find('.travel-hotel-people').val()
+                }
+            }).done(function(rtn) {
+                this.body.find('.travel-hotel-cost').val((rtn.error ? 0 : rtn.avg));
+            }.bind(this));
+        }.bind(this));
     }
 
     /**
