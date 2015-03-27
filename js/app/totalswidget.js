@@ -39,10 +39,14 @@ function(jquery, Widget, utils){
         return total;
     }
 
+    /**
+     * Modified direct cost = total cost - equipment - tuition - >2500 of each
+     * sub contract
+     */
     TotalsWidget.prototype.getModifiedDirectCost = function() {
-
-        // Until we have contracts, just return total direct cost
-        return this.getTotalDirectCost();
+        var modified = this.getTotalDirectCost();
+        modified -= this.widgets["equipment"].getTotal();
+        return modified;
     }
 
     TotalsWidget.prototype.getIndirectCost = function() {
