@@ -2,8 +2,7 @@
  * A module which defines the SalaryWidget
  * @module app/travelwidget
  */
-define(["jquery", "app/widget", "app/travelitem-hotel",
-    "app/travelitem-car", "app/travelitem-plane"],
+define(["jquery", "app/widget", "app/travelitem-hotel"],
 function(jquery, Widget, TravelItemHotel, TravelItemCar, TravelItemPlane){
     "use strict"
 
