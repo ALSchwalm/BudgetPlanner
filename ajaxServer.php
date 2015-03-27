@@ -19,7 +19,7 @@ if ($ch !== false) {
 	curl_setopt_array($ch, array(
 		CURLOPT_HEADER => false,
 		CURLOPT_RETURNTRANSFER => true,
-		CURLOPT_TIMEOUT => 10
+		CURLOPT_TIMEOUT => 20
 	));
 	$json = curl_exec($ch);
 	curl_close($ch);
@@ -33,10 +33,10 @@ $decoded = json_decode($json);
 $price = 0;
 
 foreach ($decoded->Result as $hotel) {
-	$price += $hotel->AveragePricePerNight;
+	$price += $hotel->TotalPrice;
 }
 
 echo json_encode(array(
-    'avg' => round($price / count($decoded->Result), 2),
+    'avg' => number_format($price / count($decoded->Result), 2, '.', ''),
     'error' => false));
 
