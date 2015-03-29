@@ -11,10 +11,10 @@ requirejs.config({
     },
 });
 
-require(["excel-builder", "app/settingswidget", "app/totalswidget",
+require(["excel-builder", "moment", "app/settingswidget", "app/totalswidget",
          "app/salarywidget", "app/equipmentwidget", "app/contractwidget",
          "app/subcontractwidget"],
-function (EB, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidget,
+function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidget,
           ContractWidget, SubContractWidget) {
     var widgets = {};
     var settings = null;
@@ -101,6 +101,7 @@ function (EB, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidget,
             if (!start || !end) {
                 return;
             }
+            totals.updateDuration(moment(start), moment(end));
             totals.update();
         })
 

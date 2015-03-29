@@ -20,38 +20,105 @@ function(jquery, Widget, utils){
     }
 
     TotalsWidget.prototype.update = function(){
-        this.body.find(".total-direct-cost")
-            .text(utils.asCurrency(this.getModifiedDirectCost()));
-        this.body.find(".total-modified-direct-cost")
-            .text(utils.asCurrency(this.getTotalDirectCost()));
-        this.body.find(".total-indirect-cost")
-            .text(utils.asCurrency(this.getIndirectCost()));
-        this.body.find(".total-total-cost")
-            .text(utils.asCurrency(this.getTotal()));
+        this.body.find(".total-direct-cost").each(function(i, elem){
+            $(elem).text(utils.asCurrency(this.getTotalDirectCost()[i]));
+        }.bind(this));
+
+        this.body.find(".total-modified-direct-cost").each(function(i, elem){
+            $(elem).text(utils.asCurrency(this.getModifiedDirectCost()[i]));
+        }.bind(this));
+
+        this.body.find(".total-indirect-cost").each(function(i, elem){
+            $(elem).text(utils.asCurrency(this.getIndirectCost()[i]));
+        }.bind(this));
+
+        this.body.find(".total-total-cost").each(function(i, elem){
+            $(elem).text(utils.asCurrency(this.getTotal()[i]));
+        }.bind(this));
     }
 
     TotalsWidget.prototype.getTotalDirectCost = function() {
-        var total = 0;
+        var totals = this.body.find('.total-direct-cost').map(function(){
+            return 0;
+        }).get();
+
         for (var key in this.widgets) {
-            if (this.widgets[key].getTotal)
-                total += this.widgets[key].getTotal();
+            if (this.widgets[key].getPerYearTotal) {
+                this.widgets[key].getPerYearTotal().forEach(function(yearTotal, i){
+                    totals[i] += yearTotal;
+                });
+            }
         }
-        return total;
+        return totals;
     }
 
+    /**
+     * Modified direct cost = total cost - equipment - tuition - >2500 of each
+     * sub contract
+     */
     TotalsWidget.prototype.getModifiedDirectCost = function() {
-
-        // Until we have contracts, just return total direct cost
-        return this.getTotalDirectCost();
+        return this.getTotalDirectCost().map(function(yearTotal, i){
+            return yearTotal - this.widgets["equipment"].getPerYearTotal()[i];
+        }, this);
     }
 
     TotalsWidget.prototype.getIndirectCost = function() {
         var rate = $("#settings-indirect-cost-rate").val()*0.01;
-        return this.getModifiedDirectCost()*rate;
+
+        return this.getModifiedDirectCost().map(function(yearTotal){
+            return yearTotal*rate;
+        }, this);
     }
 
     TotalsWidget.prototype.getTotal = function() {
-        return this.getTotalDirectCost() + this.getIndirectCost();
+        return this.getTotalDirectCost().map(function(yearTotal, i){
+            return yearTotal + this.getIndirectCost()[i];
+        }, this);
+    }
+
+    /**
+     * Make this item able to represent the duration start-end
+     *
+     * @param {Moment} start - New start time of the item
+     * @param {Moment} end - New end time of the item
+     */
+    TotalsWidget.prototype.updateDuration = function(start, end) {
+        this.start = start;
+        this.end = end;
+
+        var years = Math.ceil(end.diff(start, 'years', true));
+        while($(".total-direct-cost").length != years) {
+            if ($(".total-direct-cost").length > years) {
+                this.removeYear();
+            } else {
+                this.addYear();
+            }
+        }
+    }
+
+    TotalsWidget.prototype.addYear = function() {
+        this.body.find(".total-headings").find("th:last")
+            .after($("<th>").html("Year " + ($(".total-direct-cost").length+1) ));
+
+        var totalDirect = $("<td>").html("$").append($("<span>").addClass("total-direct-cost").html("0.00"));
+        $("#total-body").find(".total-direct-cost-row").append(totalDirect);
+
+        var totalModifiedDirect = $("<td>").html("$").append($("<span>").addClass("total-modified-direct-cost").html("0.00"));
+        $("#total-body").find(".total-modified-direct-cost-row").append(totalModifiedDirect);
+
+        var totalIndirect = $("<td>").html("$").append($("<span>").addClass("total-indirect-cost").html("0.00"));
+        $("#total-body").find(".total-indirect-cost-row").append(totalIndirect);
+
+        var totalTotal = $("<td>").html("$").append($("<span>").addClass("total-total-cost").html("0.00"));
+        $("#total-body").find(".total-total-cost-row").append(totalTotal);
+    }
+
+    TotalsWidget.prototype.removeYear = function() {
+        this.body.find(".total-headings").find("th:last").remove();
+        $("#total-body").find(".total-direct-cost-row td:last").remove();
+        $("#total-body").find(".total-modified-direct-cost-row td:last").remove();
+        $("#total-body").find(".total-indirect-cost-row td:last").remove();
+        $("#total-body").find(".total-total-cost-row td:last").remove();
     }
 
     TotalsWidget.prototype.serialize = function() {
