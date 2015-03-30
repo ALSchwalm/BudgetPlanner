@@ -33,6 +33,11 @@ function(jquery, autocomplete, utils, moment){
                       if (config)
                           this.restore(config);
 
+                      $(document.body).trigger("salary-added");
+                      this.body.find('.item-remove').click(function(){
+                          $(document.body).trigger("salary-removed");
+                      });
+
                       // Setup autocomplete
                       this.body.find(".salary-name").autocomplete({
                           serviceUrl: "/lookup.php",

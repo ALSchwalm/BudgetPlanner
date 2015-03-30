@@ -13,9 +13,9 @@ requirejs.config({
 
 require(["excel-builder", "moment", "app/settingswidget", "app/totalswidget",
          "app/salarywidget", "app/equipmentwidget", "app/contractwidget",
-         "app/subcontractwidget"],
+         "app/subcontractwidget", "app/fringebenefitswidget"],
 function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidget,
-          ContractWidget, SubContractWidget) {
+          ContractWidget, SubContractWidget, FringeBenefitsWidget) {
     var widgets = {};
     var settings = null;
     var totals = null;
@@ -86,12 +86,16 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
     $(document).ready(function() {
         widgets = {
             "salary" : new SalaryWidget($(".container")),
+            "fringebenefits" : new FringeBenefitsWidget($(".container")),
             "equipment" : new EquipmentWidget($(".container")),
             "contract" : new ContractWidget($(".container")),
             "subcontract" : new SubContractWidget($(".container")),
         };
         settings = new SettingsWidget($(".container"), widgets);
         totals = new TotalsWidget($(".container"), widgets);
+
+        widgets["fringebenefits"].salaryWidget = widgets["salary"];
+        benefits = widgets["fringebenefits"]; // TODO remove this
 
         widgets["settings"] = settings;
 

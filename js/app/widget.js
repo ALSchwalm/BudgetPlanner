@@ -28,13 +28,17 @@ define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
         this.body = $("<div>")
             .load("bodies/widget.html",
                   null, function(){
-                      self.types.forEach(function(type){
-                          if (type.prototype.itemName) {
-                              var typesList = self.body.find(".widget-types");
-                              var newLink = $("<a>").html(type.prototype.itemName).attr("href", "#");
-                              typesList.append($("<li>").append(newLink));
-                          }
-                      });
+                      if (self.types.length) {
+                          self.types.forEach(function(type){
+                              if (type.prototype.itemName) {
+                                  var typesList = self.body.find(".widget-types");
+                                  var newLink = $("<a>").html(type.prototype.itemName).attr("href", "#");
+                                  typesList.append($("<li>").append(newLink));
+                              }
+                          });
+                      } else {
+                          self.body.find(".widget-type-dropdown").remove();
+                      }
                       self.body.find(".widget-types a").click(function(e){
                           self.addItem({itemName:$(this).html()});
                           e.preventDefault();
