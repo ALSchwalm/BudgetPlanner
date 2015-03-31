@@ -1,13 +1,13 @@
 /**
  * A module which defines the contractual item for graduate student insurance
- * @module app/graduateinsuranceitem
+ * @module app/tuitiionbenefititem
  */
-define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
+define(["jquery", "app/utils"], function(jquery, utils){
     "use strict"
 
     /**
      * Type which defines the contractual item for graduate student insurance
-     * @alias module:app/graduateinsuranceitem
+     * @alias module:app/tuitionbenefititem
      *
      * @param {DOM Element} elem - The element to fill with this item
      * @param {ContractWidget} widget - The widget owning this element
@@ -15,12 +15,12 @@ define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
      * @param {Moment} end - End time of this item
      * @param {object} config - Restore this item from the given config
      */
-    var GraduateInsuranceItem = function(elem, widget, start, end, config) {
+    var TuititionBenefitItem = function(elem, widget, start, end, config) {
         this.parent = widget;
         this.start = start;
         this.end = end;
         this.body = $("<div>")
-            .load("bodies/graduateinsuranceitem.html",
+            .load("bodies/tuitionbenefititem.html",
                   null,
                   function(){
                       this.init();
@@ -33,13 +33,13 @@ define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
     }
 
     // No item name hides this item types
-    GraduateInsuranceItem.prototype.itemName = "";
+    TuititionBenefitItem.prototype.itemName = "";
 
     /**
      * Initialize this item. This function will be invoked after the body
      * div has been populated but before it is inserted into the DOM.
      */
-    GraduateInsuranceItem.prototype.init = function() {
+    TuititionBenefitItem.prototype.init = function() {
         $(document.body).on("graduate-added", function(){
             this.update();
             this.parent.update();
@@ -50,7 +50,7 @@ define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
     /**
      * Get an object which can be used to restore this item to a prior state
      */
-    GraduateInsuranceItem.prototype.save = function() {
+    TuititionBenefitItem.prototype.save = function() {
         return {};
     }
 
@@ -59,17 +59,17 @@ define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
      *
      * @param {object} config - The configuration object
      */
-    GraduateInsuranceItem.prototype.restore = function(config) {
+    TuititionBenefitItem.prototype.restore = function(config) {
         this.update();
     }
 
-    GraduateInsuranceItem.prototype.getMonthlyInsuranceCost = function(year) {
+    TuititionBenefitItem.prototype.getMonthlyInsuranceCost = function(year) {
         var fixedCosts = {
-            2015 : 738,
-            2016 : 794,
-            2017 : 834,
-            2018 : 875,
-            2019 : 919
+            2015 : 74,
+            2016 : 85,
+            2017 : 89,
+            2018 : 94,
+            2019 : 98
         }
 
         var year = this.start.year() + year;
@@ -82,11 +82,11 @@ define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
         }
     }
 
-    GraduateInsuranceItem.prototype.update = function() {
+    TuititionBenefitItem.prototype.update = function() {
         var self = this;
 
         var count = $(".graduate-student").length;
-        this.body.find(".graduate-insurance-count").val(count);
+        this.body.find(".graduate-benefit-count").val(count);
         var years = this.body.find('.year');
 
         var monthsWorkedPerYear =
@@ -116,7 +116,7 @@ define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
      * @param {Moment} start - New start time of the item
      * @param {Moment} end - New end time of the item
      */
-    GraduateInsuranceItem.prototype.updateDuration = function(start, end) {
+    TuititionBenefitItem.prototype.updateDuration = function(start, end) {
         this.start = start;
         this.end = end;
 
@@ -135,7 +135,7 @@ define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
     /**
      * Add a year to this item's display
      */
-    GraduateInsuranceItem.prototype.addYear = function() {
+    TuititionBenefitItem.prototype.addYear = function() {
         var year = this.body.find(".year").length;
         var newYear = $.parseHTML(
             '<tr class="row">' +
@@ -149,7 +149,7 @@ define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
     /**
      * Remove a year from this item's display
      */
-    GraduateInsuranceItem.prototype.removeYear = function() {
+    TuititionBenefitItem.prototype.removeYear = function() {
         this.body.find(".salary-totals .row").eq(-2).remove();
     }
 
@@ -158,7 +158,7 @@ define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
      *
      * @returns {Number[]} - An array of numbers, one for each year
      */
-    GraduateInsuranceItem.prototype.val = function() {
+    TuititionBenefitItem.prototype.val = function() {
         var out = [];
         this.body.find(".year").map(function(){
             out.push(parseFloat($(this).html()));
@@ -169,9 +169,9 @@ define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
     /**
      * Convert this item to an array suitable for being passed to excel-builder
      */
-    GraduateInsuranceItem.prototype.serialize = function() {
+    TuititionBenefitItem.prototype.serialize = function() {
         return [];
     }
 
-    return GraduateInsuranceItem;
+    return TuititionBenefitItem;
 });

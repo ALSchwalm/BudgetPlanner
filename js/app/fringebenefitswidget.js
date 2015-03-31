@@ -2,8 +2,8 @@
  * A module which defines the FringeBenefitsWidget
  * @module app/fringebenefitswidget
  */
-define(["jquery", "app/widget", "app/fringebenefitsitem"],
-function(jquery, Widget, FringeBenefitsItem){
+define(["jquery", "app/widget", "app/fringebenefitsitem", "app/tuitionbenefititem"],
+function(jquery, Widget, FringeBenefitsItem, TuititionBenefitItem){
     "use strict"
 
     /**
@@ -14,6 +14,13 @@ function(jquery, Widget, FringeBenefitsItem){
      */
     var FringeBenefitsWidget = function(elem) {
         this.init(elem);
+        setTimeout(function(){
+            this.items.push(
+                new TuititionBenefitItem(this.body.find(".panel-body"), this,
+                                         this.start, this.end)
+            );
+        }.bind(this), 300);
+
         $(document.body).on("salary-added", function(){
             if (this.salaryWidget.items.length > this.items.length)
                 this.addItem();

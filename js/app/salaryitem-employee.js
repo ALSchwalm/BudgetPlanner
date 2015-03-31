@@ -2,8 +2,8 @@
  * A module which defines the 'rows' which are placed in the SalaryWidget
  * @module app/salaryitem
  */
-define(["jquery", "jquery.autocomplete.min", "app/utils", "moment"],
-function(jquery, autocomplete, utils, moment){
+define(["jquery", "jquery.autocomplete.min", "app/utils", "moment", "moment-range"],
+function(jquery, autocomplete, utils, moment, momentRange){
     "use strict"
 
     /**
@@ -51,7 +51,7 @@ function(jquery, autocomplete, utils, moment){
                               }
                           }.bind(this)
                       });
-                  }.bind(this));
+                  }.bind(this)).data("item", this);
         elem.append(this.body);
         return this;
     }
@@ -127,17 +127,48 @@ function(jquery, autocomplete, utils, moment){
     }
 
     /**
+     * Determine how many months of the given year were worked.
+     *
+     * @param i - The number of years offset from the starting year
+     */
+    SalaryItemEmployee.prototype.monthsOfYearWorked = function(i) {
+        var totalRange = moment().range(this.start.clone(), this.end.clone());
+        var yearStart = this.start.clone();
+        yearStart.add(i, "year");
+        yearStart.startOf('year');
+
+        var yearEnd = this.start.clone();
+        yearEnd.add(i, "year");
+        yearEnd.endOf('year');
+
+        var yearRange = moment().range(yearStart, yearEnd);
+        var intersection = yearRange.intersect(totalRange);
+        intersection.end.add(15, "days");
+        return intersection.diff("months");
+    }
+
+    /**
      * Bring this item up-to-date.
      */
     SalaryItemEmployee.prototype.update = function() {
         var salary = this.body.find('.salary-salary').val();
+        if(this.body.find(".salary-type").text().trim() == "12-month"){
+            var monthlySalary = salary/12;
+        } else {
+            var monthlySalary = salary/9;
+        }
+
         var efforts = this.body.find('.salary-effort');
         var years = this.body.find('.year');
         if (salary != "") {
+            var self = this;
             efforts.map(function(i){
                 var effort = $(this).val()*0.01;
                 var raise = Math.pow(1+$("#settings-raise-percent").val()*0.01, i);
-                $(years[i]).text(utils.asCurrency(salary*effort*raise));
+
+                var months = self.monthsOfYearWorked(i) || 12;
+                var yearCost = monthlySalary*months*effort*raise
+                $(years[i]).text(utils.asCurrency(yearCost));
             });
             var total = _.reduce(this.body.find('.year'),
                                  function(total, e){

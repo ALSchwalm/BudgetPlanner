@@ -35,7 +35,7 @@ function(jquery, utils, SalaryItemEmployee){
 
                       if (config)
                           this.restore(config)
-                  }.bind(this));
+                  }.bind(this)).data("item", this);
         elem.append(this.body);
         return this;
     }
