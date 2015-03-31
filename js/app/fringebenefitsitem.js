@@ -69,7 +69,7 @@ define(["jquery", "app/utils"], function(jquery, utils){
 
     FringeBenefitsItem.prototype.update = function() {
         var index = this.parent.items.indexOf(this);
-        var salaryItem = this.parent.salaryWidget.items[index];
+        var salaryItem = this.parent.salaryWidget.items[index-1];
         var salaryBody = salaryItem.body;
 
         this.body.find(".benefits-name").val(salaryBody.find(".salary-name").val());

@@ -22,7 +22,7 @@ function(jquery, Widget, FringeBenefitsItem, TuititionBenefitItem){
         }.bind(this), 300);
 
         $(document.body).on("salary-added", function(){
-            if (this.salaryWidget.items.length > this.items.length)
+            if (this.salaryWidget.items.length > this.items.length-1)
                 this.addItem();
         }.bind(this));
 
