@@ -65,11 +65,11 @@ define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
 
     GraduateInsuranceItem.prototype.getMonthlyInsuranceCost = function(year) {
         var fixedCosts = {
-            2015 : 738,
-            2016 : 794,
-            2017 : 834,
-            2018 : 875,
-            2019 : 919
+            2015 : 74,
+            2016 : 85,
+            2017 : 89,
+            2018 : 94,
+            2019 : 98
         }
 
         var year = this.start.year() + year;

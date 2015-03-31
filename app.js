@@ -87,9 +87,9 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
         widgets = {
             "salary" : new SalaryWidget($(".container")),
             "fringebenefits" : new FringeBenefitsWidget($(".container")),
-            "equipment" : new EquipmentWidget($(".container")),
-            "contract" : new ContractWidget($(".container")),
             "subcontract" : new SubContractWidget($(".container")),
+            "contract" : new ContractWidget($(".container")),
+            "equipment" : new EquipmentWidget($(".container")),
         };
         settings = new SettingsWidget($(".container"), widgets);
         totals = new TotalsWidget($(".container"), widgets);
