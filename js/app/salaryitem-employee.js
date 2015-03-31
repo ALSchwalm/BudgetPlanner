@@ -87,6 +87,11 @@ function(jquery, autocomplete, utils, moment, momentRange){
                 moment(this.body.find(".salary-end-date").val())
             );
         }.bind(this));
+
+        this.body.find(".settings-start-date, .settings-end-date").datepicker({
+            changeMonth: true,
+            changeYear: true,
+        });
     }
 
     /**

@@ -2,8 +2,8 @@
  * A module which exposes a way to update global settings
  * @module app/settingswidget
  */
-define(["jquery", "app/widget", "moment"],
-function(jquery, Widget, moment){
+define(["jquery", "app/widget", "moment", "jquery-ui"],
+function(jquery, Widget, moment, jqueryui){
     "use strict"
 
     /**
@@ -36,6 +36,11 @@ function(jquery, Widget, moment){
         $("#settings-start-date, #settings-end-date").change(function(){
             this.update();
         }.bind(this));
+
+        $("#settings-start-date, #settings-end-date").datepicker({
+            changeMonth: true,
+            changeYear: true,
+        });
     }
 
     SettingsWidget.prototype.update = function() {
