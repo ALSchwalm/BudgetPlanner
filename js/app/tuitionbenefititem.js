@@ -170,7 +170,16 @@ define(["jquery", "app/utils"], function(jquery, utils){
      * Convert this item to an array suitable for being passed to excel-builder
      */
     TuititionBenefitItem.prototype.serialize = function() {
-        return [];
+        var yearCost = this.val();
+        var serialized = [
+            "", "Graduate Student Tuition", "", ""
+        ];
+
+        yearCost.forEach(function(year){
+            serialized.push('$' + year);
+        });
+
+        return serialized;
     }
 
     return TuititionBenefitItem;

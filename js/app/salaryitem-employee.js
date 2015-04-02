@@ -251,11 +251,25 @@ function(jquery, autocomplete, utils, moment, momentRange){
         var name = this.body.find(".salary-name").val();
         var salary = this.body.find(".salary-salary").val();
         var duration = this.body.find(".salary-type").text();
-        var effort = this.body.find(".salary-effort").val();
+        var efforts = this.body.find(".salary-effort");
+
+        var nameLine = ["", name || "Graduate Student", "", ""];
+
+        efforts.each(function(){
+            nameLine.push($(this).val() + '%');
+        });
+
+        var totalsLine = ["", '$' + salary, duration, ""];
+        this.val().forEach(function(total){
+            totalsLine.push('$' + total);
+        });
+
+        totalsLine.push('$' + _.reduce(this.val(), function(t, value){
+            return t + value;
+        }));
+
         return [
-            "", name, duration, salary, effort,
-            {value: 'INDIRECT("D" & ROW())*INDIRECT("E" & ROW())*0.01',
-             metadata: {type: 'formula'}}
+            nameLine, totalsLine
         ];
     }
 

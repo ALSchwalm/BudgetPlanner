@@ -21,16 +21,27 @@ function(jquery, Widget, SubContractItem){
     /**
      * Convert this widget to an array suitable for being passed to excel-builder
      */
-    SubContractWidget.prototype.serialize = function() {
-        var serialization = [
-            ["II", "SubContract"],
-            ["", 'Item Name', 'Cost', 'Purchase Year']
-        ];
+    SubContractWidget.prototype.serialize = function(formatter) {
+        var serialization = [];
 
-        this.items.forEach(function(item){
-            serialization.push(item.serialize());
+        var yearTotals = this.getPerYearTotal();
+        var titleLine = [{value: "VII", metadata: {style: formatter.id}},
+                         {value:'Subcontracts', metadata: {style: formatter.id}},
+                         "", ""];
+
+        yearTotals.forEach(function(total){
+            titleLine.push({value: '$' + total,
+                            metadata: {style: formatter.id}});
         });
 
+        titleLine.push({value:'$' + this.getTotal(),
+                        metadata: {style: formatter.id}});
+
+        serialization.push(titleLine);
+        this.items.forEach(function(item){
+            serialization.push(item.serialize(formatter));
+        });
+        serialization.push([""]);
         return serialization;
     }
 

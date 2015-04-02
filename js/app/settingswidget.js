@@ -79,7 +79,7 @@ function(jquery, Widget, moment, jqueryui){
         this.update();
     }
 
-    SettingsWidget.prototype.serialize = function() {
+    SettingsWidget.prototype.serialize = function(formatter) {
         var start = $("#settings-start-date").val();
         var end = $("#settings-end-date").val()
         if (!start || !end) {
@@ -88,10 +88,11 @@ function(jquery, Widget, moment, jqueryui){
         start = moment(start);
         end = moment(end);
         return [
-            ["Title:" + $("#settings-title").val()],
-            ["Budget for the period from " + start.format("MMMM Do YYYY")
-             + " to " + end.format("MMMM Do YYYY")],
-            [$("#settings-raise-percent").val() + "% raise factor in effect"]
+            [{value: "Title:" + $("#settings-title").val(), metadata: {style: formatter.id}}],
+            [{value: "Budget for the period from " + start.format("MMMM Do YYYY")
+              + " to " + end.format("MMMM Do YYYY"), metadata: {style: formatter.id}}],
+            [{value: $("#settings-raise-percent").val() + "% raise factor in effect",
+              metadata: {style: formatter.id}}]
         ];
     }
 

@@ -118,13 +118,17 @@ define(["jquery"], function(jquery){
      */
     BasicItem.prototype.serialize = function() {
         var name = this.body.find(".item-name").val();
-        var cost = this.body.find(".item-cost").val();
-        var year = this.body.find(".item-year").text();
-        return [
-            "", name, cost, year,
-            {value: 'INDIRECT("B" & ROW())',
-             metadata: {type: 'formula'}}
+        var yearCost = this.val();
+
+        var serialized = [
+            "", name, "", ""
         ];
+
+        yearCost.forEach(function(year){
+            serialized.push('$' + year);
+        });
+
+        return serialized;
     }
 
     return BasicItem;

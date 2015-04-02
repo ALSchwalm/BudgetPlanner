@@ -2,8 +2,8 @@
  * A module which defines the FringeBenefitsWidget
  * @module app/fringebenefitswidget
  */
-define(["jquery", "app/widget", "app/fringebenefitsitem", "app/tuitionbenefititem"],
-function(jquery, Widget, FringeBenefitsItem, TuititionBenefitItem){
+define(["jquery", "app/utils", "app/widget", "app/fringebenefitsitem", "app/tuitionbenefititem"],
+function(jquery, utils, Widget, FringeBenefitsItem, TuititionBenefitItem){
     "use strict"
 
     /**
@@ -22,7 +22,7 @@ function(jquery, Widget, FringeBenefitsItem, TuititionBenefitItem){
         }.bind(this), 300);
 
         $(document.body).on("salary-added", function(){
-            if (this.salaryWidget.items.length > this.items.length-1)
+            if (this.salaryWidget.items.length > this.items.length)
                 this.addItem();
         }.bind(this));
 
@@ -54,6 +54,33 @@ function(jquery, Widget, FringeBenefitsItem, TuititionBenefitItem){
         this.items.forEach(function(item){
             item.update();
         });
+    }
+
+    /**
+     * Convert this SalaryWidget to an array suitable for being passed to excel-builder
+     */
+    FringeBenefitsWidget.prototype.serialize = function(formatter) {
+        var serialization = [
+            [""],
+        ];
+
+        var yearTotals = this.getPerYearTotal();
+        var titleLine = [{value: "II", metadata: {style: formatter.id}},
+                         {value:'Fringe Benefits', metadata: {style: formatter.id}},
+                         "", ""];
+        yearTotals.forEach(function(total){
+            titleLine.push({value: '$' + utils.asCurrency(total),
+                            metadata: {style: formatter.id}});
+        });
+        titleLine.push({value:'$' + utils.asCurrency(this.getTotal()),
+                        metadata: {style: formatter.id}});
+
+        serialization.push(titleLine);
+        this.items.forEach(function(item){
+            serialization.push(item.serialize());
+        });
+        serialization.push([""]);
+        return serialization;
     }
 
     return FringeBenefitsWidget;

@@ -25,13 +25,21 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
         var albumList = artistWorkbook.createWorksheet();
         var stylesheet = artistWorkbook.getStyleSheet();
 
-        var content = [settings.serialize(), [""]];
-        for (var name in widgets) {
-            var widget = widgets[name];
-            content.push(widget.serialize());
-            content.push([""]);
-        }
-        content.push(totals.serialize());
+        var headingFormatter = stylesheet.createFormat({
+            font: {
+                bold: true,
+            },
+        });
+
+        var content = [
+            settings.serialize(headingFormatter),
+            widgets["salary"].serialize(headingFormatter),
+            widgets["fringebenefits"].serialize(headingFormatter),
+            widgets["equipment"].serialize(headingFormatter),
+            widgets["contract"].serialize(headingFormatter),
+            widgets["subcontract"].serialize(headingFormatter),
+            totals.serialize(headingFormatter)
+        ];
 
         var merged = [];
         merged = merged.concat.apply(merged, content);
@@ -41,8 +49,10 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
 
         albumList.setColumns([
             {width: 3},
-            {width: 13},
-            {width: 13}
+            {width: 30},
+            {width: 13}, {width: 13}, {width: 13},
+            {width: 13}, {width: 13}, {width: 13},
+            {width: 13}, {width: 13}, {width: 13}
         ]);
 
         $("<a>").attr({
