@@ -7,7 +7,7 @@ define(["jquery"], function(jquery){
 
     /**
      * Type which defines a line in the equipment widget
-     * @alias module:app/TravelItemHotel
+     * @alias module:app/,
      *
      * @param {DOM Element} elem - The element to fill with this item
      * @param {EquipmentWidget} widget - The widget owning this element
@@ -44,28 +44,6 @@ define(["jquery"], function(jquery){
 
         this.body.find('.travel-hotel-cost')
             .keyup(this.update.bind(this));
-            
-        // Get hotel price via API
-        this.body.find('.travel-hotel-people').on('blur', function() {
-            this.body.find('.travel-hotel-cost').attr('placeholder', 'Calculating...');
-            $.ajax({
-                url: '/ajaxServer.php',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    command: 'getHotelPrice',
-                    location: this.body.find('.travel-hotel-location').val(),
-                    checkin: this.body.find('.travel-hotel-checkin').val(),
-                    checkout: this.body.find('.travel-hotel-checkout').val(),
-                    rooms: this.body.find('.travel-hotel-rooms').val(),
-                    people: this.body.find('.travel-hotel-people').val()
-                }
-            }).done(function(rtn) {
-                this.body.find('.travel-hotel-cost').val((rtn.error ? 0 : rtn.avg));
-                this.body.find('.travel-hotel-cost').attr('placeholder', 'Cost');
-                this.update();
-            }.bind(this));
-        }.bind(this));
     }
 
     /**
@@ -76,10 +54,9 @@ define(["jquery"], function(jquery){
             location : this.body.find(".travel-hotel-location").val(),
             checkin : this.body.find(".travel-hotel-checkin").val(),
             checkout : this.body.find(".travel-hotel-checkout").val(),
-            rooms : this.body.find(".travel-hotel-rooms").val(),
-            people : this.body.find(".travel-hotel-people").val(),
-            cost : this.body.find(".travel-hotel-cost").val(),
-            year : this.body.find(".travel-hotel-year").val()
+			rooms : this.body.find(".travel-hotel-rooms").val(),
+			people : this.body.find(".travel-hotel-people").val(),
+            cost : this.body.find(".travel-hotel-cost").val()
         };
     }
 
@@ -98,7 +75,7 @@ define(["jquery"], function(jquery){
         this.body.find(".travel-hotel-rooms").val(config.rooms);
         this.body.find(".travel-hotel-people").val(config.people);
         this.body.find(".travel-hotel-cost").val(config.cost);
-        this.body.find(".travel-hotel-year").val(config.year);
+
 		
         this.update();
     }

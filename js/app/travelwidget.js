@@ -2,7 +2,8 @@
  * A module which defines the SalaryWidget
  * @module app/travelwidget
  */
-define(["jquery", "app/widget", "app/travelitem-hotel"],
+define(["jquery", "app/widget", "app/travelitem-hotel",
+    "app/travelitem-car", "app/travelitem-plane"],
 function(jquery, Widget, TravelItemHotel, TravelItemCar, TravelItemPlane){
     "use strict"
 
@@ -16,9 +17,8 @@ function(jquery, Widget, TravelItemHotel, TravelItemCar, TravelItemPlane){
         this.init(elem);
     }
 
-    /*TravelWidget.prototype = new Widget("Travel", [TravelItemHotel,
-                                TravelItemCar, TravelItemPlane]);*/
-    TravelWidget.prototype = new Widget("Travel", [TravelItemHotel]);
+    TravelWidget.prototype = new Widget("Travel", [TravelItemHotel,
+                                TravelItemCar, TravelItemPlane]);
 
     /**
      * Convert this TravelWidget to an array suitable for being passed to excel-builder

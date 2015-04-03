@@ -2,7 +2,8 @@
  * A module which defines the SalaryWidget
  * @module app/salarywidget
  */
-define(["jquery", "app/widget", "app/salaryitem-employee", "app/salaryitem-graduate"],
+define(["jquery", "app/widget", "app/salaryitem-employee",
+    "app/salaryitem-graduate"],
 function(jquery, Widget, SalaryItemEmployee, SalaryItemGraduate){
     "use strict"
 
