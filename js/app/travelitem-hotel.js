@@ -42,8 +42,7 @@ define(["jquery"], function(jquery){
             this.parentWidget.removeItem(this);
         }.bind(this));
 
-        this.body.find('.travel-hotel-cost')
-            .keyup(this.update.bind(this));
+        this.body.find('.travel-hotel-cost').keyup(this.update.bind(this));
             
         // Get hotel price via API
         this.body.find('.travel-hotel-people').on('blur', function() {
@@ -61,7 +60,12 @@ define(["jquery"], function(jquery){
                     people: this.body.find('.travel-hotel-people').val()
                 }
             }).done(function(rtn) {
-                this.body.find('.travel-hotel-cost').val((rtn.error ? 0 : rtn.avg));
+                if(rtn.error) {
+                    this.body.find('.travel-hotel-cost').val(0);
+                    console.log(rtn.msg);
+                } else {
+                    this.body.find('.travel-hotel-cost').val(rtn.avg);
+                }
                 this.body.find('.travel-hotel-cost').attr('placeholder', 'Cost');
                 this.update();
             }.bind(this));
@@ -79,7 +83,7 @@ define(["jquery"], function(jquery){
             rooms : this.body.find(".travel-hotel-rooms").val(),
             people : this.body.find(".travel-hotel-people").val(),
             cost : this.body.find(".travel-hotel-cost").val(),
-            year : this.body.find(".travel-hotel-year").val()
+            year : this.body.find(".travel-hotel-year").val(),
         };
     }
 

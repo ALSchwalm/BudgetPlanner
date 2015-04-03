@@ -1,13 +1,13 @@
 /**
  * A module which defines the 'rows' which are placed in the TravelWidget
- * @module app/TravelItemHotel
+ * @module app/TravelItemCar
  */
 define(["jquery"], function(jquery){
     "use strict"
 
     /**
      * Type which defines a line in the equipment widget
-     * @alias module:app/,
+     * @alias module:app/TravelItemCar
      *
      * @param {DOM Element} elem - The element to fill with this item
      * @param {EquipmentWidget} widget - The widget owning this element
@@ -15,12 +15,12 @@ define(["jquery"], function(jquery){
      * @param {Moment} end - End time of this item
      * @param {object} config - Restore this item from the given config
      */
-    var TravelItemHotel = function(elem, widget, start, end, config) {
+    var TravelItemCar = function(elem, widget, start, end, config) {
         this.parent = widget;
         this.start = start;
         this.end = end;
         this.body = $("<div>")
-            .load("bodies/travelitem-hotel.html",
+            .load("bodies/travelitem-car.html",
                   null,
                   function(){
                       this.init();
@@ -36,27 +36,50 @@ define(["jquery"], function(jquery){
      * Initialize this item. This function will be invoked after the body
      * div has been populated but before it is inserted into the DOM.
      */
-    TravelItemHotel.prototype.init = function() {
+    TravelItemCar.prototype.init = function() {
         this.body.find('.item-remove').click(function(){
             this.body.remove();
             this.parentWidget.removeItem(this);
         }.bind(this));
 
-        this.body.find('.travel-hotel-cost')
-            .keyup(this.update.bind(this));
+        this.body.find('.travel-car-cost').keyup(this.update.bind(this));
+            
+        // Get car price via API
+        this.body.find('.travel-car-people').on('blur', function() {
+            this.body.find('.travel-car-cost').attr('placeholder', 'Calculating...');
+            $.ajax({
+                url: '/ajaxServer.php',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    command: 'getCarPrice',
+                    location: this.body.find('.travel-car-destination').val(),
+                    pickup: this.body.find('.travel-car-pickupdate').val(),
+                    dropoff: this.body.find('.travel-car-dropoffdate').val()
+                }
+            }).done(function(rtn) {
+                if(rtn.error) {
+                    this.body.find('.travel-car-cost').val(0);
+                    console.log(rtn.msg);
+                } else {
+                    this.body.find('.travel-car-cost').val(rtn.avg);
+                }
+                this.body.find('.travel-car-cost').attr('placeholder', 'Cost');
+                this.update();
+            }.bind(this));
+        }.bind(this));
     }
 
     /**
      * Get an object which can be used to restore this item to a prior state
      */
-    TravelItemHotel.prototype.save = function() {
+    TravelItemCar.prototype.save = function() {
         return {
-            location : this.body.find(".travel-hotel-location").val(),
-            checkin : this.body.find(".travel-hotel-checkin").val(),
-            checkout : this.body.find(".travel-hotel-checkout").val(),
-			rooms : this.body.find(".travel-hotel-rooms").val(),
-			people : this.body.find(".travel-hotel-people").val(),
-            cost : this.body.find(".travel-hotel-cost").val()
+            destination : this.body.find(".travel-car-destination").val(),
+            pickupdate : this.body.find(".travel-car-pickupdate").val(),
+            dropoffdate : this.body.find(".travel-car-dropoffdate").val(),
+            cost : this.body.find(".travel-car-cost").val(),
+            year : this.body.find(".travel-car-year").val(),
         };
     }
 
@@ -65,22 +88,20 @@ define(["jquery"], function(jquery){
      *
      * @param {object} config - The configuration object
      */
-    TravelItemHotel.prototype.restore = function(config) {
+    TravelItemCar.prototype.restore = function(config) {
         this.start = this.parent.start;
         this.end = this.parent.end;
         this.updateDuration(this.start, this.end);
-        this.body.find(".travel-hotel-location").val(config.location);
-        this.body.find(".travel-hotel-checkin").val(config.checkin);
-        this.body.find(".travel-hotel-checkout").val(config.checkout);
-        this.body.find(".travel-hotel-rooms").val(config.rooms);
-        this.body.find(".travel-hotel-people").val(config.people);
-        this.body.find(".travel-hotel-cost").val(config.cost);
-
+        this.body.find(".travel-car-destination").val(config.destination);
+        this.body.find(".travel-car-pickupdate").val(config.pickupdate);
+        this.body.find(".travel-car-dropoffdate").val(config.dropoffdate);
+        this.body.find(".travel-car-cost").val(config.cost);
+        this.body.find(".travel-car-year").val(config.year);
 		
         this.update();
     }
 
-    TravelItemHotel.prototype.update = function() {
+    TravelItemCar.prototype.update = function() {
     }
 
     /**
@@ -89,13 +110,13 @@ define(["jquery"], function(jquery){
      * @param {Moment} start - New start time of the item
      * @param {Moment} end - New end time of the item
      */
-    TravelItemHotel.prototype.updateDuration = function(start, end) {
+    TravelItemCar.prototype.updateDuration = function(start, end) {
         this.start = start;
         this.end = end;
 
         var years = Math.ceil(end.diff(start, 'years', true));
-        while(this.body.find(".travel-hotel-year option").length != years) {
-            if (this.body.find(".travel-hotel-year option").length > years) {
+        while(this.body.find(".travel-car-year option").length != years) {
+            if (this.body.find(".travel-car-year option").length > years) {
                 this.removeYear();
             } else {
                 this.addYear();
@@ -107,9 +128,9 @@ define(["jquery"], function(jquery){
     /**
      * Add a year to this item's display
      */
-    TravelItemHotel.prototype.addYear = function() {
-        var year = this.body.find(".travel-hotel-year option").length;
-        this.body.find(".travel-hotel-year").append(
+    TravelItemCar.prototype.addYear = function() {
+        var year = this.body.find(".travel-car-year option").length;
+        this.body.find(".travel-car-year").append(
             $("<option>").attr("value", year).text("Year " + (year+1))
         );
     }
@@ -117,8 +138,8 @@ define(["jquery"], function(jquery){
     /**
      * Remove a year from this item's display
      */
-    TravelItemHotel.prototype.removeYear = function() {
-        this.body.find(".travel-hotel-year option:last").remove();
+    TravelItemCar.prototype.removeYear = function() {
+        this.body.find(".travel-car-year option:last").remove();
     }
 
     /**
@@ -126,20 +147,20 @@ define(["jquery"], function(jquery){
      *
      * @returns {Number[]} - An array of numbers, one for each year
      */
-    TravelItemHotel.prototype.val = function() {
+    TravelItemCar.prototype.val = function() {
         var arr = [];
         for (var i=0; i < this.body.find("option").length; ++i) {
             arr.push(0);
         }
-        var purchaseYear = parseInt(this.body.find(".travel-hotel-year").val());
-        arr[purchaseYear] = parseFloat(this.body.find('.travel-hotel-cost').val()) || 0;
+        var purchaseYear = parseInt(this.body.find(".travel-car-year").val());
+        arr[purchaseYear] = parseFloat(this.body.find('.travel-car-cost').val()) || 0;
         return arr;
     }
 
     /**
      * Convert this item to an array suitable for being passed to excel-builder
      */
-    TravelItemHotel.prototype.serialize = function() {
+    TravelItemCar.prototype.serialize = function() {
         /*
         var name = this.body.find(".travel-name").val();
         var cost = this.body.find(".travel-cost").val();
@@ -152,6 +173,6 @@ define(["jquery"], function(jquery){
         return [];
     }
 
-    TravelItemHotel.prototype.itemName = "Hotel";
-    return TravelItemHotel;
+    TravelItemCar.prototype.itemName = "Car";
+    return TravelItemCar;
 });
