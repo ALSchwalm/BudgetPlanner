@@ -11,11 +11,11 @@ requirejs.config({
     },
 });
 
-require(["excel-builder", "app/settingswidget", "app/totalswidget",
+require(["excel-builder", "moment", "app/settingswidget", "app/totalswidget",
          "app/salarywidget", "app/equipmentwidget", "app/contractwidget",
-         "app/subcontractwidget", "app/travelwidget"],
-function (EB, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidget,
-          ContractWidget, SubContractWidget, TravelWidget) {
+         "app/subcontractwidget", "app/travelwidget", "app/fringebenefitswidget"],
+function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidget,
+          ContractWidget, SubContractWidget, TravelWidget, FringeBenefitsWidget) {
     var widgets = {};
     var settings = null;
     var totals = null;
@@ -86,13 +86,17 @@ function (EB, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidget,
     $(document).ready(function() {
         widgets = {
             "salary" : new SalaryWidget($(".container")),
-            "equipment" : new EquipmentWidget($(".container")),
-            "contract" : new ContractWidget($(".container")),
+            "fringebenefits" : new FringeBenefitsWidget($(".container")),
             "subcontract" : new SubContractWidget($(".container")),
             "travel" : new TravelWidget($(".container")),
+            "contract" : new ContractWidget($(".container")),
+            "equipment" : new EquipmentWidget($(".container"))
         };
         settings = new SettingsWidget($(".container"), widgets);
         totals = new TotalsWidget($(".container"), widgets);
+
+        widgets["fringebenefits"].salaryWidget = widgets["salary"];
+        benefits = widgets["fringebenefits"]; // TODO remove this
 
         widgets["settings"] = settings;
 
@@ -102,6 +106,7 @@ function (EB, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidget,
             if (!start || !end) {
                 return;
             }
+            totals.updateDuration(moment(start), moment(end));
             totals.update();
         })
 
