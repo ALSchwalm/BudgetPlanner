@@ -48,7 +48,7 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
         artistWorkbook.addWorksheet(albumList);
 
         albumList.setColumns([
-            {width: 3},
+            {width: 5},
             {width: 30},
             {width: 13}, {width: 13}, {width: 13},
             {width: 13}, {width: 13}, {width: 13},
@@ -72,6 +72,8 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
 
         $.post("save.php", {
             id : location.search.split('id=')[1],
+            pi : $("#settings-author").val(),
+            title : $("#settings-title").val(),
             data : JSON.stringify(config)
         }, function(data){
             console.log("saved");

@@ -24,6 +24,8 @@ $result = mysql_query(
 $result = mysql_query(
     "CREATE TABLE IF NOT EXISTS saved (
         id VARCHAR(13) NOT NULL PRIMARY KEY,
+        title TEXT,
+        pi TEXT,
         data TEXT
     )"
 ) or die('Invalid query: ' . mysql_error());
