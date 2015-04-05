@@ -25,7 +25,7 @@ function(jquery, Widget, SubContractItem){
         var serialization = [];
 
         var yearTotals = this.getPerYearTotal();
-        var titleLine = [{value: "VII", metadata: {style: formatter.id}},
+        var titleLine = [{value: "IV", metadata: {style: formatter.id}},
                          {value:'Subcontracts', metadata: {style: formatter.id}},
                          "", ""];
 

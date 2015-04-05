@@ -13,9 +13,10 @@ requirejs.config({
 
 require(["excel-builder", "moment", "app/settingswidget", "app/totalswidget",
          "app/salarywidget", "app/equipmentwidget", "app/contractwidget",
-         "app/subcontractwidget", "app/fringebenefitswidget"],
+         "app/subcontractwidget", "app/fringebenefitswidget",
+         "app/commoditieswidget"],
 function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidget,
-          ContractWidget, SubContractWidget, FringeBenefitsWidget) {
+          ContractWidget, SubContractWidget, FringeBenefitsWidget, CommoditiesWidget) {
     var widgets = {};
     var settings = null;
     var totals = null;
@@ -35,9 +36,10 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
             settings.serialize(headingFormatter),
             widgets["salary"].serialize(headingFormatter),
             widgets["fringebenefits"].serialize(headingFormatter),
-            widgets["equipment"].serialize(headingFormatter),
-            widgets["contract"].serialize(headingFormatter),
             widgets["subcontract"].serialize(headingFormatter),
+            widgets["contract"].serialize(headingFormatter),
+            widgets["commodities"].serialize(headingFormatter),
+            widgets["equipment"].serialize(headingFormatter),
             totals.serialize(headingFormatter)
         ];
 
@@ -101,8 +103,10 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
             "fringebenefits" : new FringeBenefitsWidget($(".container")),
             "subcontract" : new SubContractWidget($(".container")),
             "contract" : new ContractWidget($(".container")),
+            "commodities" : new CommoditiesWidget($(".container")),
             "equipment" : new EquipmentWidget($(".container")),
         };
+
         settings = new SettingsWidget($(".container"), widgets);
         totals = new TotalsWidget($(".container"), widgets);
 

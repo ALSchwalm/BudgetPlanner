@@ -32,7 +32,7 @@ function(jquery, Widget, ContractItem, GraduateInsuranceItem){
         var serialization = [];
 
         var yearTotals = this.getPerYearTotal();
-        var titleLine = [{value: "VI", metadata: {style: formatter.id}},
+        var titleLine = [{value: "V", metadata: {style: formatter.id}},
                          {value:'Contractuals', metadata: {style: formatter.id}},
                          "", ""];
 

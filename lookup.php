@@ -1,12 +1,5 @@
 <?php
-
-// Connect to the sql server
-$connect = mysql_connect("localhost", "db_user", "password")
-         or die("unable to connect to msql server: " . mysql_error());
-
-// Select the appropriate database
-mysql_select_db("budget_db", $connect)
-    or die("unable to select database 'db': " . mysql_error());
+include("connection.php");
 
 $name = $_GET["query"];
 $name = mysql_real_escape_string($name);
