@@ -37,7 +37,12 @@ define(["jquery"], function(jquery){
      * div has been populated but before it is inserted into the DOM.
      */
     TravelItemPlane.prototype.init = function() {
-        
+        this.body.find('.item-remove').click(function(){
+            this.body.remove();
+            this.parentWidget.removeItem(this);
+        }.bind(this));
+
+        this.body.find('.travel-plane-cost').change(this.update.bind(this));
     }
 
     /**
@@ -45,11 +50,13 @@ define(["jquery"], function(jquery){
      */
     TravelItemPlane.prototype.save = function() {
         return {
-            destination : this.body.find(".travel-destination").val(),
-            departure : this.body.find(".travel-departure").val(),
-            arrival : this.body.find(".travel-arrival").val(),
-			method : this.body.find(".travel-method").val(),
-			price : this.body.find(".travel-year").val()
+            departurelocation : this.body.find(".travel-plane-departurelocation").val(),
+            arrivallocation : this.body.find(".travel-plane-arrivallocation").val(),
+            seats : this.body.find(".travel-plane-seats").val(),
+            cost : this.body.find(".travel-plane-cost").val(),
+            departuredate : this.body.find(".travel-plane-departuredate").val(),
+            returndate : this.body.find(".travel-plane-returndate").val(),
+            year : this.body.find(".travel-plane-year").val()
         };
     }
 
@@ -62,11 +69,13 @@ define(["jquery"], function(jquery){
         this.start = this.parent.start;
         this.end = this.parent.end;
         this.updateDuration(this.start, this.end);
-		this.body.find(".travel-destination").val(config.destination),
-		this.body.find(".travel-departure").val(config.departure),
-		this.body.find(".travel-arrival").val(config.arrival),
-		this.body.find(".travel-method").val(config.method),
-		this.body.find(".travel-year").val(config.year)
+        this.body.find(".travel-plane-departurelocation").val(config.departurelocation);
+        this.body.find(".travel-plane-arrivallocation").val(config.arrivallocation);
+        this.body.find(".travel-plane-seats").val(config.seats);
+        this.body.find(".travel-plane-cost").val(config.cost);
+        this.body.find(".travel-plane-departuredate").val(config.departuredate);
+        this.body.find(".travel-plane-returndate").val(config.returndate);
+        this.body.find(".travel-plane-year").val(config.year)
 		
         this.update();
     }
@@ -85,8 +94,8 @@ define(["jquery"], function(jquery){
         this.end = end;
 
         var years = Math.ceil(end.diff(start, 'years', true));
-        while(this.body.find(".travel-year option").length != years) {
-            if (this.body.find(".travel-year option").length > years) {
+        while(this.body.find(".travel-plane-year option").length != years) {
+            if (this.body.find(".travel-plane-year option").length > years) {
                 this.removeYear();
             } else {
                 this.addYear();
@@ -99,8 +108,8 @@ define(["jquery"], function(jquery){
      * Add a year to this item's display
      */
     TravelItemPlane.prototype.addYear = function() {
-        var year = this.body.find(".travel-year option").length;
-        this.body.find(".travel-year").append(
+        var year = this.body.find(".travel-plane-year option").length;
+        this.body.find(".travel-plane-year").append(
             $("<option>").attr("value", year).text("Year " + (year+1))
         );
     }
@@ -109,7 +118,7 @@ define(["jquery"], function(jquery){
      * Remove a year from this item's display
      */
     TravelItemPlane.prototype.removeYear = function() {
-        this.body.find(".travel-year option:last").remove();
+        this.body.find(".travel-plane-year option:last").remove();
     }
 
     /**
@@ -122,8 +131,8 @@ define(["jquery"], function(jquery){
         for (var i=0; i < this.body.find("option").length; ++i) {
             arr.push(0);
         }
-        var purchaseYear = parseInt(this.body.find(".travel-year").val());
-        arr[purchaseYear] = parseFloat(this.body.find('.travel-cost').val()) || 0;
+        var purchaseYear = parseInt(this.body.find(".travel-plane-year").val());
+        arr[purchaseYear] = parseFloat(this.body.find('.travel-plane-cost').val()) || 0;
         return arr;
     }
 
@@ -131,14 +140,7 @@ define(["jquery"], function(jquery){
      * Convert this item to an array suitable for being passed to excel-builder
      */
     TravelItemPlane.prototype.serialize = function() {
-        var name = this.body.find(".travel-name").val();
-        var cost = this.body.find(".travel-cost").val();
-        var year = this.body.find(".travel-year").text();
-        return [
-            name, cost, year,
-            {value: 'INDIRECT("B" & ROW())',
-             metadata: {type: 'formula'}}
-        ];
+        return [];
     }
 
     TravelItemPlane.prototype.itemName = "Plane";
