@@ -136,13 +136,6 @@ define(["jquery"], function(jquery){
         return arr;
     }
 
-    /**
-     * Convert this item to an array suitable for being passed to excel-builder
-     */
-    TravelItemPlane.prototype.serialize = function() {
-        return [];
-    }
-
     TravelItemPlane.prototype.itemName = "Plane";
     return TravelItemPlane;
 });

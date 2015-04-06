@@ -163,22 +163,6 @@ define(["jquery"], function(jquery){
         return arr;
     }
 
-    /**
-     * Convert this item to an array suitable for being passed to excel-builder
-     */
-    TravelItemHotel.prototype.serialize = function() {
-        /*
-        var name = this.body.find(".travel-name").val();
-        var cost = this.body.find(".travel-cost").val();
-        var year = this.body.find(".travel-year").text();
-        return [
-            name, cost, year,
-            {value: 'INDIRECT("B" & ROW())',
-             metadata: {type: 'formula'}}
-        ];*/
-        return [];
-    }
-
     TravelItemHotel.prototype.itemName = "Hotel";
     return TravelItemHotel;
 });
