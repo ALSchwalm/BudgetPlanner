@@ -1,9 +1,9 @@
 /**
- * A module which defines the EquipmentWidget
- * @module app/equipmentwidget
+ * A module which defines the CommoditiesWidget
+ * @module app/commoditieswidget
  */
-define(["jquery", "app/widget", "app/equipmentitem"],
-function(jquery, Widget, EquipmentItem){
+define(["jquery", "app/widget", "app/commoditiesitem"],
+function(jquery, Widget, CommoditiesItem){
     "use strict"
 
     /**
@@ -12,21 +12,22 @@ function(jquery, Widget, EquipmentItem){
      *
      * @param {DOM Element} elem - The element to fill with this widget
      */
-    var EquipmentWidget = function(elem) {
+    var CommoditiesWidget = function(elem) {
         this.init(elem);
     }
 
-    EquipmentWidget.prototype = new Widget("Equipment", [EquipmentItem]);
+    CommoditiesWidget.prototype = new Widget("Commodities and Supplies",
+                                             [CommoditiesItem]);
 
     /**
      * Convert this widget to an array suitable for being passed to excel-builder
      */
-    EquipmentWidget.prototype.serialize = function(formatter) {
+    CommoditiesWidget.prototype.serialize = function(formatter) {
         var serialization = [];
 
         var yearTotals = this.getPerYearTotal();
-        var titleLine = [{value: "VII", metadata: {style: formatter.id}},
-                         {value:'Equipment', metadata: {style: formatter.id}},
+        var titleLine = [{value: "VI", metadata: {style: formatter.id}},
+                         {value:'Commodities', metadata: {style: formatter.id}},
                          "", ""];
         yearTotals.forEach(function(total){
             titleLine.push({value:'$' + total, metadata: {style: formatter.id}});
@@ -42,5 +43,5 @@ function(jquery, Widget, EquipmentItem){
         return serialization;
     }
 
-    return EquipmentWidget;
+    return CommoditiesWidget;
 });

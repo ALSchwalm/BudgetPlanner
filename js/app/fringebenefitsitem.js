@@ -138,19 +138,28 @@ define(["jquery", "app/utils"], function(jquery, utils){
      * @returns {Number[]} - An array of numbers, one for each year
      */
     FringeBenefitsItem.prototype.val = function() {
-        var arr = [];
-        for (var i=0; i < this.body.find("option").length; ++i) {
-            arr.push(0);
-        }
-        var purchaseYear = parseInt(this.body.find(".equipment-year").val());
-        arr[purchaseYear] = parseFloat(this.body.find('.equipment-cost').val()) || 0;
-        return arr;
+        var index = this.parent.items.indexOf(this);
+        var salaryItem = this.parent.salaryWidget.items[index-1];
+        var percent = parseFloat(this.body.find(".benefits-percent").val()) * 0.01;
+
+        var yearlyPay = salaryItem.val();
+        return yearlyPay.map(function(value){
+            return value*percent;
+        });
     }
 
     /**
      * Convert this item to an array suitable for being passed to excel-builder
      */
     FringeBenefitsItem.prototype.serialize = function() {
+        var name = this.body.find(".benefits-name").val();
+        var percent = this.body.find(".benefits-percent").val()
+        var serialized = ["", name, "@", percent + '%'];
+
+        this.val().forEach(function(year){
+            serialized.push('$' + utils.asCurrency(year));
+        });
+        return serialized;
     }
 
     return FringeBenefitsItem;

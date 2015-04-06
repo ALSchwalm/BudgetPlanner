@@ -2,8 +2,8 @@
  * A module which exposes a way to update global settings
  * @module app/settingswidget
  */
-define(["jquery", "app/widget", "moment"],
-function(jquery, Widget, moment){
+define(["jquery", "app/widget", "moment", "jquery-ui", "app/utils"],
+function(jquery, Widget, moment, jqueryui, utils){
     "use strict"
 
     /**
@@ -19,6 +19,7 @@ function(jquery, Widget, moment){
                        null,
                        this.onAdded.bind(this));
         elem.prepend(this.body);
+        this.body.show();
     }
 
     SettingsWidget.prototype.onAdded = function() {
@@ -35,6 +36,37 @@ function(jquery, Widget, moment){
 
         $("#settings-start-date, #settings-end-date").change(function(){
             this.update();
+        }.bind(this));
+
+        $("#settings-start-date, #settings-end-date").datepicker({
+            changeMonth: true,
+            changeYear: true,
+        });
+
+        $("#continue-button").click(function(){
+            var empty = this.body.find("input").filter(function() {
+                return this.value === "";
+            });
+
+            if (empty.length) {
+                var alert = '<div id="error-alert" class="alert alert-info alert-dismissible" role="alert">' +
+                  '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                   '<span aria-hidden="true">&times;</span>' +
+                  '</button>' +
+                  '<strong>Error  </strong><span class="message">Please fill out all of the forms before continuing.</span>' +
+                '</div>';
+                var elem = $($.parseHTML(alert));
+                elem.insertBefore(".container");
+                return;
+            }
+
+            for (var key in this.widgets) {
+                if (this.widgets[key].body) {
+                    this.widgets[key].body.find(".row:first").show();
+                }
+            }
+            this.totals.body.find(".row:first").show();
+            $("#continue-button").remove();
         }.bind(this));
     }
 
@@ -74,7 +106,26 @@ function(jquery, Widget, moment){
         this.update();
     }
 
-    SettingsWidget.prototype.serialize = function() {
+    SettingsWidget.prototype.monthsOfYearWorked = function(i) {
+        var start = moment($("#settings-start-date").val());
+        var end = moment($("#settings-end-date").val());
+
+        var totalRange = moment().range(start.clone(), end.clone());
+        var yearStart = start.clone();
+        yearStart.add(i, "year");
+        yearStart.startOf('year');
+
+        var yearEnd = start.clone();
+        yearEnd.add(i, "year");
+        yearEnd.endOf('year');
+
+        var yearRange = moment().range(yearStart, yearEnd);
+        var intersection = yearRange.intersect(totalRange);
+        intersection.end.add(15, "days");
+        return intersection.diff("months");
+    }
+
+    SettingsWidget.prototype.serialize = function(formatter) {
         var start = $("#settings-start-date").val();
         var end = $("#settings-end-date").val()
         if (!start || !end) {
@@ -82,12 +133,37 @@ function(jquery, Widget, moment){
         }
         start = moment(start);
         end = moment(end);
-        return [
-            ["Title:" + $("#settings-title").val()],
-            ["Budget for the period from " + start.format("MMMM Do YYYY")
-             + " to " + end.format("MMMM Do YYYY")],
-            [$("#settings-raise-percent").val() + "% raise factor in effect"]
+
+        var serialized = [
+            [{value: "Title:" + $("#settings-title").val(), metadata: {style: formatter.id}}],
+            [{value: "Budget for the period from " + start.format("MMMM Do YYYY")
+              + " to " + end.format("MMMM Do YYYY"), metadata: {style: formatter.id}}],
+            [{value: $("#settings-raise-percent").val() + "% raise factor in effect",
+              metadata: {style: formatter.id}}],
+            [""]
         ];
+
+        var yearLine = [
+            "", "", "", ""
+        ];
+
+        for (var i=0; i < (end.year() - start.year()+1); ++i) {
+            yearLine.push("Year " + (start.year() + i));
+        }
+
+        yearLine.push("Total");
+        serialized.push(yearLine);
+
+        var monthsLine = [
+            "", "", "", ""
+        ];
+        for (var i=0; i < (end.year() - start.year()+1); ++i) {
+            monthsLine.push(this.monthsOfYearWorked(i) + " Months");
+        }
+
+        serialized.push(monthsLine);
+
+        return serialized;
     }
 
     return SettingsWidget;

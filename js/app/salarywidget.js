@@ -3,8 +3,8 @@
  * @module app/salarywidget
  */
 define(["jquery", "app/widget", "app/salaryitem-employee",
-    "app/salaryitem-graduate"],
-function(jquery, Widget, SalaryItemEmployee, SalaryItemGraduate){
+    "app/salaryitem-graduate", "app/utils"],
+function(jquery, Widget, SalaryItemEmployee, SalaryItemGraduate, utils){
     "use strict"
 
     /**
@@ -23,15 +23,25 @@ function(jquery, Widget, SalaryItemEmployee, SalaryItemGraduate){
     /**
      * Convert this SalaryWidget to an array suitable for being passed to excel-builder
      */
-    SalaryWidget.prototype.serialize = function() {
-        var serialization = [
-            [""], [""],
-            ["I", 'Salary And Wages'],
-            ["", 'Name', '9/12-month', 'Salary', 'Percent Effort'],
-        ];
+    SalaryWidget.prototype.serialize = function(formatter) {
+        var serialization = [];
 
+        var yearTotals = this.getPerYearTotal();
+        var titleLine = [{value: "I", metadata: {style: formatter.id}},
+                         {value:'Salary And Wages', metadata: {style: formatter.id}},
+                         "", ""];
+        yearTotals.forEach(function(total){
+            titleLine.push({value: '$' + utils.asCurrency(total),
+                            metadata: {style: formatter.id}});
+        });
+        titleLine.push({value:'$' + this.getTotal(),
+                        metadata: {style: formatter.id}});
+
+        serialization.push(titleLine);
         this.items.forEach(function(item){
-            serialization.push(item.serialize());
+            item.serialize().forEach(function(row){
+                serialization.push(row);
+            })
         });
 
         return serialization;

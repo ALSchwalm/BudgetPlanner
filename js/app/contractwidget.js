@@ -28,16 +28,27 @@ function(jquery, Widget, ContractItem, GraduateInsuranceItem){
     /**
      * Convert this widget to an array suitable for being passed to excel-builder
      */
-    ContractWidget.prototype.serialize = function() {
-        var serialization = [
-            ['Contracts'],
-            ['Item Name', 'Cost', 'Purchase Year']
-        ];
+    ContractWidget.prototype.serialize = function(formatter) {
+        var serialization = [];
 
-        this.items.forEach(function(item){
-            serialization.push(item.serialize());
+        var yearTotals = this.getPerYearTotal();
+        var titleLine = [{value: "V", metadata: {style: formatter.id}},
+                         {value:'Contractuals', metadata: {style: formatter.id}},
+                         "", ""];
+
+        yearTotals.forEach(function(total){
+            titleLine.push({value: '$' + total,
+                            metadata: {style: formatter.id}});
         });
 
+        titleLine.push({value:'$' + this.getTotal(),
+                        metadata: {style: formatter.id}});
+
+        serialization.push(titleLine);
+        this.items.forEach(function(item){
+            serialization.push(item.serialize(formatter));
+        });
+        serialization.push([""]);
         return serialization;
     }
 

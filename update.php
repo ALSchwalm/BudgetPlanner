@@ -1,13 +1,6 @@
 <?php
 
-// TEMPORARY VALUES: DO NOT UPDATE WITH ACTUAL PASSWORD
-// Connect to the sql server
-$connect = mysql_connect("localhost", "db_user", "password")
-    or die("unable to connect to msql server: " . mysql_error());
-
-// Select the appropriate database
-mysql_select_db("budget_db", $connect)
-    or die("unable to select database 'db': " . mysql_error());
+include("connection.php");
 
 // Create the table
 $result = mysql_query(
@@ -24,12 +17,14 @@ $result = mysql_query(
 $result = mysql_query(
     "CREATE TABLE IF NOT EXISTS saved (
         id VARCHAR(13) NOT NULL PRIMARY KEY,
+        title TEXT,
+        pi TEXT,
         data TEXT
     )"
 ) or die('Invalid query: ' . mysql_error());
 
 // Get the data from the csv file
-$csvData = file_get_contents("HPC_data.csv");
+$csvData = file_get_contents($_FILES['update_file']['tmp_name']);
 
 // Convert to array and drop first element
 $lines = explode(PHP_EOL, $csvData);
@@ -61,5 +56,36 @@ foreach ($lines as $line) {
 
     $result = mysql_query($sql_query) or
         die('Invalid query: ' . mysql_error());
+
+    if (!$result) {
+        echo "Error updating database.";
+    }
 }
 ?>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Budget Planning Tool</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
+    <script src="js/lib/jquery.js"></script>
+    <script src="js/lib/bootstrap.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="collapse navbar-collapse">
+          <a class="navbar-brand" href="/">HPC² Budget Utility</a>
+          <ul class="nav navbar-nav">
+            <li><a href="#">Help</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <h3>Update database</h3>
+      Update complete.
+    </div>
+  </body>
+</html>

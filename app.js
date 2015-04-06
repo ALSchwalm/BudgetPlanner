@@ -13,9 +13,11 @@ requirejs.config({
 
 require(["excel-builder", "moment", "app/settingswidget", "app/totalswidget",
          "app/salarywidget", "app/equipmentwidget", "app/contractwidget",
-         "app/subcontractwidget", "app/travelwidget", "app/fringebenefitswidget"],
+         "app/subcontractwidget", "app/travelwidget", "app/fringebenefitswidget",
+         "app/commoditieswidget"],
 function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidget,
-          ContractWidget, SubContractWidget, TravelWidget, FringeBenefitsWidget) {
+          ContractWidget, SubContractWidget, TravelWidget, FringeBenefitsWidget,
+          CommoditiesWidget) {
     var widgets = {};
     var settings = null;
     var totals = null;
@@ -25,13 +27,22 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
         var albumList = artistWorkbook.createWorksheet();
         var stylesheet = artistWorkbook.getStyleSheet();
 
-        var content = [settings.serialize(), [""]];
-        for (var name in widgets) {
-            var widget = widgets[name];
-            content.push(widget.serialize());
-            content.push([""]);
-        }
-        content.push(totals.serialize());
+        var headingFormatter = stylesheet.createFormat({
+            font: {
+                bold: true,
+            },
+        });
+
+        var content = [
+            settings.serialize(headingFormatter),
+            widgets["salary"].serialize(headingFormatter),
+            widgets["fringebenefits"].serialize(headingFormatter),
+            widgets["subcontract"].serialize(headingFormatter),
+            widgets["contract"].serialize(headingFormatter),
+            widgets["commodities"].serialize(headingFormatter),
+            widgets["equipment"].serialize(headingFormatter),
+            totals.serialize(headingFormatter)
+        ];
 
         var merged = [];
         merged = merged.concat.apply(merged, content);
@@ -40,9 +51,11 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
         artistWorkbook.addWorksheet(albumList);
 
         albumList.setColumns([
-            {width: 3},
-            {width: 13},
-            {width: 13}
+            {width: 5},
+            {width: 30},
+            {width: 13}, {width: 13}, {width: 13},
+            {width: 13}, {width: 13}, {width: 13},
+            {width: 13}, {width: 13}, {width: 13}
         ]);
 
         $("<a>").attr({
@@ -62,6 +75,8 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
 
         $.post("save.php", {
             id : location.search.split('id=')[1],
+            pi : $("#settings-author").val(),
+            title : $("#settings-title").val(),
             data : JSON.stringify(config)
         }, function(data){
             console.log("saved");
@@ -90,10 +105,13 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
             "subcontract" : new SubContractWidget($(".container")),
             "travel" : new TravelWidget($(".container")),
             "contract" : new ContractWidget($(".container")),
-            "equipment" : new EquipmentWidget($(".container"))
+            "equipment" : new EquipmentWidget($(".container")),
+            "commodities" : new CommoditiesWidget($(".container")),
         };
+
         settings = new SettingsWidget($(".container"), widgets);
         totals = new TotalsWidget($(".container"), widgets);
+        settings.totals = totals;
 
         widgets["fringebenefits"].salaryWidget = widgets["salary"];
         benefits = widgets["fringebenefits"]; // TODO remove this
@@ -127,6 +145,14 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
             }, function(data){
                 if (JSON.parse(data)) {
                     restore(JSON.parse(JSON.parse(data)));
+
+                    for (var key in widgets) {
+                        if (widgets[key].body) {
+                            widgets[key].body.find(".row:first").show();
+                        }
+                    }
+                    totals.body.find(".row:first").show();
+                    $("#continue-button").remove();
                 }
             });
         }, 400);

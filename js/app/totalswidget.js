@@ -121,12 +121,45 @@ function(jquery, Widget, utils){
         $("#total-body").find(".total-total-cost-row td:last").remove();
     }
 
-    TotalsWidget.prototype.serialize = function() {
+    TotalsWidget.prototype.serialize = function(formatter) {
+        var totalDirectLine = [
+            "", {value: "Total Direct Cost", metadata: {style: formatter.id}}, "", ""
+        ];
+
+        this.getTotalDirectCost().forEach(function(year){
+            totalDirectLine.push({value:'$'+utils.asCurrency(year),
+                                  metadata: {style: formatter.id}});
+        });
+
+        var modifiedDirectCost = [
+            "", {value:"Modified Total Direct Cost", metadata: {style: formatter.id}}, "", ""
+        ];
+        this.getModifiedDirectCost().forEach(function(year){
+            modifiedDirectCost.push({value: '$' + utils.asCurrency(year),
+                                     metadata: {style: formatter.id}});
+        });
+
+        var indirectCost = [
+            "", {value:"Indirect Cost", metadata: {style: formatter.id}}, "", ""
+        ];
+        this.getIndirectCost().forEach(function(year){
+            indirectCost.push({value: '$' + utils.asCurrency(year),
+                               metadata: {style: formatter.id}});
+        });
+
+        var total = [
+            "", {value:"Total", metadata: {style: formatter.id}}, "", ""
+        ];
+        this.getTotal().forEach(function(year){
+            total.push({value:'$' + utils.asCurrency(year),
+                        metadata: {style: formatter.id}});
+        });
+
         return [
-            ["", "TOTAL DIRECT COST", "", this.getTotalDirectCost()],
-            ["", "MODIFIED TOTAL DIRECT COST", "", this.getModifiedDirectCost()],
-            ["", "INDIRECT COST", $("#total-indirect-cost-rate").val() + "%", this.getIndirectCost()],
-            ["", "TOTAL", "", this.getTotal()]
+            totalDirectLine,
+            modifiedDirectCost,
+            indirectCost,
+            total
         ];
     }
 
