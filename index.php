@@ -58,13 +58,13 @@
     </div>
     <script>
      $("#newbudget").click(function(e){
-       document.location.href = "/budget.html?id="+Math.random().toString(36).substring(5);
+       document.location.href = "budget.html?id="+Math.random().toString(36).substring(5);
        e.preventDefault();
      });
 
      $("tr td").click(function(){
        var id = $(this).parent().attr("link");
-       document.location.href = '/budget.html?id=' + id;
+       document.location.href = 'budget.html?id=' + id;
      });
     </script>
   </body>
