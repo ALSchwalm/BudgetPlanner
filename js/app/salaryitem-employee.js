@@ -88,7 +88,7 @@ function(jquery, autocomplete, utils, moment, momentRange){
             );
         }.bind(this));
 
-        this.body.find(".settings-start-date, .settings-end-date").datepicker({
+        this.body.find(".salary-start-date, .salary-end-date").datepicker({
             changeMonth: true,
             changeYear: true,
         });
@@ -107,10 +107,13 @@ function(jquery, autocomplete, utils, moment, momentRange){
         this.updateDuration(this.start, this.end);
         this.body.find(".salary-name").val(config.name);
         this.body.find(".salary-salary").val(config.salary);
-        this.body.find(".salary-effort").map(function(i){
-            $(this).val(config.efforts[i]);
-        });
-        this.update();
+        setTimeout(function(){
+            this.body.find(".salary-effort").map(function(i){
+                $(this).val(config.efforts[i]);
+            });
+            this.update();
+            this.parent.update();
+        }.bind(this), 300);
     }
 
     SalaryItemEmployee.prototype.itemName = "Employee";

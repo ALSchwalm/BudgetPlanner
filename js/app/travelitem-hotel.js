@@ -39,11 +39,16 @@ define(["jquery"], function(jquery){
     TravelItemHotel.prototype.init = function() {
         this.body.find('.item-remove').click(function(){
             this.body.remove();
-            this.parentWidget.removeItem(this);
+            this.parent.removeItem(this);
         }.bind(this));
 
         this.body.find('.travel-hotel-cost').keyup(this.update.bind(this));
-            
+
+        this.body.find('.travel-hotel-checkin, .travel-hotel-checkout').datepicker({
+            changeMonth: true,
+            changeYear: true,
+        });
+
         // Get hotel price via API
         this.body.find('.travel-hotel-people').on('blur', function() {
             this.body.find('.travel-hotel-cost').attr('placeholder', 'Calculating...');
@@ -103,7 +108,7 @@ define(["jquery"], function(jquery){
         this.body.find(".travel-hotel-people").val(config.people);
         this.body.find(".travel-hotel-cost").val(config.cost);
         this.body.find(".travel-hotel-year").val(config.year);
-		
+
         this.update();
     }
 

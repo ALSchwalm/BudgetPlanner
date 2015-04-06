@@ -23,7 +23,7 @@ function(jquery, Widget, TravelItemHotel, TravelItemCar, TravelItemPlane){
     /**
      * Convert this TravelWidget to an array suitable for being passed to excel-builder
      */
-    TravelWidget.prototype.serialize = function() {
+    TravelWidget.prototype.serialize = function(formatter) {
         var serialization = [];
 
         var yearTotals = this.getPerYearTotal();
@@ -37,9 +37,6 @@ function(jquery, Widget, TravelItemHotel, TravelItemCar, TravelItemPlane){
                         metadata: {style: formatter.id}});
 
         serialization.push(titleLine);
-        this.items.forEach(function(item){
-            serialization.push(item.serialize());
-        });
         serialization.push([""]);
         return serialization;
     }

@@ -34,7 +34,7 @@ function(jquery, Widget, SalaryItemEmployee, SalaryItemGraduate, utils){
             titleLine.push({value: '$' + utils.asCurrency(total),
                             metadata: {style: formatter.id}});
         });
-        titleLine.push({value:'$' + this.getTotal(),
+        titleLine.push({value:'$' + utils.asCurrency(this.getTotal()),
                         metadata: {style: formatter.id}});
 
         serialization.push(titleLine);

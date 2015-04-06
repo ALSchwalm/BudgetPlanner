@@ -37,6 +37,7 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
             settings.serialize(headingFormatter),
             widgets["salary"].serialize(headingFormatter),
             widgets["fringebenefits"].serialize(headingFormatter),
+            widgets["travel"].serialize(headingFormatter),
             widgets["subcontract"].serialize(headingFormatter),
             widgets["contract"].serialize(headingFormatter),
             widgets["commodities"].serialize(headingFormatter),
@@ -102,8 +103,8 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
         widgets = {
             "salary" : new SalaryWidget($(".container")),
             "fringebenefits" : new FringeBenefitsWidget($(".container")),
-            "subcontract" : new SubContractWidget($(".container")),
             "travel" : new TravelWidget($(".container")),
+            "subcontract" : new SubContractWidget($(".container")),
             "contract" : new ContractWidget($(".container")),
             "commodities" : new CommoditiesWidget($(".container")),
             "equipment" : new EquipmentWidget($(".container")),

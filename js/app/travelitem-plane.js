@@ -39,10 +39,15 @@ define(["jquery"], function(jquery){
     TravelItemPlane.prototype.init = function() {
         this.body.find('.item-remove').click(function(){
             this.body.remove();
-            this.parentWidget.removeItem(this);
+            this.parent.removeItem(this);
         }.bind(this));
 
         this.body.find('.travel-plane-cost').change(this.update.bind(this));
+
+        this.body.find(".travel-plane-departuredate, .travel-plane-returndate").datepicker({
+            changeMonth: true,
+            changeYear: true,
+        });
     }
 
     /**
@@ -76,7 +81,7 @@ define(["jquery"], function(jquery){
         this.body.find(".travel-plane-departuredate").val(config.departuredate);
         this.body.find(".travel-plane-returndate").val(config.returndate);
         this.body.find(".travel-plane-year").val(config.year)
-		
+
         this.update();
     }
 

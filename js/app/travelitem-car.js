@@ -39,11 +39,16 @@ define(["jquery"], function(jquery){
     TravelItemCar.prototype.init = function() {
         this.body.find('.item-remove').click(function(){
             this.body.remove();
-            this.parentWidget.removeItem(this);
+            this.parent.removeItem(this);
         }.bind(this));
 
         this.body.find('.travel-car-cost').change(this.update.bind(this));
-            
+
+        this.body.find('.travel-car-pickupdate, .travel-car-dropoffdate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+        })
+
         // Get car price via API
         this.body.find('.travel-car-dropoffdate').on('blur', function() {
             this.body.find('.travel-car-cost').attr('placeholder', 'Calculating...');
@@ -97,7 +102,7 @@ define(["jquery"], function(jquery){
         this.body.find(".travel-car-dropoffdate").val(config.dropoffdate);
         this.body.find(".travel-car-cost").val(config.cost);
         this.body.find(".travel-car-year").val(config.year);
-		
+
         this.update();
     }
 
