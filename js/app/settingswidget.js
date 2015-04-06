@@ -19,6 +19,7 @@ function(jquery, Widget, moment, jqueryui, utils){
                        null,
                        this.onAdded.bind(this));
         elem.prepend(this.body);
+        this.body.show();
     }
 
     SettingsWidget.prototype.onAdded = function() {
@@ -41,6 +42,32 @@ function(jquery, Widget, moment, jqueryui, utils){
             changeMonth: true,
             changeYear: true,
         });
+
+        $("#continue-button").click(function(){
+            var empty = this.body.find("input").filter(function() {
+                return this.value === "";
+            });
+
+            if (empty.length) {
+                var alert = '<div id="error-alert" class="alert alert-info alert-dismissible" role="alert">' +
+                  '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                   '<span aria-hidden="true">&times;</span>' +
+                  '</button>' +
+                  '<strong>Error  </strong><span class="message">Please fill out all of the forms before continuing.</span>' +
+                '</div>';
+                var elem = $($.parseHTML(alert));
+                elem.insertBefore(".container");
+                return;
+            }
+
+            for (var key in this.widgets) {
+                if (this.widgets[key].body) {
+                    this.widgets[key].body.find(".row:first").show();
+                }
+            }
+            this.totals.body.find(".row:first").show();
+            $("#continue-button").remove();
+        }.bind(this));
     }
 
     SettingsWidget.prototype.update = function() {

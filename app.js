@@ -109,6 +109,7 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
 
         settings = new SettingsWidget($(".container"), widgets);
         totals = new TotalsWidget($(".container"), widgets);
+        settings.totals = totals;
 
         widgets["fringebenefits"].salaryWidget = widgets["salary"];
         benefits = widgets["fringebenefits"]; // TODO remove this
@@ -142,6 +143,14 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
             }, function(data){
                 if (JSON.parse(data)) {
                     restore(JSON.parse(JSON.parse(data)));
+
+                    for (var key in widgets) {
+                        if (widgets[key].body) {
+                            widgets[key].body.find(".row:first").show();
+                        }
+                    }
+                    totals.body.find(".row:first").show();
+                    $("#continue-button").remove();
                 }
             });
         }, 400);
