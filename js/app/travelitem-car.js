@@ -58,7 +58,7 @@ define(["jquery"], function(jquery){
                     dropoff: this.body.find('.travel-car-dropoffdate').val()
                 }
             }).done(function(rtn) {
-                if(rtn.error) {
+                if(rtn.error || typeof rtn.error == 'undefined') {
                     this.body.find('.travel-car-cost').val(0);
                     console.log(rtn.msg);
                 } else {
