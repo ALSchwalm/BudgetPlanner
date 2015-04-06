@@ -105,8 +105,8 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
             "subcontract" : new SubContractWidget($(".container")),
             "travel" : new TravelWidget($(".container")),
             "contract" : new ContractWidget($(".container")),
-            "equipment" : new EquipmentWidget($(".container")),
             "commodities" : new CommoditiesWidget($(".container")),
+            "equipment" : new EquipmentWidget($(".container")),
         };
 
         settings = new SettingsWidget($(".container"), widgets);

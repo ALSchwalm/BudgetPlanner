@@ -3,7 +3,7 @@
  * @module app/salarywidget
  */
 define(["jquery", "app/widget", "app/salaryitem-employee",
-    "app/salaryitem-graduate", "app/utils"],
+        "app/salaryitem-graduate", "app/utils"],
 function(jquery, Widget, SalaryItemEmployee, SalaryItemGraduate, utils){
     "use strict"
 
