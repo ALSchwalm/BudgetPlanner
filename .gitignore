@@ -1,7 +1,4 @@
 HPC_data.csv
 *.xml
 _compareTemp/
-update_database.php
-save.php
-restore.php
-lookup.php
+connection.php
