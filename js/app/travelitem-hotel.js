@@ -60,7 +60,7 @@ define(["jquery"], function(jquery){
                     people: this.body.find('.travel-hotel-people').val()
                 }
             }).done(function(rtn) {
-                if(rtn.error) {
+                if(rtn.error || (typeof rtn.error == 'undefined') ) {
                     this.body.find('.travel-hotel-cost').val(0);
                     console.log(rtn.msg);
                 } else {
