@@ -42,10 +42,10 @@ define(["jquery"], function(jquery){
             this.parentWidget.removeItem(this);
         }.bind(this));
 
-        this.body.find('.travel-car-cost').keyup(this.update.bind(this));
+        this.body.find('.travel-car-cost').change(this.update.bind(this));
             
         // Get car price via API
-        this.body.find('.travel-car-people').on('blur', function() {
+        this.body.find('.travel-car-dropoffdate').on('blur', function() {
             this.body.find('.travel-car-cost').attr('placeholder', 'Calculating...');
             $.ajax({
                 url: '/ajaxServer.php',
