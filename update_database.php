@@ -19,7 +19,8 @@ $result = mysql_query(
         id VARCHAR(13) NOT NULL PRIMARY KEY,
         title TEXT,
         pi TEXT,
-        data TEXT
+        data TEXT,
+        created DATETIME DEFAULT CURRENT_TIMESTAMP
     )"
 ) or die('Invalid query: ' . mysql_error());
 

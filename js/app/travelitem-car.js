@@ -53,7 +53,7 @@ define(["jquery"], function(jquery){
         this.body.find('.travel-car-dropoffdate').on('blur', function() {
             this.body.find('.travel-car-cost').attr('placeholder', 'Calculating...');
             $.ajax({
-                url: '/ajaxServer.php',
+                url: 'ajaxServer.php',
                 type: 'POST',
                 dataType: 'json',
                 data: {

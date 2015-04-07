@@ -38,10 +38,12 @@
           <th>#</th>
           <th>Budget Name</th>
           <th>Primary Investigator</th>
+          <th>Created</th>
+          <th></th>
         </tr>
         <?php
         include("connection.php");
-        $sql_query = "SELECT id, title, pi FROM saved";
+        $sql_query = "SELECT id, title, pi, created FROM saved";
         $result = mysql_query($sql_query)
           or die('Invalid query: ' . mysql_error());
 
@@ -50,11 +52,18 @@
           echo "<tr link=".$row["id"].">";
           echo     "<td>".$count."</td>";
           echo     "<td>".$row["title"]."</td>";
-          echo     "<td>".$row["pi"]."</td></tr>";
+          echo     "<td>".$row["pi"]."</td>";
+          echo     "<td>".$row["created"]."</td>";
+          echo     "<td><a class='btn btn-info remove' id=".$row["id"].">Remove</a></td></tr>";
           $count += 1;
         }
         ?>
       </table>
+      <?php
+        if ($count == 1) {
+            echo "No existing budgets.";
+        }
+      ?>
     </div>
     <script>
      $("#newbudget").click(function(e){
@@ -66,6 +75,20 @@
        var id = $(this).parent().attr("link");
        document.location.href = 'budget.html?id=' + id;
      });
+
+$(".remove").click(function(e){
+    if(confirm('Are you sure you want to remove the budget? This action cannot be undone.')) {
+        $.post("remove.php", {
+                id : $(this).attr("id")
+            }, function(){
+                location.reload();
+            });
+    }
+
+    e.preventDefault();
+    return false;
+})
+
     </script>
   </body>
 </html>
