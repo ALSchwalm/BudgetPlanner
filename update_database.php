@@ -76,7 +76,7 @@ foreach ($lines as $line) {
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <div class="collapse navbar-collapse">
-          <a class="navbar-brand" href="/">HPC² Budget Utility</a>
+          <a class="navbar-brand" href=".">HPC² Budget Utility</a>
           <ul class="nav navbar-nav">
             <li><a href="#">Help</a></li>
           </ul>

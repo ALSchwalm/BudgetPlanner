@@ -22,7 +22,11 @@ function(jquery, utils, Widget, FringeBenefitsItem, TuititionBenefitItem){
         }.bind(this), 300);
 
         $(document.body).on("salary-added", function(){
-            if (this.salaryWidget.items.length > this.items.length)
+            var salaryItems = this.salaryWidget.items.filter(function(item){
+                // Graduate student items have no name, do not count them
+                return item.body.find(".salary-name").length == 1;
+            }).length;
+            if (salaryItems > this.items.length-1)
                 this.addItem();
         }.bind(this));
 

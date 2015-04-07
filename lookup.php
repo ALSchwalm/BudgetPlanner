@@ -12,10 +12,13 @@ $result = mysql_query("SELECT name, duration, salary
 // Collect the result into an arry
 $rows = array();
 while ($row = mysql_fetch_assoc($result)) {
-    $rows[] = ["value"=>$row["name"], "data"=>$row];
+    $rows[] = array("value"=>$row["name"], "data"=>$row);
 }
 
 // Return the array encoded as json
-print json_encode(["suggestions"=>$rows]);
+$json = json_encode(array("suggestions"=>$rows))
+      or die(json_last_error());
+
+print $json;
 
 ?>

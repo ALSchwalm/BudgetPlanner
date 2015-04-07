@@ -40,7 +40,7 @@ function(jquery, autocomplete, utils, moment, momentRange){
 
                       // Setup autocomplete
                       this.body.find(".salary-name").autocomplete({
-                          serviceUrl: "/lookup.php",
+                          serviceUrl: "lookup.php",
                           lookupLimit: 10,
                           onSelect : function(completion) {
                               this.body.find(".salary-salary").val(completion.data.salary);

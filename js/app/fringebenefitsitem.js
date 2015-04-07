@@ -65,6 +65,11 @@ define(["jquery", "app/utils"], function(jquery, utils){
         this.body.find(".benefits-name").val(config.name);
         this.body.find(".benefits-type").val(config.category);
         this.body.find(".benefits-percent").val(config.percent);
+
+        setTimeout(function(){
+            this.update();
+            this.parent.update();
+        }.bind(this), 500);
     }
 
     FringeBenefitsItem.prototype.update = function() {

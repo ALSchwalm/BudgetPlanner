@@ -133,7 +133,10 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
             return 'Any unsaved changes will be lost.';
         };
 
-        $("#download").click(download);
+        $("#download").click(function(e){
+            e.preventDefault();
+            download()
+        });
         $("#save").click(function(e){
             e.preventDefault();
             save();
@@ -145,7 +148,9 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
                 id : location.search.split('id=')[1],
             }, function(data){
                 if (JSON.parse(data)) {
-                    restore(JSON.parse(JSON.parse(data)));
+                    var restoreData =
+                        JSON.parse(JSON.parse(data).data.replace(/\\/g, ""))
+                    restore(restoreData);
 
                     for (var key in widgets) {
                         if (widgets[key].body) {
