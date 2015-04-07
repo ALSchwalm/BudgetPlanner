@@ -20,7 +20,7 @@ $result = mysql_query(
         title TEXT,
         pi TEXT,
         data TEXT,
-        created DATETIME DEFAULT CURRENT_TIMESTAMP
+        created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )"
 ) or die('Invalid query: ' . mysql_error());
 
