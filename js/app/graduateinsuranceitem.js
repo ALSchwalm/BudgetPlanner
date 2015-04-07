@@ -120,6 +120,10 @@ define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
         this.start = start;
         this.end = end;
 
+        if (!this.start || !this.end || !this.end.diff) {
+            return;
+        }
+
         var years = Math.ceil(end.diff(start, 'years', true));
         while(this.body.find(".year").length != years) {
             if (this.body.find(".year").length > years) {

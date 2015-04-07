@@ -59,11 +59,13 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
             {width: 13}, {width: 13}, {width: 13}
         ]);
 
-        $("<a>").attr({
+        var link = $("<a>").attr({
             download: "file.xlsx",
             href: 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,' +
                 EB.createFile(artistWorkbook)
-        })[0].click();
+        }).css("display", "none");
+        $("body").append(link);
+        link[0].click();
     }
 
     save = function() {
@@ -81,6 +83,7 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
             data : JSON.stringify(config)
         }, function(data){
             console.log("saved");
+            alert("Save complete.");
         });
 
         return config;
