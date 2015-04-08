@@ -151,8 +151,7 @@ function(jquery, autocomplete, utils, moment, momentRange){
 
         var yearRange = moment().range(yearStart, yearEnd);
         var intersection = yearRange.intersect(totalRange);
-        intersection.end.add(15, "days");
-        return intersection.diff("months");
+        return Math.round((intersection.diff("days")/30)*2)/2;
     }
 
     /**
@@ -196,7 +195,7 @@ function(jquery, autocomplete, utils, moment, momentRange){
         this.start = start;
         this.end = end;
 
-        var years = Math.ceil(end.diff(start, 'years', true));
+        var years = 1 + (end.year() - start.year());
         while(this.body.find(".year").length != years) {
             if (this.body.find(".year").length > years) {
                 this.removeYear();
@@ -227,7 +226,7 @@ function(jquery, autocomplete, utils, moment, momentRange){
         var year = this.body.find(".year").length;
         var newYear = $.parseHTML(
             '<tr class="row">' +
-                '<td class="col-sm-4">Year ' + (year+1) + '</td>' +
+                '<td class="col-sm-4">Year ' + (this.start.year()+year) + '</td>' +
                 '<td class="col-sm-4">' +
                     '<div class="input-group">' +
                         '<input type="text" class="form-control salary-effort" placeholder="Effort">' +

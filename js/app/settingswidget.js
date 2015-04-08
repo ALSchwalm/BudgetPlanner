@@ -121,8 +121,7 @@ function(jquery, Widget, moment, jqueryui, utils){
 
         var yearRange = moment().range(yearStart, yearEnd);
         var intersection = yearRange.intersect(totalRange);
-        intersection.end.add(15, "days");
-        return intersection.diff("months");
+        return Math.round((intersection.diff("days")/30)*2)/2;
     }
 
     SettingsWidget.prototype.serialize = function(formatter) {

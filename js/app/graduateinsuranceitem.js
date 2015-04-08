@@ -124,7 +124,7 @@ define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
             return;
         }
 
-        var years = Math.ceil(end.diff(start, 'years', true));
+        var years = 1 + (end.year() - start.year());
         while(this.body.find(".year").length != years) {
             if (this.body.find(".year").length > years) {
                 this.removeYear();
@@ -143,7 +143,7 @@ define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
         var year = this.body.find(".year").length;
         var newYear = $.parseHTML(
             '<tr class="row">' +
-                '<td class="col-sm-4">Year ' + (year+1) + '</td>' +
+                '<td class="col-sm-4">Year ' + (year+this.start.year()) + '</td>' +
                 '<td class="col-sm-4">$<span class="year currency">0.00</></td>' +
             '</tr>'
         );

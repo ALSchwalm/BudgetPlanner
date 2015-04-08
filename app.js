@@ -122,7 +122,7 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
 
         widgets["settings"] = settings;
 
-        $(document).on("change keyup click", function(){
+        var updateTotals = function(){
             var start = $("#settings-start-date").val();
             var end = $("#settings-end-date").val()
             if (!start || !end) {
@@ -130,7 +130,8 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
             }
             totals.updateDuration(moment(start), moment(end));
             totals.update();
-        })
+        }
+        $(document).on("change keyup click", updateTotals);
 
         window.onbeforeunload = function(){
             return 'Any unsaved changes will be lost.';
@@ -162,6 +163,7 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
                     }
                     totals.body.find(".row:first").show();
                     $("#continue-button").remove();
+                    updateTotals();
                 }
             });
         }, 400);

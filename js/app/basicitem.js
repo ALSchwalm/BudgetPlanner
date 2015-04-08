@@ -70,7 +70,7 @@ define(["jquery"], function(jquery){
         this.start = start;
         this.end = end;
 
-        var years = Math.ceil(end.diff(start, 'years', true));
+        var years = 1 + (end.year() - start.year());
         while(this.body.find(".item-year option").length != years) {
             if (this.body.find(".item-year option").length > years) {
                 this.removeYear();
@@ -87,7 +87,7 @@ define(["jquery"], function(jquery){
     BasicItem.prototype.addYear = function() {
         var year = this.body.find(".item-year option").length;
         this.body.find(".item-year").append(
-            $("<option>").attr("value", year).text("Year " + (year+1))
+            $("<option>").attr("value", year).text("Year " + (year+this.start.year()))
         );
     }
 

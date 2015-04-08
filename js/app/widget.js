@@ -150,7 +150,7 @@ define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
         this.start = start;
         this.end = end;
 
-        var years = Math.ceil(end.diff(start, 'years', true));
+        var years = 1 + (end.year() - start.year());
         while(this.body.find(".widget-year").length != years) {
             if (this.body.find(".widget-year").length > years) {
                 this.removeYear();
@@ -170,7 +170,8 @@ define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
     Widget.prototype.addYear = function() {
         var year = this.body.find('.widget-year').length;
         var newYear = $.parseHTML(
-            '<td class="widget-year-cell"><i>Year ' + (year+1) + '</i>: $<span class="widget-year currency">0.00</span></td>'
+            '<td class="widget-year-cell"><i>Year ' + (year+this.start.year()) +
+                '</i>: $<span class="widget-year currency">0.00</span></td>'
         );
         $(newYear).insertBefore(this.body.find(".widget-total-cell"));
     }

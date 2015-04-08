@@ -86,7 +86,7 @@ function(jquery, Widget, utils){
         this.start = start;
         this.end = end;
 
-        var years = Math.ceil(end.diff(start, 'years', true));
+        var years = 1 + (end.year() - start.year());
         while($(".total-direct-cost").length != years) {
             if ($(".total-direct-cost").length > years) {
                 this.removeYear();
@@ -98,7 +98,7 @@ function(jquery, Widget, utils){
 
     TotalsWidget.prototype.addYear = function() {
         this.body.find(".total-headings").find("th:last")
-            .after($("<th>").html("Year " + ($(".total-direct-cost").length+1) ));
+            .after($("<th>").html("Year " + ($(".total-direct-cost").length+this.start.year()) ));
 
         var totalDirect = $("<td>").html("$").append($("<span>").addClass("total-direct-cost").html("0.00"));
         $("#total-body").find(".total-direct-cost-row").append(totalDirect);

@@ -67,7 +67,6 @@ define(["jquery"], function(jquery){
             }).done(function(rtn) {
                 if(rtn.error || (typeof rtn.error == 'undefined') ) {
                     this.body.find('.travel-hotel-cost').val(0);
-                    console.log(rtn.msg);
                 } else {
                     this.body.find('.travel-hotel-cost').val(rtn.avg);
                 }
