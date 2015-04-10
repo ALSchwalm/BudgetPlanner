@@ -71,16 +71,17 @@ function(jquery, Widget, moment, jqueryui, utils){
     }
 
     SettingsWidget.prototype.update = function() {
+        var start = $("#settings-start-date").val();
+        var end = $("#settings-end-date").val()
+        if (!start || !end) {
+            return;
+        }
         _.map(this.widgets, function(widget, name){
-            var start = $("#settings-start-date").val();
-            var end = $("#settings-end-date").val()
-            if (!start || !end) {
-                return;
-            }
             if (widget.updateDuration) {
                 widget.updateDuration(moment(start), moment(end));
             }
         });
+        this.totals.updateDuration(moment(start), moment(end));
     }
 
     SettingsWidget.prototype.save = function() {

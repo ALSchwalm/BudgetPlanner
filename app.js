@@ -123,12 +123,6 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
         widgets["settings"] = settings;
 
         var updateTotals = function(){
-            var start = $("#settings-start-date").val();
-            var end = $("#settings-end-date").val()
-            if (!start || !end) {
-                return;
-            }
-            totals.updateDuration(moment(start), moment(end));
             totals.update();
         }
         $(document).on("change keyup click", updateTotals);
