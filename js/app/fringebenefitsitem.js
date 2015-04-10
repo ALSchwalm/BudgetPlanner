@@ -162,14 +162,20 @@ define(["jquery", "app/utils"], function(jquery, utils){
     /**
      * Convert this item to an array suitable for being passed to excel-builder
      */
-    FringeBenefitsItem.prototype.serialize = function() {
+    FringeBenefitsItem.prototype.serialize = function(header, money) {
         var name = this.body.find(".benefits-name").val();
         var percent = this.body.find(".benefits-percent").val()
         var serialized = ["", name, "@", percent + '%'];
 
         this.val().forEach(function(year){
-            serialized.push('$' + utils.asCurrency(year));
+            serialized.push({value: parseFloat(year),
+                             metadata : {style : money.id}});
         });
+
+        serialized.push({value: _.reduce(this.val(), function(t, value){
+            return t + value;
+        }), metadata : {style: money.id}});
+
         return serialized;
     }
 

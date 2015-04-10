@@ -31,18 +31,24 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
             font: {
                 bold: true,
             },
+            format: '$#,##0.00'
         });
 
+        var moneyFormatter = stylesheet.createFormat({
+            format: '$#,##0.00'
+        });
+
+
         var content = [
-            settings.serialize(headingFormatter),
-            widgets["salary"].serialize(headingFormatter),
-            widgets["fringebenefits"].serialize(headingFormatter),
-            widgets["travel"].serialize(headingFormatter),
-            widgets["subcontract"].serialize(headingFormatter),
-            widgets["contract"].serialize(headingFormatter),
-            widgets["commodities"].serialize(headingFormatter),
-            widgets["equipment"].serialize(headingFormatter),
-            totals.serialize(headingFormatter)
+            settings.serialize(headingFormatter, moneyFormatter),
+            widgets["salary"].serialize(headingFormatter, moneyFormatter),
+            widgets["fringebenefits"].serialize(headingFormatter, moneyFormatter),
+            widgets["travel"].serialize(headingFormatter, moneyFormatter),
+            widgets["subcontract"].serialize(headingFormatter, moneyFormatter),
+            widgets["contract"].serialize(headingFormatter, moneyFormatter),
+            widgets["commodities"].serialize(headingFormatter, moneyFormatter),
+            widgets["equipment"].serialize(headingFormatter, moneyFormatter),
+            totals.serialize(headingFormatter, moneyFormatter)
         ];
 
         var merged = [];

@@ -22,7 +22,7 @@ function(jquery, Widget, CommoditiesItem){
     /**
      * Convert this widget to an array suitable for being passed to excel-builder
      */
-    CommoditiesWidget.prototype.serialize = function(formatter) {
+    CommoditiesWidget.prototype.serialize = function(formatter, money) {
         var serialization = [];
 
         var yearTotals = this.getPerYearTotal();
@@ -30,14 +30,14 @@ function(jquery, Widget, CommoditiesItem){
                          {value:'Commodities', metadata: {style: formatter.id}},
                          "", ""];
         yearTotals.forEach(function(total){
-            titleLine.push({value:'$' + total, metadata: {style: formatter.id}});
+            titleLine.push({value: total, metadata: {style: formatter.id}});
         });
-        titleLine.push({value:'$' + this.getTotal(),
+        titleLine.push({value: this.getTotal(),
                         metadata: {style: formatter.id}});
 
         serialization.push(titleLine);
         this.items.forEach(function(item){
-            serialization.push(item.serialize());
+            serialization.push(item.serialize(formatter, money));
         });
         serialization.push([""]);
         return serialization;

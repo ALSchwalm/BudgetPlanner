@@ -31,9 +31,9 @@ function(jquery, Widget, TravelItemHotel, TravelItemCar, TravelItemPlane){
                          {value:'Travel', metadata: {style: formatter.id}},
                          "", ""];
         yearTotals.forEach(function(total){
-            titleLine.push({value:'$' + total, metadata: {style: formatter.id}});
+            titleLine.push({value: total, metadata: {style: formatter.id}});
         });
-        titleLine.push({value:'$' + this.getTotal(),
+        titleLine.push({value: this.getTotal(),
                         metadata: {style: formatter.id}});
 
         serialization.push(titleLine);

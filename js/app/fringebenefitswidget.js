@@ -63,7 +63,7 @@ function(jquery, utils, Widget, FringeBenefitsItem, TuititionBenefitItem){
     /**
      * Convert this SalaryWidget to an array suitable for being passed to excel-builder
      */
-    FringeBenefitsWidget.prototype.serialize = function(formatter) {
+    FringeBenefitsWidget.prototype.serialize = function(formatter, money) {
         var serialization = [
             [""],
         ];
@@ -73,15 +73,15 @@ function(jquery, utils, Widget, FringeBenefitsItem, TuititionBenefitItem){
                          {value:'Fringe Benefits', metadata: {style: formatter.id}},
                          "", ""];
         yearTotals.forEach(function(total){
-            titleLine.push({value: '$' + utils.asCurrency(total),
+            titleLine.push({value: total,
                             metadata: {style: formatter.id}});
         });
-        titleLine.push({value:'$' + utils.asCurrency(this.getTotal()),
+        titleLine.push({value: this.getTotal(),
                         metadata: {style: formatter.id}});
 
         serialization.push(titleLine);
         this.items.forEach(function(item){
-            serialization.push(item.serialize());
+            serialization.push(item.serialize(formatter, money));
         });
         serialization.push([""]);
         return serialization;

@@ -116,7 +116,7 @@ define(["jquery", "app/utils"], function(jquery, utils){
     /**
      * Convert this item to an array suitable for being passed to excel-builder
      */
-    BasicItem.prototype.serialize = function() {
+    BasicItem.prototype.serialize = function(header, money) {
         var name = this.body.find(".item-name").val();
         var yearCost = this.val();
 
@@ -125,8 +125,13 @@ define(["jquery", "app/utils"], function(jquery, utils){
         ];
 
         yearCost.forEach(function(year){
-            serialized.push('$' + year);
+            serialized.push({value: parseFloat(year),
+                             metadata : {style: money.id}});
         });
+
+        serialized.push({value: _.reduce(this.val(), function(t, value){
+            return t + value;
+        }), metadata : {style: money.id}});
 
         return serialized;
     }

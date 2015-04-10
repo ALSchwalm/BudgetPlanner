@@ -20,21 +20,33 @@ function(jquery, Widget, utils){
     }
 
     TotalsWidget.prototype.update = function(){
+        var sum = function(arr) {
+            return _.reduce(arr, function(t, v) { return t + v;});
+        }
+
         this.body.find(".total-direct-cost").each(function(i, elem){
             $(elem).text(utils.asCurrency(this.getTotalDirectCost()[i]));
         }.bind(this));
+        this.body.find(".total-direct-cost-row td:last")
+            .html('$' + utils.asCurrency(sum(this.getTotalDirectCost())));
 
         this.body.find(".total-modified-direct-cost").each(function(i, elem){
             $(elem).text(utils.asCurrency(this.getModifiedDirectCost()[i]));
         }.bind(this));
+        this.body.find(".total-modified-direct-cost-row td:last")
+            .html('$' + utils.asCurrency(sum(this.getModifiedDirectCost())));
 
         this.body.find(".total-indirect-cost").each(function(i, elem){
             $(elem).text(utils.asCurrency(this.getIndirectCost()[i]));
         }.bind(this));
+        this.body.find(".total-indirect-cost-row td:last")
+            .html('$' + utils.asCurrency(sum(this.getIndirectCost())));
 
         this.body.find(".total-total-cost").each(function(i, elem){
             $(elem).text(utils.asCurrency(this.getTotal()[i]));
         }.bind(this));
+        this.body.find(".total-total-cost-row td:last")
+            .html('$' + utils.asCurrency(sum(this.getTotal())));
     }
 
     TotalsWidget.prototype.getTotalDirectCost = function() {
@@ -98,19 +110,19 @@ function(jquery, Widget, utils){
 
     TotalsWidget.prototype.addYear = function() {
         this.body.find(".total-headings").find("th:last")
-            .after($("<th>").html("Year " + ($(".total-direct-cost").length+this.start.year()) ));
+            .before($("<th>").html("Year " + ($(".total-direct-cost").length+this.start.year()) ));
 
         var totalDirect = $("<td>").html("$").append($("<span>").addClass("total-direct-cost").html("0.00"));
-        $("#total-body").find(".total-direct-cost-row").append(totalDirect);
+        $("#total-body").find(".total-direct-cost-row td:last").before(totalDirect);
 
         var totalModifiedDirect = $("<td>").html("$").append($("<span>").addClass("total-modified-direct-cost").html("0.00"));
-        $("#total-body").find(".total-modified-direct-cost-row").append(totalModifiedDirect);
+        $("#total-body").find(".total-modified-direct-cost-row td:last").before(totalModifiedDirect);
 
         var totalIndirect = $("<td>").html("$").append($("<span>").addClass("total-indirect-cost").html("0.00"));
-        $("#total-body").find(".total-indirect-cost-row").append(totalIndirect);
+        $("#total-body").find(".total-indirect-cost-row td:last").before(totalIndirect);
 
         var totalTotal = $("<td>").html("$").append($("<span>").addClass("total-total-cost").html("0.00"));
-        $("#total-body").find(".total-total-cost-row").append(totalTotal);
+        $("#total-body").find(".total-total-cost-row td:last").before(totalTotal);
     }
 
     TotalsWidget.prototype.removeYear = function() {
@@ -122,38 +134,49 @@ function(jquery, Widget, utils){
     }
 
     TotalsWidget.prototype.serialize = function(formatter) {
+        var sum = function(arr) {
+            return _.reduce(arr, function(t, v) { return t + v;});
+        }
+
         var totalDirectLine = [
             "", {value: "Total Direct Cost", metadata: {style: formatter.id}}, "", ""
         ];
-
         this.getTotalDirectCost().forEach(function(year){
-            totalDirectLine.push({value:'$'+utils.asCurrency(year),
+            totalDirectLine.push({value: year,
                                   metadata: {style: formatter.id}});
         });
+        totalDirectLine.push({value: sum(this.getTotalDirectCost()),
+                              metadata: {style: formatter.id}});
 
         var modifiedDirectCost = [
             "", {value:"Modified Total Direct Cost", metadata: {style: formatter.id}}, "", ""
         ];
         this.getModifiedDirectCost().forEach(function(year){
-            modifiedDirectCost.push({value: '$' + utils.asCurrency(year),
+            modifiedDirectCost.push({value: year,
                                      metadata: {style: formatter.id}});
         });
+        modifiedDirectCost.push({value: sum(this.getModifiedDirectCost()),
+                                 metadata: {style: formatter.id}});
 
         var indirectCost = [
             "", {value:"Indirect Cost", metadata: {style: formatter.id}}, "", ""
         ];
         this.getIndirectCost().forEach(function(year){
-            indirectCost.push({value: '$' + utils.asCurrency(year),
+            indirectCost.push({value: year,
                                metadata: {style: formatter.id}});
         });
+        indirectCost.push({value: sum(this.getIndirectCost()),
+                           metadata: {style: formatter.id}});
 
         var total = [
             "", {value:"Total", metadata: {style: formatter.id}}, "", ""
         ];
         this.getTotal().forEach(function(year){
-            total.push({value:'$' + utils.asCurrency(year),
+            total.push({value: year,
                         metadata: {style: formatter.id}});
         });
+        total.push({value: sum(this.getTotal()),
+                    metadata: {style: formatter.id}});
 
         return [
             totalDirectLine,
