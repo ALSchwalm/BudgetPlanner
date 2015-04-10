@@ -86,7 +86,7 @@ function(jquery, Widget, utils){
         this.start = start;
         this.end = end;
 
-        var years = 1 + (end.year() - start.year());
+        var years = utils.yearsBetween(this.start, this.end);
         while($(".total-direct-cost").length != years) {
             if ($(".total-direct-cost").length > years) {
                 this.removeYear();

@@ -77,6 +77,8 @@ define(["jquery", "app/utils"], function(jquery, utils){
         var salaryItem = this.parent.salaryWidget.items[index-1];
         var salaryBody = salaryItem.body;
 
+        this.updateDuration(salaryItem.start, salaryItem.end, true);
+
         this.body.find(".benefits-name").val(salaryBody.find(".salary-name").val());
         var percent = parseFloat(this.body.find(".benefits-percent").val()) || 0;
         percent *= 0.01;
@@ -99,11 +101,12 @@ define(["jquery", "app/utils"], function(jquery, utils){
      * @param {Moment} start - New start time of the item
      * @param {Moment} end - New end time of the item
      */
-    FringeBenefitsItem.prototype.updateDuration = function(start, end) {
+    FringeBenefitsItem.prototype.updateDuration = function(start, end, noUpdate) {
+        var noUpdate = noUpdate || false;
         this.start = start;
         this.end = end;
 
-        var years = 1 + (end.year() - start.year());
+        var years = utils.yearsBetween(this.start, this.end);
         while(this.body.find(".year").length != years) {
             if (this.body.find(".year").length > years) {
                 this.removeYear();
@@ -111,8 +114,11 @@ define(["jquery", "app/utils"], function(jquery, utils){
                 this.addYear();
             }
         }
-        this.update();
-        this.parent.update();
+
+        if (!noUpdate) {
+            this.update();
+            this.parent.update();
+        }
     }
 
 

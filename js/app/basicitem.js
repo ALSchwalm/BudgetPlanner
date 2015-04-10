@@ -2,7 +2,7 @@
  * A module which defines the 'rows' which are placed in the EquipmentWidget
  * @module app/basicitem
  */
-define(["jquery"], function(jquery){
+define(["jquery", "app/utils"], function(jquery, utils){
     "use strict"
 
     /**
@@ -70,7 +70,7 @@ define(["jquery"], function(jquery){
         this.start = start;
         this.end = end;
 
-        var years = 1 + (end.year() - start.year());
+        var years = utils.yearsBetween(this.start, this.end);
         while(this.body.find(".item-year option").length != years) {
             if (this.body.find(".item-year option").length > years) {
                 this.removeYear();

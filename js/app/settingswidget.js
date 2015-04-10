@@ -147,7 +147,7 @@ function(jquery, Widget, moment, jqueryui, utils){
             "", "", "", ""
         ];
 
-        for (var i=0; i < (end.year() - start.year()+1); ++i) {
+        for (var i=0; i < utils.yearsBetween(start, end); ++i) {
             yearLine.push("Year " + (start.year() + i));
         }
 
@@ -157,7 +157,7 @@ function(jquery, Widget, moment, jqueryui, utils){
         var monthsLine = [
             "", "", "", ""
         ];
-        for (var i=0; i < (end.year() - start.year()+1); ++i) {
+        for (var i=0; i < utils.yearsBetween(start, end); ++i) {
             monthsLine.push(this.monthsOfYearWorked(i) + " Months");
         }
 

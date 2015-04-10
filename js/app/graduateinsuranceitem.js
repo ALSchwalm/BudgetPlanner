@@ -124,7 +124,7 @@ define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
             return;
         }
 
-        var years = 1 + (end.year() - start.year());
+        var years = utils.yearsBetween(this.start, this.end);
         while(this.body.find(".year").length != years) {
             if (this.body.find(".year").length > years) {
                 this.removeYear();
