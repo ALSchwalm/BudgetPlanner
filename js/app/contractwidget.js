@@ -45,9 +45,14 @@ function(jquery, Widget, ContractItem, GraduateInsuranceItem){
                         metadata: {style: formatter.id}});
 
         serialization.push(titleLine);
-        this.items.forEach(function(item){
-            serialization.push(item.serialize(formatter, money));
-        });
+
+        // Graduate insurance should be the last thing listed
+        for (var i=1; i < this.items.length; ++i) {
+            serialization.push(this.items[i].serialize(formatter, money));
+        }
+        if (this.items[0]) {
+            serialization.push(this.items[0].serialize(formatter, money))
+        }
         serialization.push([""]);
         return serialization;
     }

@@ -28,7 +28,7 @@ define(["jquery", "app/basicitem"], function(jquery, BasicItem){
                       if (config)
                           this.restore(config);
                   }.bind(this));
-        elem.append(this.body);
+        $(".graduate-insurance").before(this.body);
         return this;
     }
 

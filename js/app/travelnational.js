@@ -57,6 +57,7 @@ define(["jquery", "app/utils"], function(jquery, utils){
 
     TravelItemNational.prototype.save = function() {
         return {
+            description : this.body.find(".travel-description").val(),
             state : this.body.find(".travel-state").val(),
             city : this.body.find(".travel-city").val(),
 
@@ -73,6 +74,7 @@ define(["jquery", "app/utils"], function(jquery, utils){
     }
 
     TravelItemNational.prototype.restore = function(config) {
+        this.body.find(".travel-description").val(config.description);
         this.body.find(".travel-state").val(config.state);
 
         this.updateState(config.state);
@@ -94,12 +96,11 @@ define(["jquery", "app/utils"], function(jquery, utils){
 
     TravelItemNational.prototype.update = function() {
         var total = _.reduce(this.val(), function(t, v) {return t + v;});
-
-        var display = "-.--";
+        var display = "0.00";
         if (total) {
             display = utils.asCurrency(total);
         }
-        this.body.find(".travel-cost").html(display);
+        this.body.find(".travel-cost").val(display);
     }
 
     TravelItemNational.prototype.updateDuration = function(start, end) {
@@ -143,6 +144,7 @@ define(["jquery", "app/utils"], function(jquery, utils){
         var config = this.save();
         arr[purchaseYear] = (config.airfare + (config.lodging * config.people * config.nights) +
                              (config.perDiem * config.days*  config.people)) * config.core + config.misc;
+        arr[purchaseYear] *= config.trips;
         arr[purchaseYear] = arr[purchaseYear] || 0;
         return arr;
     }
