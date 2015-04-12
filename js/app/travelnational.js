@@ -28,29 +28,38 @@ define(["jquery", "app/utils"], function(jquery, utils){
         }.bind(this));
 
         this.body.find('.travel-state').change(function(){
-            $.get("travel.php", {state : $(this).val()}, function(data){
-                var elem = $($.parseHTML(data));
-                var cities = self.body.find(".travel-city");
-                cities.empty().append(elem.find("#city option"));
-            })
+            self.updateState($(this).val());
         });
 
         this.body.find('.travel-city').change(function(){
-            $.get("travel.php", {stat : self.body.find(".travel-state").val(),
-                                 city : $(this).val()},
+            $.get("travel.php", {state : self.body.find(".travel-state").val(),
+                                 city : escape($(this).val())},
                   function(data){
-                      var elem = $($.parseHTML(data));
-                      var cost = elem.find("#data_div_summary dd").html();
-                      cost = cost.replace(/\$/g, '');
+                      // The html returned from this page is malformed, so
+                      // just try our best to parse it with a regex
+                      var r = /HCMA:.+\$(.+?)</g
+                      var matched = r.exec(data);
                       var perDiem = self.body.find(".travel-per-diem")
-                          .val(cost);
+                          .val(matched[1]);
                       self.update();
                   });
         });
     }
 
+    TravelItemNational.prototype.updateState = function(state) {
+        var self = this;
+        $.get("travel.php", {state : state}, function(data){
+            var elem = $($.parseHTML(data));
+            var cities = self.body.find(".travel-city");
+            cities.empty().append(elem.find("#city option"));
+        });
+    }
+
     TravelItemNational.prototype.save = function() {
         return {
+            state : this.body.find(".travel-state").val(),
+            city : this.body.find(".travel-city").val(),
+
             core : parseInt(this.body.find(".travel-core-affiliate").val()),
             people : parseInt(this.body.find(".travel-people-number").val()),
             nights : parseInt(this.body.find(".travel-nights").val()),
@@ -64,6 +73,13 @@ define(["jquery", "app/utils"], function(jquery, utils){
     }
 
     TravelItemNational.prototype.restore = function(config) {
+        this.body.find(".travel-state").val(config.state);
+
+        this.updateState(config.state);
+        setTimeout(function(){
+            this.body.find(".travel-city").val(config.city);
+        }.bind(this), 1000);
+
         this.body.find(".travel-core-affiliate").val(config.core);
         this.body.find(".travel-people-number").val(config.people);
         this.body.find(".travel-nights").val(config.nights);
