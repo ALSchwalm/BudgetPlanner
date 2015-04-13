@@ -86,13 +86,13 @@ define(["jquery", "app/utils"], function(jquery, utils){
         var years = this.body.find('.year');
         var self = this;
         years.map(function(i){
-            $(this).text(utils.asCurrency(percent*salaryItem.val()[i]));
+            $(this).text((percent*salaryItem.val()[i]).format());
         });
         var total = _.reduce(years,
                              function(total, e){
-                                 return total + parseFloat($(e).text());
+                                 return total + utils.fromCurrency($(e).text());
                              }, 0);
-        this.body.find('.total').text(utils.asCurrency(total));
+        this.body.find('.total').text(total.format());
     }
 
     /**
@@ -168,7 +168,7 @@ define(["jquery", "app/utils"], function(jquery, utils){
         var serialized = ["", name, "@", percent + '%'];
 
         this.val().forEach(function(year){
-            serialized.push({value: parseFloat(year),
+            serialized.push({value: utils.fromCurrency(year),
                              metadata : {style : money.id}});
         });
 

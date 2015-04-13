@@ -62,11 +62,11 @@ define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
 
         var years = this.getPerYearTotal();
         this.body.find(".widget-year").map(function(i){
-            $(this).text(utils.asCurrency(years[i]));
+            $(this).text(years[i].format());
         });
 
         var total = this.getTotal();
-        this.body.find(".widget-total").text(utils.asCurrency(total));
+        this.body.find(".widget-total").text(total.format());
     }
 
     /**

@@ -109,7 +109,7 @@ define(["jquery", "app/utils"], function(jquery, utils){
             arr.push(0);
         }
         var purchaseYear = parseInt(this.body.find(".item-year").val());
-        arr[purchaseYear] = parseFloat(this.body.find('.item-cost').val()) || 0;
+        arr[purchaseYear] = utils.fromCurrency(this.body.find('.item-cost').val()) || 0;
         return arr;
     }
 
@@ -125,7 +125,7 @@ define(["jquery", "app/utils"], function(jquery, utils){
         ];
 
         yearCost.forEach(function(year){
-            serialized.push({value: parseFloat(year),
+            serialized.push({value: utils.fromCurrency(year),
                              metadata : {style: money.id}});
         });
 

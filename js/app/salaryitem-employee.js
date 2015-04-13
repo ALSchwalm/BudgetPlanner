@@ -175,13 +175,13 @@ function(jquery, autocomplete, utils, moment, momentRange){
 
                 var months = self.monthsOfYearWorked(i) || 12;
                 var yearCost = monthlySalary*months*effort*raise
-                $(years[i]).text(utils.asCurrency(yearCost));
+                $(years[i]).text(yearCost.format());
             });
             var total = _.reduce(this.body.find('.year'),
                                  function(total, e){
-                                     return total + parseFloat($(e).text());
+                                     return total + utils.fromCurrency($(e).text());
                                  }, 0);
-            this.body.find('.total').text(utils.asCurrency(total));
+            this.body.find('.total').text(total.format());
         }
     }
 
@@ -214,7 +214,7 @@ function(jquery, autocomplete, utils, moment, momentRange){
     SalaryItemEmployee.prototype.val = function() {
         var out = [];
         this.body.find(".year").map(function(){
-            out.push(parseFloat($(this).html()));
+            out.push(utils.fromCurrency($(this).html()));
         });
         return out;
     }
@@ -261,7 +261,7 @@ function(jquery, autocomplete, utils, moment, momentRange){
             nameLine.push($(this).val() + '%');
         });
 
-        var totalsLine = ["", {value: parseFloat(salary), metadata : {style: money.id}},
+        var totalsLine = ["", {value: utils.fromCurrency(salary), metadata : {style: money.id}},
                           duration, ""];
         this.val().forEach(function(total){
             totalsLine.push({value: total, metadata : {style: money.id}});

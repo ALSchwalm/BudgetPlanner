@@ -25,28 +25,28 @@ function(jquery, Widget, utils){
         }
 
         this.body.find(".total-direct-cost").each(function(i, elem){
-            $(elem).text(utils.asCurrency(this.getTotalDirectCost()[i]));
+            $(elem).text(this.getTotalDirectCost()[i].format());
         }.bind(this));
         this.body.find(".total-direct-cost-row td:last")
-            .html('$' + utils.asCurrency(sum(this.getTotalDirectCost())));
+            .html('$' + sum(this.getTotalDirectCost()).format());
 
         this.body.find(".total-modified-direct-cost").each(function(i, elem){
-            $(elem).text(utils.asCurrency(this.getModifiedDirectCost()[i]));
+            $(elem).text(this.getModifiedDirectCost()[i].format());
         }.bind(this));
         this.body.find(".total-modified-direct-cost-row td:last")
-            .html('$' + utils.asCurrency(sum(this.getModifiedDirectCost())));
+            .html('$' + sum(this.getModifiedDirectCost()).format());
 
         this.body.find(".total-indirect-cost").each(function(i, elem){
-            $(elem).text(utils.asCurrency(this.getIndirectCost()[i]));
+            $(elem).text(this.getIndirectCost()[i].format());
         }.bind(this));
         this.body.find(".total-indirect-cost-row td:last")
-            .html('$' + utils.asCurrency(sum(this.getIndirectCost())));
+            .html('$' + sum(this.getIndirectCost()).format());
 
         this.body.find(".total-total-cost").each(function(i, elem){
-            $(elem).text(utils.asCurrency(this.getTotal()[i]));
+            $(elem).text(this.getTotal()[i].format());
         }.bind(this));
         this.body.find(".total-total-cost-row td:last")
-            .html('$' + utils.asCurrency(sum(this.getTotal())));
+            .html('$' + sum(this.getTotal()).format());
     }
 
     TotalsWidget.prototype.getTotalDirectCost = function() {

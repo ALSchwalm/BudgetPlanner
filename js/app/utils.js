@@ -4,11 +4,20 @@
 define(function(){
     "use strict"
 
-    var utils = {
-        asCurrency : function(value){
-            return value.toFixed(2);
-        },
+    Number.prototype.format = function(n, x) {
+        var n = n || 2;
+        var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+        return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+    };
 
+    var utils = {
+
+        fromCurrency : function(str) {
+            if (!str.replace)
+                return str;
+            var str = str.replace(/,/g, '');
+            return parseFloat(str);
+        },
         yearsBetween : function(start, end) {
             var e = end.clone();
             e.subtract(1, 'days');

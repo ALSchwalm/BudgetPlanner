@@ -98,7 +98,7 @@ define(["jquery", "app/utils"], function(jquery, utils){
         var total = _.reduce(this.val(), function(t, v) {return t + v;});
         var display = "0.00";
         if (total) {
-            display = utils.asCurrency(total);
+            display = total.format();
         }
         this.body.find(".travel-cost").val(display);
     }

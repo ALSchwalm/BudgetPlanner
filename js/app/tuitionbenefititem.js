@@ -100,14 +100,13 @@ define(["jquery", "app/utils"], function(jquery, utils){
         });
 
         years.map(function(i){
-            $(this).text(utils.asCurrency(self.getMonthlyInsuranceCost(i)*
-                                          monthsWorkedPerYear[i]));
+            $(this).text((self.getMonthlyInsuranceCost(i)*monthsWorkedPerYear[i]).format());
         });
         var total = _.reduce(years,
                              function(total, e){
-                                 return total + parseFloat($(e).text());
+                                 return total + utils.fromCurrency($(e).text());
                              }, 0);
-        this.body.find('.total').text(utils.asCurrency(total));
+        this.body.find('.total').text(total.format());
     }
 
     /**
@@ -165,7 +164,7 @@ define(["jquery", "app/utils"], function(jquery, utils){
     TuititionBenefitItem.prototype.val = function() {
         var out = [];
         this.body.find(".year").map(function(){
-            out.push(parseFloat($(this).html()));
+            out.push(utils.fromCurrency($(this).html()));
         });
         return out;
     }
