@@ -136,6 +136,7 @@ function(jquery, Widget, moment, jqueryui, utils){
 
         var serialized = [
             [{value: "Title:" + $("#settings-title").val(), metadata: {style: formatter.id}}],
+            [{value: "PI:" + $("#settings-author").val(), metadata: {style: formatter.id}}],
             [{value: "Budget for the period from " + start.format("MMMM Do YYYY")
               + " to " + end.format("MMMM Do YYYY"), metadata: {style: formatter.id}}],
             [{value: $("#settings-raise-percent").val() + "% raise factor in effect",

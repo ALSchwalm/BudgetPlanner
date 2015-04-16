@@ -174,7 +174,8 @@ function(jquery, Widget, utils){
                                  metadata: {style: formatter.id}});
 
         var indirectCost = [
-            "", {value:"Indirect Cost", metadata: {style: formatter.id}}, "", ""
+            "", {value:"Indirect Cost", metadata: {style: formatter.id}},
+            "@", $("#settings-indirect-cost-rate").val() + '%'
         ];
         this.getIndirectCost().forEach(function(year){
             indirectCost.push({value: year,
