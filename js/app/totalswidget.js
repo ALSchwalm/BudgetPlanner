@@ -70,7 +70,22 @@ function(jquery, Widget, utils){
      */
     TotalsWidget.prototype.getModifiedDirectCost = function() {
         return this.getTotalDirectCost().map(function(yearTotal, i){
-            return yearTotal - this.widgets["equipment"].getPerYearTotal()[i];
+            // Modified = total less equipment, less tuition, less > 25000 of each
+            // sub contract
+            var contractSurplus = 0;
+            if (this.widgets["subcontract"].items.length) {
+                contractSurplus = _.reduce(this.widgets["subcontract"].items,
+                                           function(t, item) {
+                                               if (item.val()[i] >= 25000)
+                                                   t += item.val()[i] - 25000;
+                                               return t;
+                                           }, 0);
+            }
+
+            return yearTotal -
+                this.widgets["equipment"].getPerYearTotal()[i] -
+                this.widgets["fringebenefits"].items[0].val()[i] -
+                contractSurplus;
         }, this);
     }
 
