@@ -143,7 +143,7 @@ define(["jquery", "app/utils"], function(jquery, utils){
 
         var config = this.save();
         arr[purchaseYear] = (config.airfare + (config.lodging * config.people * config.nights) +
-                             (config.perDiem * config.days*  config.people)) * config.core + config.misc;
+                             (config.perDiem * config.days*  config.people)) * config.core + (config.misc || 0);
         arr[purchaseYear] *= config.trips;
         arr[purchaseYear] = arr[purchaseYear] || 0;
         return arr;

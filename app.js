@@ -60,9 +60,9 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
         albumList.setColumns([
             {width: 5},
             {width: 30},
-            {width: 13}, {width: 13}, {width: 13},
-            {width: 13}, {width: 13}, {width: 13},
-            {width: 13}, {width: 13}, {width: 13}
+            {width: 16}, {width: 16}, {width: 16},
+            {width: 16}, {width: 16}, {width: 16},
+            {width: 16}, {width: 16}, {width: 16}
         ]);
 
         var link = $("<a>").attr({
