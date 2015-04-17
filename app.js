@@ -97,15 +97,22 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
 
     restore = function(config) {
         widgets["settings"].restore(config["settings"]);
+        var i=1;
         for (var key in config) {
-            if (key !== "totals" && key !== "settings") {
-                widgets[key].restore(config[key]);
-            }
+            setTimeout(function(key){
+                return function() {
+                    if (key !== "totals" && key !== "settings") {
+                        console.log("restoring", key);
+                        widgets[key].restore(config[key]);
+                    }
+                }
+            }(key), i*1000);
+            ++i;
         }
 
         setTimeout(function(){
             totals.update();
-        }, 1000);
+        }, 1000*i);
     }
 
     $(document).ready(function() {

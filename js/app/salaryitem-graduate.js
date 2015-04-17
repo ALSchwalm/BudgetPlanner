@@ -26,15 +26,15 @@ function(jquery, utils, SalaryItemEmployee){
                   function(){
                       this.init();
                       this.updateDuration(start, end);
-
-                      // Trigger event so contractual will update
-                      $(document.body).trigger("graduate-added");
                       this.body.find('.item-remove').click(function(){
                           $(document.body).trigger("graduate-added");
                       });
 
                       if (config)
                           this.restore(config)
+
+                      // Trigger event so contractual will update
+                      $(document.body).trigger("graduate-added");
                   }.bind(this)).data("item", this);
         elem.append(this.body);
         return this;

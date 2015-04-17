@@ -95,7 +95,7 @@ define(["jquery", "app/utils"], function(jquery, utils){
     }
 
     TravelItemNational.prototype.update = function() {
-        var total = _.reduce(this.val(), function(t, v) {return t + v;});
+        var total = _.reduce(this.val(), function(t, v) {return t + v;}, 0);
         var display = "0.00";
         if (total) {
             display = total.format();

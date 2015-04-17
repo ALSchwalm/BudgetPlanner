@@ -106,12 +106,16 @@ define(["jquery", "app/utils"], function(jquery, utils){
         this.start = start;
         this.end = end;
 
-        var years = utils.yearsBetween(this.start, this.end);
-        while(this.body.find(".year").length != years) {
-            if (this.body.find(".year").length > years) {
-                this.removeYear();
-            } else {
+        var yearsBetween = utils.yearsBetween(this.start, this.end);
+        var years = this.body.find(".year").length;
+
+        if (years < yearsBetween) {
+            for (var i=0; i < yearsBetween - years; ++i) {
                 this.addYear();
+            }
+        } else {
+            for (var i=0; i < years - yearsBetween; ++i) {
+                this.removeYear();
             }
         }
 
