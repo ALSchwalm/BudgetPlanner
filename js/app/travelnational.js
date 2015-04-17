@@ -1,4 +1,5 @@
-define(["jquery", "app/utils"], function(jquery, utils){
+define(["jquery", "bootstrap-multiselect", "app/utils"],
+function(jquery, multiselect, utils){
     "use strict"
 
     var TravelItemNational = function(elem, widget, start, end, config) {
@@ -11,6 +12,9 @@ define(["jquery", "app/utils"], function(jquery, utils){
                   function(){
                       this.init();
                       this.updateDuration(start, end);
+                      this.body.find(".item-year").multiselect({
+                          buttonWidth: '120px'
+                      });
                       if (config)
                           this.restore(config);
                   }.bind(this));
@@ -18,7 +22,7 @@ define(["jquery", "app/utils"], function(jquery, utils){
         return this;
     }
 
-    TravelItemNational.prototype.itemName = "National";
+    TravelItemNational.prototype.itemName = "Add Item";
 
     TravelItemNational.prototype.init = function() {
         var self = this;
@@ -60,8 +64,7 @@ define(["jquery", "app/utils"], function(jquery, utils){
             description : this.body.find(".travel-description").val(),
             state : this.body.find(".travel-state").val(),
             city : this.body.find(".travel-city").val(),
-
-            core : parseInt(this.body.find(".travel-core-affiliate").val()),
+            years : this.body.find(".item-year").val(),
             people : parseInt(this.body.find(".travel-people-number").val()),
             nights : parseInt(this.body.find(".travel-nights").val()),
             days : parseInt(this.body.find(".travel-days").val()),
@@ -76,13 +79,12 @@ define(["jquery", "app/utils"], function(jquery, utils){
     TravelItemNational.prototype.restore = function(config) {
         this.body.find(".travel-description").val(config.description);
         this.body.find(".travel-state").val(config.state);
-
+        this.body.find(".item-year").multiselect('select', config.years);
         this.updateState(config.state);
         setTimeout(function(){
             this.body.find(".travel-city").val(config.city);
         }.bind(this), 1000);
 
-        this.body.find(".travel-core-affiliate").val(config.core);
         this.body.find(".travel-people-number").val(config.people);
         this.body.find(".travel-nights").val(config.nights);
         this.body.find(".travel-days").val(config.days);
@@ -135,17 +137,20 @@ define(["jquery", "app/utils"], function(jquery, utils){
     }
 
     TravelItemNational.prototype.val = function() {
+        var config = this.save();
+        var cost = (config.airfare + (config.lodging * config.people * config.nights) +
+                    (config.perDiem * config.days*  config.people)) + (config.misc || 0);
+        cost *= config.trips;
+
         var arr = [];
         for (var i=0; i < this.body.find(".item-year option").length; ++i) {
-            arr.push(0);
+            if (this.body.find(".item-year").val() instanceof Array  &&
+                this.body.find(".item-year").val().indexOf(i.toString()) >= 0) {
+                arr.push(cost * config.trips);
+            } else {
+                arr.push(0);
+            }
         }
-        var purchaseYear = parseInt(this.body.find(".item-year").val());
-
-        var config = this.save();
-        arr[purchaseYear] = (config.airfare + (config.lodging * config.people * config.nights) +
-                             (config.perDiem * config.days*  config.people)) * config.core + (config.misc || 0);
-        arr[purchaseYear] *= config.trips;
-        arr[purchaseYear] = arr[purchaseYear] || 0;
         return arr;
     }
 

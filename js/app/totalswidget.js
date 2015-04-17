@@ -20,6 +20,8 @@ function(jquery, Widget, utils){
     }
 
     TotalsWidget.prototype.update = function(){
+        if (!this.body.children(".row").is(":visible"))
+            return;
         var sum = function(arr) {
             return _.reduce(arr, function(t, v) { return t + v;});
         }

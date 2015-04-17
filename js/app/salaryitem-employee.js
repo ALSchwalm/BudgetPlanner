@@ -32,25 +32,7 @@ function(jquery, autocomplete, utils, moment, momentRange){
                       this.updateDuration(start, end);
                       if (config)
                           this.restore(config);
-
                       $(document.body).trigger("salary-added");
-                      this.body.find('.item-remove').click(function(){
-                          $(document.body).trigger("salary-removed");
-                      });
-
-                      // Setup autocomplete
-                      this.body.find(".salary-name").autocomplete({
-                          serviceUrl: "lookup.php",
-                          lookupLimit: 10,
-                          onSelect : function(completion) {
-                              this.body.find(".salary-salary").val(completion.data.salary);
-                              if (completion.data.duration.trim() === "9-mth") {
-                                  this.body.find(".salary-type").html("9-month ");
-                              } else {
-                                  this.body.find(".salary-type").html("12-month ");
-                              }
-                          }.bind(this)
-                      });
                   }.bind(this)).data("item", this);
         elem.append(this.body);
         return this;
@@ -61,6 +43,25 @@ function(jquery, autocomplete, utils, moment, momentRange){
      * div has been populated but before it is inserted into the DOM.
      */
     SalaryItemEmployee.prototype.init = function() {
+        this.body.find('.item-remove').click(function(){
+            $(document.body).trigger("salary-removed");
+        });
+
+        // Setup autocomplete
+        this.body.find(".salary-name").autocomplete({
+            serviceUrl: "lookup.php",
+            lookupLimit: 10,
+            autoSelectFirst : true,
+            onSelect : function(completion) {
+                this.body.find(".salary-salary").val(completion.data.salary);
+                if (completion.data.duration.trim() === "9-mth") {
+                    this.body.find(".salary-type").html("9-month ");
+                } else {
+                    this.body.find(".salary-type").html("12-month ");
+                }
+            }.bind(this)
+        });
+
         this.body.find('.dropdown-menu a').click(function(e){
             $(this).parent().parent().siblings('button')
                 .find(".salary-type").html($(this).attr("name"));

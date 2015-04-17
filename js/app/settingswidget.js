@@ -70,18 +70,39 @@ function(jquery, Widget, moment, jqueryui, utils){
         }.bind(this));
     }
 
+    SettingsWidget.prototype.validateDates = function(start, end) {
+        console.log(start, end, start.year(), end.year());
+        if (end < start || start.year() < 2000 || end.year() < 2000) {
+            return false;
+        }
+        return true;
+    }
+
     SettingsWidget.prototype.update = function() {
         var start = $("#settings-start-date").val();
         var end = $("#settings-end-date").val()
         if (!start || !end) {
             return;
         }
+
+        var momentStart = moment(start);
+        var momentEnd = moment(end);
+
+        if (!this.validateDates(momentStart, momentEnd)) {
+            $("#settings-end-date, #settings-start-date").parent()
+                .addClass("has-error");
+            return;
+        } else {
+            $("#settings-end-date, #settings-start-date").parent()
+                .removeClass("has-error");
+        }
+
         _.map(this.widgets, function(widget, name){
             if (widget.updateDuration) {
-                widget.updateDuration(moment(start), moment(end));
+                widget.updateDuration(momentStart.clone(), momentEnd.clone());
             }
         });
-        this.totals.updateDuration(moment(start), moment(end));
+        this.totals.updateDuration(momentStart.clone(), momentEnd.clone());
     }
 
     SettingsWidget.prototype.save = function() {
