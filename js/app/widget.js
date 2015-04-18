@@ -55,9 +55,11 @@ define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
      * Bring the values displayed by this widget up-to-date. This
      * method will be invoked whenever the underlying items change.
      */
-    Widget.prototype.update = function() {
+    Widget.prototype.update = function(noUpdateItems) {
+        var noUpdateItems = noUpdateItems || false;
         this.items.map(function(item){
-            item.update();
+            if (!noUpdateItems)
+                item.update();
         });
 
         var years = this.getPerYearTotal();

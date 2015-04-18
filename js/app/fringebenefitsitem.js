@@ -77,7 +77,7 @@ define(["jquery", "app/utils"], function(jquery, utils){
         var salaryItem = this.parent.salaryWidget.items[index-1];
         var salaryBody = salaryItem.body;
 
-        this.updateDuration(salaryItem.start, salaryItem.end, true);
+        this.updateEmployeeDuration(salaryItem.start, salaryItem.end, true);
 
         this.body.find(".benefits-name").val(salaryBody.find(".salary-name").val());
         var percent = parseFloat(this.body.find(".benefits-percent").val()) || 0;
@@ -93,6 +93,7 @@ define(["jquery", "app/utils"], function(jquery, utils){
                                  return total + utils.fromCurrency($(e).text());
                              }, 0);
         this.body.find('.total').text(total.format());
+        this.parent.update(true);
     }
 
     /**
@@ -123,6 +124,25 @@ define(["jquery", "app/utils"], function(jquery, utils){
             this.update();
             this.parent.update();
         }
+    }
+
+    FringeBenefitsItem.prototype.updateEmployeeDuration = function(start, end)  {
+        var self = this;
+        this.start = start;
+        this.end = end;
+        var budgetStart = moment($("#settings-start-date").val());
+        var budgetEnd = moment($("#settings-end-date").val());
+
+        var years = this.body.find(".year");
+
+        years.map(function(i){
+            i += budgetStart.year();
+            if (i < start.year() || i > end.year()) {
+                $(this).parents(".row:first").hide();
+            } else {
+                $(this).parents(".row:first").show();
+            }
+        });
     }
 
 

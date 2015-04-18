@@ -53,7 +53,7 @@ function(jquery, utils, Widget, FringeBenefitsItem, TuititionBenefitItem){
     }
 
     FringeBenefitsWidget.prototype.removeItem = function(){
-        var item = this.items.shift(1);
+        var item = this.items.pop();
         item.body.remove();
         this.items.forEach(function(item){
             item.update();

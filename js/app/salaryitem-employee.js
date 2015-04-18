@@ -83,7 +83,7 @@ function(jquery, autocomplete, utils, moment, momentRange){
         );
 
         this.body.find(".salary-start-date, .salary-end-date").change(function(){
-            this.updateDuration(
+            this.updateEmployeeDuration(
                 moment(this.body.find(".salary-start-date").val()),
                 moment(this.body.find(".salary-end-date").val())
             );
@@ -141,17 +141,42 @@ function(jquery, autocomplete, utils, moment, momentRange){
      * @param i - The number of years offset from the starting year
      */
     SalaryItemEmployee.prototype.monthsOfYearWorked = function(i) {
-        var totalRange = moment().range(this.start.clone(), this.end.clone());
-        var yearStart = this.start.clone();
+        var budgetStart = moment($("#settings-start-date").val());
+        var budgetEnd = moment($("#settings-end-date").val());
+
+        var yearStart = budgetStart.clone();
         yearStart.add(i, "year");
         yearStart.startOf('year');
 
-        var yearEnd = this.start.clone();
+        var yearEnd = budgetStart.clone();
         yearEnd.add(i, "year");
         yearEnd.endOf('year');
 
-        var yearRange = moment().range(yearStart, yearEnd);
-        var intersection = yearRange.intersect(totalRange);
+        var intersection = null;
+
+        // The employee worked less than a year, during this year
+        if (this.start >= yearStart && this.end <= yearEnd) {
+            var workedRange = moment().range(this.start.clone(), this.end.clone());
+            var yearRange = moment().range(yearStart, yearEnd);
+            var intersection = workedRange.intersect(yearRange);
+        }
+
+        // The employee started working this year, and continues
+        else if (this.start >= yearStart && this.start < yearEnd && this.end >= yearEnd) {
+            var workedRange = moment().range(this.start.clone(), yearEnd);
+            var yearRange = moment().range(yearStart, yearEnd);
+            var intersection = workedRange.intersect(yearRange);
+        }
+
+        // The employee was working previously, but stopped this year
+        else if (this.start <= yearStart && this.end <= yearEnd && this.end > yearStart) {
+            var workedRange = moment().range(yearStart, this.end.clone());
+            var yearRange = moment().range(yearStart, yearEnd);
+            var intersection = workedRange.intersect(yearRange);
+        }
+
+        if (!intersection)
+            return 0;
         return Math.round((intersection.diff("days")/30)*2)/2;
     }
 
@@ -174,7 +199,7 @@ function(jquery, autocomplete, utils, moment, momentRange){
                 var effort = $(this).val()*0.01;
                 var raise = Math.pow(1+$("#settings-raise-percent").val()*0.01, i);
 
-                var months = self.monthsOfYearWorked(i) || 12;
+                var months = self.monthsOfYearWorked(i);
                 var yearCost = monthlySalary*months*effort*raise
                 $(years[i]).text(yearCost.format());
             });
@@ -193,10 +218,10 @@ function(jquery, autocomplete, utils, moment, momentRange){
      * @param {Moment} end - New end time of the item
      */
     SalaryItemEmployee.prototype.updateDuration = function(start, end) {
-        this.start = start;
-        this.end = end;
+        this.totalBudgetStart = start;
+        this.totalBudgetEnd = end;
 
-        var yearsBetween = utils.yearsBetween(this.start, this.end);
+        var yearsBetween = utils.yearsBetween(start, end);
         var years = this.body.find(".year").length;
 
         if (years < yearsBetween) {
@@ -210,6 +235,27 @@ function(jquery, autocomplete, utils, moment, momentRange){
         }
     }
 
+    SalaryItemEmployee.prototype.updateEmployeeDuration = function(start, end)  {
+        var self = this;
+        this.start = start;
+        this.end = end;
+        var budgetStart = moment($("#settings-start-date").val());
+        var budgetEnd = moment($("#settings-end-date").val());
+
+        var years = this.body.find(".year");
+
+        years.map(function(i){
+            i += budgetStart.year();
+            if (i < start.year() || i > end.year()) {
+                $(this).parents(".row:first").hide();
+                self.update();
+                self.parent.update();
+            } else {
+                $(this).parents(".row:first").show();
+            }
+        });
+    }
+
 
     /**
      * Get the current costs for each year from this item.
@@ -219,7 +265,11 @@ function(jquery, autocomplete, utils, moment, momentRange){
     SalaryItemEmployee.prototype.val = function() {
         var out = [];
         this.body.find(".year").map(function(){
-            out.push(utils.fromCurrency($(this).html()));
+            if ($(this).is(":visible")) {
+                out.push(utils.fromCurrency($(this).html()));
+            } else {
+                out.push(0);
+            }
         });
         return out;
     }

@@ -71,7 +71,6 @@ function(jquery, Widget, moment, jqueryui, utils){
     }
 
     SettingsWidget.prototype.validateDates = function(start, end) {
-        console.log(start, end, start.year(), end.year());
         if (end < start || start.year() < 2000 || end.year() < 2000) {
             return false;
         }
