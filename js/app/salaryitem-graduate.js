@@ -35,6 +35,7 @@ function(jquery, utils, SalaryItemEmployee){
 
                       // Trigger event so contractual will update
                       $(document.body).trigger("graduate-added");
+                      $(document.body).trigger("salary-added");
                   }.bind(this)).data("item", this);
         elem.append(this.body);
         return this;

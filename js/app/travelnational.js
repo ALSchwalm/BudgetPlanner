@@ -13,7 +13,10 @@ function(jquery, multiselect, utils){
                       this.init();
                       this.updateDuration(start, end);
                       this.body.find(".item-year").multiselect({
-                          buttonWidth: '120px'
+                          buttonWidth: '150px',
+                          buttonText: function(options, select) {
+                              return 'Travel Years';
+                          },
                       });
                       if (config)
                           this.restore(config);

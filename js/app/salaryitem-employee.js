@@ -105,7 +105,7 @@ function(jquery, autocomplete, utils, moment, momentRange){
         this.body.find(".salary-end-date").val(config.end);
         this.start = moment(config.start)
         this.end = moment(config.end);
-        this.updateDuration(this.start, this.end);
+        this.updateEmployeeDuration(this.start, this.end);
         this.body.find(".salary-name").val(config.name);
         this.body.find(".salary-salary").val(config.salary);
         setTimeout(function(){
@@ -281,7 +281,7 @@ function(jquery, autocomplete, utils, moment, momentRange){
         var year = this.body.find(".year").length;
         var newYear = $.parseHTML(
             '<tr class="row">' +
-                '<td class="col-sm-4">Year ' + (this.start.year()+year) + '</td>' +
+                '<td class="col-sm-4 small-font">Fiscal Year ' + (this.start.year()+year) + '</td>' +
                 '<td class="col-sm-4">' +
                     '<div class="input-group">' +
                         '<input type="text" class="form-control salary-effort" placeholder="Effort">' +

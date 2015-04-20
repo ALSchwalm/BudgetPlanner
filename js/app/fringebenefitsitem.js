@@ -79,7 +79,7 @@ define(["jquery", "app/utils"], function(jquery, utils){
 
         this.updateEmployeeDuration(salaryItem.start, salaryItem.end, true);
 
-        this.body.find(".benefits-name").val(salaryBody.find(".salary-name").val());
+        this.body.find(".benefits-name").val(salaryBody.find(".salary-name, .graduate-name").val());
         var percent = parseFloat(this.body.find(".benefits-percent").val()) || 0;
         percent *= 0.01;
 
@@ -153,7 +153,7 @@ define(["jquery", "app/utils"], function(jquery, utils){
         var year = this.body.find(".year").length;
         var newYear = $.parseHTML(
             '<tr class="row">' +
-                '<td class="col-sm-4">Year ' + (year+this.start.year()) + '</td>' +
+                '<td class="col-sm-4 small-font">Fiscal Year ' + (year+this.start.year()) + '</td>' +
                 '<td class="col-sm-4">$<span class="year currency">0.00</></td>' +
             '</tr>'
         );
