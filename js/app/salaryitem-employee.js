@@ -175,6 +175,10 @@ function(jquery, autocomplete, utils, moment, momentRange){
             var intersection = workedRange.intersect(yearRange);
         }
 
+        else if (this.start <= yearStart && this.end >= yearEnd) {
+            return 12;
+        }
+
         if (!intersection)
             return 0;
         return Math.round((intersection.diff("days")/30)*2)/2;
