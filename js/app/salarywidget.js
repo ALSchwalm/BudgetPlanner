@@ -23,7 +23,7 @@ function(jquery, Widget, SalaryItemEmployee, SalaryItemGraduate, utils){
     /**
      * Convert this SalaryWidget to an array suitable for being passed to excel-builder
      */
-    SalaryWidget.prototype.serialize = function(formatter, money) {
+    SalaryWidget.prototype.serialize = function(formatter, money, percent) {
         var serialization = [];
 
         var yearTotals = this.getPerYearTotal();
@@ -39,7 +39,7 @@ function(jquery, Widget, SalaryItemEmployee, SalaryItemGraduate, utils){
 
         serialization.push(titleLine);
         this.items.forEach(function(item){
-            item.serialize(formatter, money).forEach(function(row){
+            item.serialize(formatter, money, percent).forEach(function(row){
                 serialization.push(row);
             })
         });

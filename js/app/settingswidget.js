@@ -178,8 +178,16 @@ function(jquery, Widget, moment, jqueryui, utils){
         var monthsLine = [
             "", "", "", ""
         ];
+
+        var newStart = start.clone();
         for (var i=0; i < utils.yearsBetween(start, end); ++i) {
-            monthsLine.push(this.monthsOfYearWorked(i) + " Months");
+            var newEnd = newStart.clone().endOf("year");
+            if (newEnd > end) {
+                newEnd = end;
+            }
+            monthsLine.push(newStart.format("MM/YY") + "-" + newEnd.format("MM/YY"));
+            newStart.add(1, "year").startOf("year");
+            //monthsLine.push(this.monthsOfYearWorked(i) + " Months");
         }
 
         serialized.push(monthsLine);

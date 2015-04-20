@@ -38,10 +38,17 @@ function (EB, moment, SettingsWidget, TotalsWidget, SalaryWidget, EquipmentWidge
             format: '$#,##0.00'
         });
 
+        var percentFormatter = stylesheet.createFormat({
+            format: '0.0#%',
+            font : {
+                color: "FF0000FF"
+            }
+        });
+
 
         var content = [
             settings.serialize(headingFormatter, moneyFormatter),
-            widgets["salary"].serialize(headingFormatter, moneyFormatter),
+            widgets["salary"].serialize(headingFormatter, moneyFormatter, percentFormatter),
             widgets["fringebenefits"].serialize(headingFormatter, moneyFormatter),
             widgets["travel"].serialize(headingFormatter, moneyFormatter),
             widgets["subcontract"].serialize(headingFormatter, moneyFormatter),

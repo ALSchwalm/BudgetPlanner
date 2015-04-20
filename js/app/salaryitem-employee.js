@@ -304,7 +304,7 @@ function(jquery, autocomplete, utils, moment, momentRange){
     /**
      * Convert this SalaryItemEmployee to an array suitable for being passed to excel-builder
      */
-    SalaryItemEmployee.prototype.serialize = function(heading, money) {
+    SalaryItemEmployee.prototype.serialize = function(heading, money, percent) {
         var name = this.body.find(".salary-name").val();
         var salary = this.body.find(".salary-salary").val();
         var duration = this.body.find(".salary-type").text();
@@ -313,10 +313,12 @@ function(jquery, autocomplete, utils, moment, momentRange){
         var nameLine = ["", name || "Graduate Student", "", ""];
 
         efforts.each(function(){
-            nameLine.push($(this).val() + '%');
+            nameLine.push({value: parseFloat($(this).val())*0.01,
+                           metadata : {style : percent.id}});
         });
 
-        var totalsLine = ["", {value: utils.fromCurrency(salary), metadata : {style: money.id}},
+        var totalsLine = ["", {value: utils.fromCurrency(salary),
+                               metadata : {style: money.id}},
                           duration, ""];
         this.val().forEach(function(total){
             totalsLine.push({value: total, metadata : {style: money.id}});
