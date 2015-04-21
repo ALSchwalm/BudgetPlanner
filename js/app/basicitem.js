@@ -87,7 +87,7 @@ define(["jquery", "app/utils"], function(jquery, utils){
     BasicItem.prototype.addYear = function() {
         var year = this.body.find(".item-year option").length;
         this.body.find(".item-year").append(
-            $("<option>").attr("value", year).text("Fiscal Year " + (year+this.start.year()))
+            $("<option>").attr("value", year).text("Fiscal Year " + utils.fiscalYearName(this.start, year))
         );
     }
 

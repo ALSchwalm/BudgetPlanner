@@ -153,7 +153,7 @@ define(["jquery", "app/utils"], function(jquery, utils){
         var year = this.body.find(".year").length;
         var newYear = $.parseHTML(
             '<tr class="row">' +
-                '<td class="col-sm-4 small-font">Fiscal Year ' + (year+this.start.year()) + '</td>' +
+                '<td class="col-sm-4 small-font">Fiscal Year ' + utils.fiscalYearName(this.start, year) + '</td>' +
                 '<td class="col-sm-4">$<span class="year currency">0.00</></td>' +
             '</tr>'
         );

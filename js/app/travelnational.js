@@ -131,7 +131,7 @@ function(jquery, multiselect, utils){
     TravelItemNational.prototype.addYear = function() {
         var year = this.body.find(".item-year option").length;
         this.body.find(".item-year").append(
-            $("<option>").attr("value", year).text(year+this.start.year())
+            $("<option>").attr("value", year).text(utils.fiscalYearName(this.start, year))
         );
     }
 

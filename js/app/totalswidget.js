@@ -126,8 +126,9 @@ function(jquery, Widget, utils){
     }
 
     TotalsWidget.prototype.addYear = function() {
+        var year = $(".total-direct-cost").length;
         this.body.find(".total-headings").find("th:last")
-            .before($("<th>").html("Year " + ($(".total-direct-cost").length+this.start.year()) ));
+            .before($("<th>").html("FY " + utils.fiscalYearName(this.start, year)));
 
         var totalDirect = $("<td>").html("$").append($("<span>").addClass("total-direct-cost").html("0.00"));
         $("#total-body").find(".total-direct-cost-row td:last").before(totalDirect);

@@ -146,11 +146,19 @@ function(jquery, autocomplete, utils, moment, momentRange){
 
         var yearStart = budgetStart.clone();
         yearStart.add(i, "year");
-        yearStart.startOf('year');
+        if (yearStart.month() >= 6) {
+            yearStart = moment({year : yearStart.year(), month: 6, day: 1});
+        } else {
+            yearStart = moment({year : yearStart.year()-1, month: 6, day: 1});
+        }
 
         var yearEnd = budgetStart.clone();
         yearEnd.add(i, "year");
-        yearEnd.endOf('year');
+        if (yearEnd.month() <= 5) {
+            yearEnd = moment({year : yearEnd.year(), month: 5, day: 30});
+        } else {
+            yearEnd = moment({year : yearEnd.year()+1, month: 5, day: 30});
+        }
 
         var intersection = null;
 
@@ -285,7 +293,7 @@ function(jquery, autocomplete, utils, moment, momentRange){
         var year = this.body.find(".year").length;
         var newYear = $.parseHTML(
             '<tr class="row">' +
-                '<td class="col-sm-4 small-font">Fiscal Year ' + (this.start.year()+year) + '</td>' +
+                '<td class="col-sm-4 small-font">Fiscal Year ' + utils.fiscalYearName(this.totalBudgetStart, year) + '</td>' +
                 '<td class="col-sm-4">' +
                     '<div class="input-group">' +
                         '<input type="text" class="form-control salary-effort" placeholder="Effort">' +

@@ -172,7 +172,7 @@ define(["jquery", "app/utils", "moment"], function(jquery, utils, moment){
     Widget.prototype.addYear = function() {
         var year = this.body.find('.widget-year').length;
         var newYear = $.parseHTML(
-            '<td class="widget-year-cell"><i>FY ' + (year+this.start.year()) +
+            '<td class="widget-year-cell"><i>FY ' + utils.fiscalYearName(this.start, year) +
                 '</i>: $<span class="widget-year currency">0.00</span></td>'
         );
         $(newYear).insertBefore(this.body.find(".widget-total-cell"));

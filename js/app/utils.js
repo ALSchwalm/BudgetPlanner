@@ -19,10 +19,23 @@ define(function(){
             return parseFloat(str);
         },
         yearsBetween : function(start, end) {
+            var s = start.clone();
             var e = end.clone();
-            e.subtract(1, 'days');
-            var years = 1 + (e.year() - start.year());
+
+            var years = e.year() - s.year();
+            if (e.months() > 5) {
+                years += 1;
+            }
             return years;
+        },
+        fiscalYearName : function(date, i) {
+            var s = date.clone();
+            s.add(i, "year");
+            if (s.months() >= 6) {
+                return s.year() + 1;
+            } else {
+                return s.year();
+            }
         }
     };
 
