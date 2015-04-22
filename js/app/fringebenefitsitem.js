@@ -42,6 +42,7 @@ define(["jquery", "app/utils"], function(jquery, utils){
         var self = this;
         this.body.find(".benefits-type").change(function(){
             self.body.find(".benefits-percent").val($(this).val());
+            self.update();
         });
     }
 
