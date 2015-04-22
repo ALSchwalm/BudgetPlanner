@@ -26,6 +26,9 @@ define(function(){
             if (e.months() > 5) {
                 years += 1;
             }
+            if (s.months() < 6) {
+                years += 1;
+            }
             return years;
         },
         fiscalYearName : function(date, i) {

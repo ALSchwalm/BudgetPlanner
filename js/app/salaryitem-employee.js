@@ -255,10 +255,9 @@ function(jquery, autocomplete, utils, moment, momentRange){
         var budgetEnd = moment($("#settings-end-date").val());
 
         var years = this.body.find(".year");
-
+        var yearsBetween = utils.yearsBetween(start, end);
         years.map(function(i){
-            i += budgetStart.year();
-            if (i < start.year() || i > end.year()) {
+            if (!self.monthsOfYearWorked(i)) {
                 $(this).parents(".row:first").hide();
                 self.update();
                 self.parent.update();

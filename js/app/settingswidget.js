@@ -169,7 +169,7 @@ function(jquery, Widget, moment, jqueryui, utils){
         ];
 
         for (var i=0; i < utils.yearsBetween(start, end); ++i) {
-            yearLine.push("Year " + (start.year() + i));
+            yearLine.push("FY " + utils.fiscalYearName(start, i));
         }
 
         yearLine.push("Total");
@@ -181,13 +181,15 @@ function(jquery, Widget, moment, jqueryui, utils){
 
         var newStart = start.clone();
         for (var i=0; i < utils.yearsBetween(start, end); ++i) {
-            var newEnd = newStart.clone().endOf("year");
+            var newEnd = moment({year: newStart.year(), month: 5, days: 30});
+            if (newStart > newEnd) {
+                newEnd.add(1, "year");
+            }
             if (newEnd > end) {
                 newEnd = end;
             }
             monthsLine.push(newStart.format("MM/YY") + "-" + newEnd.format("MM/YY"));
-            newStart.add(1, "year").startOf("year");
-            //monthsLine.push(this.monthsOfYearWorked(i) + " Months");
+            newStart = moment({year: newStart.year()+1, month: 6, days: 1});
         }
 
         serialized.push(monthsLine);
