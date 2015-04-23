@@ -26,9 +26,6 @@ define(["jquery", "app/utils"], function(jquery, utils){
             this.body.remove();
             this.parent.removeItem(this);
         }.bind(this));
-
-        this.body.find('.item-cost')
-            .keyup(this.update.bind(this));
     }
 
     /**
@@ -37,8 +34,12 @@ define(["jquery", "app/utils"], function(jquery, utils){
     BasicItem.prototype.save = function() {
         return {
             name : this.body.find(".item-name").val(),
-            cost : this.body.find(".item-cost").val(),
-            year : this.body.find(".item-year").val()
+            costs: this.body.find(".item-cost").map(function(){
+                return $(this).val()
+            }).get(),
+            checked: this.body.find(".item-check").map(function(){
+                return this.checked;
+            }).get()
         };
     }
 
@@ -52,12 +53,24 @@ define(["jquery", "app/utils"], function(jquery, utils){
         this.end = this.parent.end;
         this.updateDuration(this.start, this.end);
         this.body.find(".item-name").val(config.name);
-        this.body.find(".item-cost").val(config.cost);
-        this.body.find(".item-year").val(config.year);
+        this.body.find(".item-cost").map(function(i){
+            $(this).val(config.costs[i]);
+        });
+        this.body.find(".item-check").map(function(i){
+            this.checked = config.checked[i];
+            $(this).parents(".item-row").find(".item-cost")
+                .prop("disabled", !this.checked);
+        });
         this.update();
+        this.parent.update();
     }
 
     BasicItem.prototype.update = function() {
+        var values = this.val();
+        var total = _.reduce(values, function(total, v){
+            return total + (v || 0);
+        }, 0);
+        this.body.find(".total").text(total.format());
     }
 
     /**
@@ -70,12 +83,15 @@ define(["jquery", "app/utils"], function(jquery, utils){
         this.start = start;
         this.end = end;
 
-        var years = utils.yearsBetween(this.start, this.end);
-        while(this.body.find(".item-year option").length != years) {
-            if (this.body.find(".item-year option").length > years) {
-                this.removeYear();
-            } else {
+        var yearsBetween = utils.yearsBetween(this.start, this.end);
+        var years = this.body.find(".year").length;
+        if (years < yearsBetween) {
+            for (var i=0; i < yearsBetween - years; ++i) {
                 this.addYear();
+            }
+        } else {
+            for (var i=0; i < years - yearsBetween; ++i) {
+                this.removeYear();
             }
         }
     }
@@ -85,17 +101,33 @@ define(["jquery", "app/utils"], function(jquery, utils){
      * Add a year to this item's display
      */
     BasicItem.prototype.addYear = function() {
-        var year = this.body.find(".item-year option").length;
-        this.body.find(".item-year").append(
-            $("<option>").attr("value", year).text("Fiscal Year " + utils.fiscalYearName(this.start, year))
+        var self = this;
+        var year = this.body.find(".year").length;
+        var newYear = $.parseHTML(
+            '<tr class="row item-row">' +
+                '<td class="col-sm-4 small-font">Fiscal Year ' + utils.fiscalYearName(this.start, year) + '</td>' +
+                '<td class="col-sm-3"><input type="checkbox" checked="checked" class="item-check"></td>' +
+                '<td class="col-sm-5">' +
+                    '<div class="input-group">' +
+                        '<span class="input-group-addon hidden-sm hidden-xs">$</span>' +
+                        '<input type="text" class="form-control year item-cost" placeholder="Cost">' +
+                    '</div>' +
+                '</td>' +
+            '</tr>'
         );
+        $(newYear).insertBefore(this.body.find(".item-costs .row:last"));
+        $(newYear).find(".item-check").change(function(e){
+            $(newYear).find(".item-cost").prop("disabled", !this.checked);
+            self.update();
+        });
+        $(newYear).find('.item-cost').keyup(this.update.bind(this));
     }
 
     /**
      * Remove a year from this item's display
      */
     BasicItem.prototype.removeYear = function() {
-        this.body.find(".item-year option:last").remove();
+        this.body.find(".item-costs .row").eq(-2).remove();
     }
 
     /**
@@ -104,13 +136,15 @@ define(["jquery", "app/utils"], function(jquery, utils){
      * @returns {Number[]} - An array of numbers, one for each year
      */
     BasicItem.prototype.val = function() {
-        var arr = [];
-        for (var i=0; i < this.body.find("option").length; ++i) {
-            arr.push(0);
-        }
-        var purchaseYear = parseInt(this.body.find(".item-year").val());
-        arr[purchaseYear] = utils.fromCurrency(this.body.find('.item-cost').val()) || 0;
-        return arr;
+        var out = [];
+        this.body.find(".item-cost").map(function(){
+            if (!$(this).prop("disabled")) {
+                out.push(utils.fromCurrency($(this).val()));
+            } else {
+                out.push(0);
+            }
+        });
+        return out;
     }
 
     /**
