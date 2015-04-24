@@ -95,7 +95,8 @@ define(["jquery", "app/utils"], function(jquery, utils){
         $(".graduate-student").each(function(i){
             var salaryItem = $(this).parent().data("item");
             years.each(function(i){
-                monthsWorkedPerYear[i] += salaryItem.monthsOfYearWorked(i);
+                monthsWorkedPerYear[i] += utils.monthsOfYearWorked(i, salaryItem.start,
+                                                                   salaryItem.end);
             });
         });
 
