@@ -127,24 +127,6 @@ function(jquery, Widget, moment, jqueryui, utils){
         this.update();
     }
 
-    SettingsWidget.prototype.monthsOfYearWorked = function(i) {
-        var start = moment($("#settings-start-date").val());
-        var end = moment($("#settings-end-date").val());
-
-        var totalRange = moment().range(start.clone(), end.clone());
-        var yearStart = start.clone();
-        yearStart.add(i, "year");
-        yearStart.startOf('year');
-
-        var yearEnd = start.clone();
-        yearEnd.add(i, "year");
-        yearEnd.endOf('year');
-
-        var yearRange = moment().range(yearStart, yearEnd);
-        var intersection = yearRange.intersect(totalRange);
-        return Math.round((intersection.diff("days")/30)*2)/2;
-    }
-
     SettingsWidget.prototype.serialize = function(formatter) {
         var start = $("#settings-start-date").val();
         var end = $("#settings-end-date").val()
@@ -180,16 +162,14 @@ function(jquery, Widget, moment, jqueryui, utils){
         ];
 
         var newStart = start.clone();
+        var newEnd = start.clone();
         for (var i=0; i < utils.yearsBetween(start, end); ++i) {
-            var newEnd = moment({year: newStart.year(), month: 5, days: 30});
-            if (newStart > newEnd) {
-                newEnd.add(1, "year");
-            }
-            if (newEnd > end) {
-                newEnd = end;
+            if (i == 0) {
+                newEnd.add(utils.monthsOfYearWorked(0), "months");
             }
             monthsLine.push(newStart.format("MM/YY") + "-" + newEnd.format("MM/YY"));
-            newStart = moment({year: newStart.year()+1, month: 6, days: 1});
+            newStart = newEnd.clone();
+            newEnd.add(utils.monthsOfYearWorked(i+1), "months");
         }
 
         serialized.push(monthsLine);

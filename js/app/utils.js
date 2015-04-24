@@ -39,6 +39,59 @@ define(function(){
             } else {
                 return s.year();
             }
+        },
+        monthsOfYearWorked : function(i, start, end) {
+            var budgetStart = moment($("#settings-start-date").val());
+            var budgetEnd = moment($("#settings-end-date").val());
+            var start = start || budgetStart.clone();
+            var end = end || budgetEnd.clone();
+
+            var yearStart = budgetStart.clone();
+            yearStart.add(i, "year");
+            if (yearStart.month() >= 6) {
+                yearStart = moment({year : yearStart.year(), month: 6, day: 1});
+            } else {
+                yearStart = moment({year : yearStart.year()-1, month: 6, day: 1});
+            }
+
+            var yearEnd = budgetStart.clone();
+            yearEnd.add(i, "year");
+            if (yearEnd.month() <= 5) {
+                yearEnd = moment({year : yearEnd.year(), month: 5, day: 30});
+            } else {
+                yearEnd = moment({year : yearEnd.year()+1, month: 5, day: 30});
+            }
+
+            var intersection = null;
+
+            // The employee worked less than a year, during this year
+            if (start >= yearStart && end <= yearEnd) {
+                var workedRange = moment().range(start.clone(), end.clone());
+                var yearRange = moment().range(yearStart, yearEnd);
+                var intersection = workedRange.intersect(yearRange);
+            }
+
+            // The employee started working this year, and continues
+            else if (start >= yearStart && start < yearEnd && end >= yearEnd) {
+                var workedRange = moment().range(start.clone(), yearEnd);
+                var yearRange = moment().range(yearStart, yearEnd);
+                var intersection = workedRange.intersect(yearRange);
+            }
+
+            // The employee was working previously, but stopped this year
+            else if (start <= yearStart && end <= yearEnd && end > yearStart) {
+                var workedRange = moment().range(yearStart, end.clone());
+                var yearRange = moment().range(yearStart, yearEnd);
+                var intersection = workedRange.intersect(yearRange);
+            }
+
+            else if (start <= yearStart && end >= yearEnd) {
+                return 12;
+            }
+
+            if (!intersection)
+                return 0;
+            return Math.round((intersection.diff("days")/30)*2)/2;
         }
     };
 

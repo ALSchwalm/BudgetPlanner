@@ -136,63 +136,6 @@ function(jquery, autocomplete, utils, moment, momentRange){
     }
 
     /**
-     * Determine how many months of the given year were worked.
-     *
-     * @param i - The number of years offset from the starting year
-     */
-    SalaryItemEmployee.prototype.monthsOfYearWorked = function(i) {
-        var budgetStart = moment($("#settings-start-date").val());
-        var budgetEnd = moment($("#settings-end-date").val());
-
-        var yearStart = budgetStart.clone();
-        yearStart.add(i, "year");
-        if (yearStart.month() >= 6) {
-            yearStart = moment({year : yearStart.year(), month: 6, day: 1});
-        } else {
-            yearStart = moment({year : yearStart.year()-1, month: 6, day: 1});
-        }
-
-        var yearEnd = budgetStart.clone();
-        yearEnd.add(i, "year");
-        if (yearEnd.month() <= 5) {
-            yearEnd = moment({year : yearEnd.year(), month: 5, day: 30});
-        } else {
-            yearEnd = moment({year : yearEnd.year()+1, month: 5, day: 30});
-        }
-
-        var intersection = null;
-
-        // The employee worked less than a year, during this year
-        if (this.start >= yearStart && this.end <= yearEnd) {
-            var workedRange = moment().range(this.start.clone(), this.end.clone());
-            var yearRange = moment().range(yearStart, yearEnd);
-            var intersection = workedRange.intersect(yearRange);
-        }
-
-        // The employee started working this year, and continues
-        else if (this.start >= yearStart && this.start < yearEnd && this.end >= yearEnd) {
-            var workedRange = moment().range(this.start.clone(), yearEnd);
-            var yearRange = moment().range(yearStart, yearEnd);
-            var intersection = workedRange.intersect(yearRange);
-        }
-
-        // The employee was working previously, but stopped this year
-        else if (this.start <= yearStart && this.end <= yearEnd && this.end > yearStart) {
-            var workedRange = moment().range(yearStart, this.end.clone());
-            var yearRange = moment().range(yearStart, yearEnd);
-            var intersection = workedRange.intersect(yearRange);
-        }
-
-        else if (this.start <= yearStart && this.end >= yearEnd) {
-            return 12;
-        }
-
-        if (!intersection)
-            return 0;
-        return Math.round((intersection.diff("days")/30)*2)/2;
-    }
-
-    /**
      * Bring this item up-to-date.
      */
     SalaryItemEmployee.prototype.update = function() {
@@ -211,7 +154,7 @@ function(jquery, autocomplete, utils, moment, momentRange){
                 var effort = $(this).val()*0.01;
                 var raise = Math.pow(1+$("#settings-raise-percent").val()*0.01, i);
 
-                var months = self.monthsOfYearWorked(i);
+                var months = utils.monthsOfYearWorked(i, this.start, this.end);
                 var yearCost = monthlySalary*months*effort*raise
                 $(years[i]).text(yearCost.format());
             });
@@ -257,7 +200,7 @@ function(jquery, autocomplete, utils, moment, momentRange){
         var years = this.body.find(".year");
         var yearsBetween = utils.yearsBetween(start, end);
         years.map(function(i){
-            if (!self.monthsOfYearWorked(i)) {
+            if (!utils.monthsOfYearWorked(i, self.start, self.end)) {
                 $(this).parents(".row:first").hide();
                 self.update();
                 self.parent.update();

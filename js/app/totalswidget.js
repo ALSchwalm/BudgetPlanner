@@ -71,17 +71,32 @@ function(jquery, Widget, utils){
      * sub contract
      */
     TotalsWidget.prototype.getModifiedDirectCost = function() {
+        var sum = function(l){return _.reduce(l, function(t, i){return t+i}, 0)};
+
         return this.getTotalDirectCost().map(function(yearTotal, i){
             // Modified = total less equipment, less tuition, less > 25000 of each
             // sub contract
             var contractSurplus = 0;
             if (this.widgets["subcontract"].items.length) {
-                contractSurplus = _.reduce(this.widgets["subcontract"].items,
-                                           function(t, item) {
-                                               if (item.val()[i] >= 25000)
-                                                   t += item.val()[i] - 25000;
-                                               return t;
-                                           }, 0);
+
+                var perItemTotal = this.widgets["subcontract"].items
+                    .map(function(item){
+                        var sumBeforeCurrentYear = sum(item.val().slice(0, i));
+
+                        // prior years have gone over 25K
+                        if (sumBeforeCurrentYear >= 25000) {
+                            return item.val()[i];
+
+                        // this is the first year to go over 25K
+                        } else if (sumBeforeCurrentYear + item.val()[i] > 25000) {
+                            return sumBeforeCurrentYear + item.val()[i] - 25000;
+
+                        // still not over 25K
+                        } else {
+                            return 0;
+                        }
+                    });
+                contractSurplus = sum(perItemTotal);
             }
 
             return yearTotal -
